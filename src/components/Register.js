@@ -1,52 +1,29 @@
 import React from 'react'
-import { useState } from 'react'
-
-//get data from form
-
-const getFormValues = () => {
-  const storedValues = localStorage.getItem('data');
-  if(!storedValues)
-      return {
-          name: '',
-          balance:''
-      };
-      return JSON.parse(storedValues)
-}
-
-// if(localStorage.getItem('data') == null){
-    //   localStorage.setItem('data', '[]');
-    // }
-
-  // getprevious data and push
-    //let oldData = JSON.parse(localStorage.getItem('data'));
-    // oldData.push(newData);
-
-  // save old data + new data to local storage
-    // localStorage.setItem('data', JSON.stringify(oldData))
-
-const Register = props => {
-  // const {value} = props
-  const [values, setValues] = useState(getFormValues)
 
 
-  React.useEffect(() => {
-    localStorage.setItem('data',JSON.stringify(values));
-  }, [values]);
+const Register = () => {
+
+  var adminInfo = {};
+      
+  const save = (event) => {
+    // implement error checking for empty input (username at least 8 characters)
+    
+    let username_input = document.getElementById('admin-username').value;
+    
+
+    if (localStorage.getItem(username_input) === null) {  
+      
+      adminInfo.firstname = document.getElementById('admin-firstname').value;
+      adminInfo.lastname = document.getElementById('admin-lastname').value;
+      adminInfo.password = document.getElementById('admin-password').value;
+      localStorage.setItem(username_input, adminInfo);
+      console.log(localStorage.getItem('adaef'))
+    }
+  }
 
 
 const submitForm = (event) => {
     event.preventDefault();
-    // alert('Enter something!')
-}
-
-const save = (event) => {
-
-  setValues((previousValues) => ({
-    ...previousValues,
-    [event.target.name]: event.target.value,
-  }));
-
-    
 }
 
 
@@ -54,23 +31,32 @@ const save = (event) => {
     <div className="register-main">
 
       <form onSubmit={submitForm} className='form2'>
-        <label htmlFor = "name">Account name:</label>
-
+        
+        <label htmlFor = "name">Username:</label>
         <input 
         type='text' 
-        name ='name' id='name' className='form-control' placeholder='enter name'
-        value={values.name}  
-        onChange={save}/>
+        name ='name' id='admin-username' className='form-control' placeholder='enter name'
+        />
         
-        <label htmlFor = "balance">Balance:</label>
+        <label htmlFor = "firstname">First Name:</label>
         <input 
-        type='number' name='balance' id='balance' className='form-control' placeholder='enter balance'
-        value={values.balance} 
-        onChange={save}/>
+        type='text' name='firstname' id='admin-firstname' className='form-control' placeholder='enter first name'
+        />
 
-        <button>Register</button>
-        <button>View</button>
+        <label htmlFor = "lastname">Last Name:</label>
+        <input 
+        type='text' name='lastname' id='admin-lastname' className='form-control' placeholder='enter lastname'
+        />
+
+        <label htmlFor = "password">Password:</label>
+        <input 
+        type='text' name='password' id='admin-password' className='form-control' placeholder='enter password'
+        />
+
+        <button onClick={save}>Register</button>
+        
       </form>
+            
 
     </div>
   )
@@ -78,22 +64,3 @@ const save = (event) => {
 
 export default Register
 
-
-// function save() {
-  // const [values, setValues] = useState(getFormValues)
-  // let [nameValue, setNameValue] = useState
-  // let [balanceValue , setBalValue] = useState
-  // let new_data = document.getElementById('input').value;
-
-  //save array
-    // if(localStorage.getItem('data') == null){
-    //   localStorage.setItem('data', '[]');
-    // }
-
-  //getprevious data and push
-    // var old_data = JSON.parse(localStorage.getItem('data'));
-    // old_data.push(new_data);
-
-  //save old data + new data to local storage
-    // localStorage.setItem('data', JSON.stringify(old_data))
-// }
