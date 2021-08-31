@@ -1,6 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Switch, Route } from 'react-router-dom'
-import {useState} from 'react-dom'
 
 /* Components */
 import Home from './components/Home'
@@ -13,13 +12,13 @@ import Create from './components/Create'
 
 
 const App = () => {
-  // const [status, setStatus] = useState({
-  //   isLoggedIn: false,
-  // })
+  const [status, setStatus] = useState({
+    isLoggedIn: false,
+  });
   return (
     <Switch>
         <Route path="/home" component={Home} />
-        <Route path="/login" component={Login}/>
+        <Route path="/login" render={(props) => <Login {...props} status={status} />} />
         <Route path="/register" component={Register} /> 
         <Route path="/accounts" component={Accounts} />
         <Route path="/account" component={Account} />

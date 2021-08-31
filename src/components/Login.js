@@ -12,7 +12,7 @@ const getFormValues = () => {
         return JSON.parse(storedValues)
 }
 
-const Login = () => {
+const Login = ({status}) => {
     const [values, setValues] = useState(getFormValues)
     //     name: '',
     //     password:''
