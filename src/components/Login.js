@@ -12,7 +12,7 @@ const getFormValues = () => {
         return JSON.parse(storedValues)
 }
 
-const Login = () => {
+const Login = ({status}) => {
     const [values, setValues] = useState(getFormValues)
     //     name: '',
     //     password:''
@@ -39,7 +39,7 @@ const Login = () => {
     
     <div className="login-main">
          
-        <form className='form1'>
+        <form onSubmit={handleSubmit} className='form1'>
             <h1>Sign-in</h1>
             <label htmlFor = "name">Account name:</label>
             <input type='text' name ='name' id='name' className='form-control' value={values.name} onChange={handleChange} placeholder='username'/>
@@ -47,7 +47,7 @@ const Login = () => {
             <input type='password' name='password' id='password' className='form-control' value={values.password} onChange={handleChange}placeholder='password'/>
         </form> 
 
-        <button className='buttons btn1' onClick={handleSubmit}>Login</button>
+        <button className='buttons btn1'>Login</button>
     </div>
 
 
