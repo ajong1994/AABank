@@ -19,11 +19,11 @@ const App = () => {
     <Switch>
         <Route path="/home" component={Home} />
         <Route path="/login" render={(props) => <Login {...props} status={status} />} />
-        <Route path="/register" component={Register} /> 
-        <Route path="/accounts" component={Accounts} />
-        <Route path="/account" component={Account} />
-        <Route path="/create" component={Create} /> 
-        <Route path="/transactions" component={Transactions} />
+        <Route path="/register" render={(props) => <Register {...props} status={status} />}  /> 
+        <Route path="/accounts" render={(props) => <Accounts {...props} status={status} />} />
+        <Route path="/account" render={(props) => <Account {...props} status={status} />} />
+        <Route path="/create" render={(props) => <Create {...props} status={status} />} /> 
+        <Route path="/transactions" render={(props) => <Transactions {...props} status={status} />}  />
         <Route path="/" component={Home} />
     </Switch>
   );
