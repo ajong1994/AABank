@@ -1,56 +1,43 @@
-import React from 'react'
-import { useState } from 'react'
+import {Redirect, useHistory} from 'react-router-dom'
+import Textfield from './Textfield'
+import Form from './Form'
+import Button from './Button'
 
-
-const getFormValues = () => {
-    const storedValues= localStorage.getItem('form');
-    if(!storedValues)
-        return {
-            name: '',
-            password:''
-        };
-        return JSON.parse(storedValues)
-}
 
 const Login = ({status}) => {
-    const [values, setValues] = useState(getFormValues)
-    //     name: '',
-    //     password:''
-    // })
 
-    React.useEffect(() => {
-        localStorage.setItem('form',JSON.stringify(values));
-    }, [values]);
-
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // alert('Enter something!')
-    }
-
-    const handleChange = (event) => {
-        setValues((previousValues) => ({
-            ...previousValues,
-            [event.target.name]: event.target.value,
-        }));
+    const history = useHistory();
+    
+    if (status.isLoggedIn) {
+        return <Redirect to="/accounts"/>
     } 
 
+    function handleLogin() {
+        var loginUser = document.getElementById('login-userinput').value;
+        var loginPass = document.getElementById('login-userpass').value;
+        var storageUser = JSON.parse(localStorage.getItem(loginUser));
+        console.log(storageUser);
+        if (storageUser !== null) {
+            if (storageUser.password === loginPass) {
+                history.push("/accounts");
+            } else {
+                alert ('Incorrect password.')
+            }
+        } else {
+            alert('Admin user does not exist.')
+        }
+    }
+
+
     return (
-    
-    <div className="login-main">
-         
-        <form onSubmit={handleSubmit} className='form1'>
-            <h1>Sign-in</h1>
-            <label htmlFor = "name">Account name:</label>
-            <input type='text' name ='name' id='name' className='form-control' value={values.name} onChange={handleChange} placeholder='username'/>
-            <label>Password:</label>
-            <input type='password' name='password' id='password' className='form-control' value={values.password} onChange={handleChange}placeholder='password'/>
-        </form> 
-
-        <button className='buttons btn1'>Login</button>
-    </div>
-
-
+        <div className="login-main">
+            <Form classnames="form1" >
+                <h1>Sign-in</h1>
+                <Textfield id="login-userinput" classnames="form-control" placeholder="Enter your username" type="text">Username</Textfield>
+                <Textfield id="login-userpass" classnames="form-control" placeholder="Enter your password" type="password">Password</Textfield>
+                <Button classnames="buttons btn1" onclick={handleLogin}>Login</Button>
+            </Form>
+        </div>
     )
 }
 
