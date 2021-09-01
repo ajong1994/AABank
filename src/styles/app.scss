@@ -83,16 +83,17 @@ body {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        align-content: center;
-        
-        .registerError {
-            color:red;
-            font-weight: bold;
-            font-size:10px;
-        }   
+        align-content: center;  
     }
     
 }
+
+.errortext {
+    color:red;
+    font-weight: bold;
+    font-size:10px;
+} 
+
 .hide {
     display: none;
 }

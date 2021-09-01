@@ -12,13 +12,20 @@ import Create from './components/Create'
 
 
 const App = () => {
+
+  //Find a way to save state to session storage so it persists
   const [status, setStatus] = useState({
     isLoggedIn: false,
   });
+
+  function updateStatus(newstate) {
+    setStatus(newstate);
+  }
+
   return (
     <Switch>
         <Route path="/home" component={Home} />
-        <Route path="/login" render={(props) => <Login {...props} status={status} />} />
+        <Route path="/login" render={(props) => <Login {...props} status={status} updater={updateStatus}/>} />
         <Route path="/register" render={(props) => <Register {...props} status={status} />}  /> 
         <Route path="/accounts" render={(props) => <Accounts {...props} status={status} />} />
         <Route path="/account" render={(props) => <Account {...props} status={status} />} />
