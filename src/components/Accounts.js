@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import React, {Component} from 'react'
+import { NavLink } from 'react-router-dom';
 
 
 //component
@@ -31,11 +31,19 @@ const Accounts = () => {
   return (
     <>
       <div className="accounts-main">
+
+        <header className="App-header">
+        <ul>
+              <li><NavLink className="navItem" to='/create'>Create an account</NavLink></li>
+              <li><NavLink className="navItem" to='/transactions'>Transactions</NavLink></li>
+        </ul>
+        </header>
+
         <div className="form-wrapper">
           <input
             type="text"
             name="user"
-            placeholder="Create usert"
+            placeholder="Create user"
             value={user}
             onChange={handleOnChange}
           />

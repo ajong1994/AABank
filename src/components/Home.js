@@ -14,7 +14,7 @@ const Home = () => {
             <li><NavLink className="navItem" to= '/register'>Register</NavLink></li>
           </ul>
           
-        </header>  
+      </header>  
 
         <h1>WELCOME!!!</h1>
     </div>
