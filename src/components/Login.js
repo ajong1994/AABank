@@ -1,16 +1,26 @@
+import {useState} from 'react'
 import {Redirect, useHistory} from 'react-router-dom'
 import Textfield from './Textfield'
 import Form from './Form'
 import Button from './Button'
+import Error from './Error'
 
 
-const Login = ({status}) => {
+const Login = ({status, updater}) => {
+
 
     const history = useHistory();
-    
+    const [isError, setError] = useState({
+        userNameError: false,
+        passwordError: false
+    });
+
     if (status.isLoggedIn) {
         return <Redirect to="/accounts"/>
     } 
+
+    var userNameError = "Username does not exist."
+    var passwordError = "Incorrect password." 
 
     function handleLogin() {
         var loginUser = document.getElementById('login-userinput').value;
@@ -19,12 +29,21 @@ const Login = ({status}) => {
         console.log(storageUser);
         if (storageUser !== null) {
             if (storageUser.password === loginPass) {
+                let newStat = status;
+                newStat.isLoggedIn = true;
+                updater({newStat});
                 history.push("/accounts");
             } else {
-                alert ('Incorrect password.')
+                setError({
+                    userNameError: false,
+                    passwordError: true
+                })
             }
         } else {
-            alert('Admin user does not exist.')
+            setError({
+                userNameError: true,
+                passwordError: false
+            })
         }
     }
 
@@ -34,11 +53,12 @@ const Login = ({status}) => {
             <Form classnames="form1" >
                 <h1>Sign-in</h1>
                 <Textfield id="login-userinput" classnames="form-control" placeholder="Enter your username" type="text">Username</Textfield>
+                <Error classnames={isError.userNameError===true ? 'errortext' : 'hide'}>{userNameError}</Error>
                 <Textfield id="login-userpass" classnames="form-control" placeholder="Enter your password" type="password">Password</Textfield>
+                <Error classnames={isError.passwordError===true ? 'errortext' : 'hide'}>{passwordError}</Error>
                 <Button classnames="buttons btn1" onclick={handleLogin}>Login</Button>
             </Form>
         </div>
-
     )
 }
 
