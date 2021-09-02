@@ -45,9 +45,9 @@ const App = () => {
     </Switch>
   );
   /* Objectives */
-  // - App should have a page to display all users (can be a table where the name and balance are visible) -> Route /accounts and /account
+  // - App should have a page to display all users (can be a table where the name and balance are visible) -> Route /accounts with account modal
   // - App should have a page for creating a user -> Route /create
-  // - App should have a page for deposit/withdraw/transfer (can be separate or in one page) -> TBD
+  // - App should have a page for deposit/withdraw/transfer (can be separate or in one page) -> included in account modal
 }
 
 
@@ -56,7 +56,7 @@ const App = () => {
 
 //Function create_user(user, balance)
 // - Function creates new user in system (First Name, Last Name, Email, Balance, Account Number)
-// - New user has zero balance (or an optional initial balance)--Make zero balance the default prop
+// - New user has zero balance (or an optional initial balance)
 // - user (argument) is any string value. We should add propTypes.string
 
 //Function deposit(user, amount)
@@ -73,10 +73,10 @@ const App = () => {
 // - Returns balance of from_user and to_user in given format (Phpxx,xxx.xx)
 
 //Function get_balance(user)
-// - Returns blance of the user in given format (Phpxx,xxx.xx)
+// - Returns balance of the user in given format (Phpxx,xxx.xx)
 
-//Function list_users()
-// - Returns all users
+//Function list_users() [DONE]
+// - Returns all users -- in ./Accounts
 
 
 /* Error Handling */
