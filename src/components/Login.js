@@ -15,7 +15,7 @@ const Login = ({status, updater}) => {
         passwordError: false
     });
 
-    if (status.isLoggedIn) {
+    if (status) {
         return <Redirect to="/accounts"/>
     } 
 
@@ -29,9 +29,7 @@ const Login = ({status, updater}) => {
         console.log(storageUser);
         if (storageUser !== null) {
             if (storageUser.password === loginPass) {
-                let newStat = status;
-                newStat.isLoggedIn = true;
-                updater({newStat});
+                updater('true');
                 history.push("/accounts");
             } else {
                 setError({
