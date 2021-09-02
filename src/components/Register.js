@@ -1,92 +1,143 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import Textfield from './Textfield'
+import Form from './Form'
+import Button from './Button'
+import Error from './Error'
 
+//input status
+const Register = ({status}) => {
 
-const Register = () => {
+  const history = useHistory()
 
-  let history = useHistory()
+  //no error state
   const [isError, setError] = useState({
-    userNameError:false,
-    passwordError:false
+      userNameEmptyError:false,
+      userNameExistError:false,
+      firstNameError:false,
+      lastNameError:false,
+      passwordError:false,
+      passwordEmpty:false
   });
-  
-  var adminInfo = {}; 
-  var userNameError = "username already exist"
-  var passwordError = "password is invalid" 
-  
-  const save = (event) => {
+  //if an error is committed display error message/s
+  var adminInfo = {};
+  var userNameError1 = "username cannot be blank!";
+  var userNameError2 =  "username already exist!";
+  var firstNameError = "firstname cannot be blank!"
+  var lastNameError = "lastname cannot be blank!"
+  var passwordError1 = "password is invalid!" ;
+  var passwordError2 = "password cannot be blank!";
+
+
+  function save() {
     
-    // implement error checking for empty input (username at least 8 characters)  
-   
-    let username_input = document.getElementById('admin-username').value
-    let password_input = document.getElementById('admin-password').value
-            
+    let username_input = document.getElementById('admin-username').value,
+        firstname_input = document.getElementById('admin-firstname').value,
+        lastname_input = document.getElementById('admin-lastname').value,
+        password_input = document.getElementById('admin-password').value;
+
+        //if username input field is empty
         if (username_input !== '') {  
-          if  ((localStorage.getItem(username_input) === null) && (password_input.length > 6) && (username_input !== '')) {
+
+          //if username doesn't exist, all fields are complete and password is at least 6 characters, proceed to registration
+          if  ((localStorage.getItem(username_input) === null) && (firstname_input !== '') && (lastname_input !== '') && (password_input.length >= 6)) {
             adminInfo.firstname = document.getElementById('admin-firstname').value;
             adminInfo.lastname = document.getElementById('admin-lastname').value;
             adminInfo.password = document.getElementById('admin-password').value;
-            localStorage.setItem(username_input, JSON.stringify(adminInfo)); //store in local storage      
-            // console.log(localStorage.getItem(username_input))
-            history.push('/Accounts') 
-          } else if ((localStorage.getItem(username_input) === null) && (username_input !== '')) {
+            localStorage.setItem(username_input, JSON.stringify(adminInfo)); 
+            // history.push('/Accounts') 
+            history.push('/login') 
+            alert(`User ${username_input} succesfully created!`)
+
+          //if firstname field is left empty leave an error message
+          } else if ((localStorage.getItem(username_input) === null) && (firstname_input === '')){
             setError({
-              userNameError:false,
-              passwordError:true
-          })} else if ((localStorage.getItem(username_input) === null) && (password_input.length > 6) ) {
+              userNameEmptyError:false,
+              userNameExistError:false,
+              firstNameError:true,
+              lastNameError:false,
+              passwordError:false,
+              passwordEmpty:false
+          })
+
+          //if lastname field is left empty leave an error message
+          } else if ((localStorage.getItem(username_input) === null) && (lastname_input === '')){
             setError({
-              userNameError:true,
-              passwordError:false
-          })} else {
+              userNameEmptyError:false,
+              userNameExistError:false,
+              firstNameError:false,
+              lastNameError:true,
+              passwordError:false,
+              passwordEmpty:false
+          })
+
+          //if password field is left empty leave an error message
+          } else if ((localStorage.getItem(username_input) === null) && (password_input === '')){
             setError({
-              userNameError:true,
-              passwordError:false
+              userNameEmptyError:false,
+              userNameExistError:false,
+              firstNameError:false,
+              lastNameError:false,
+              passwordError:false,
+              passwordEmpty:true
+          })
+
+          //if password input is less than 6 characters leave an error message
+          } else if ((localStorage.getItem(username_input) === null) && (password_input.length < 6)) {
+            setError({
+              userNameEmptyError:false,
+              userNameExistError:false,
+              firstNameError:false,
+              lastNameError:false,
+              passwordError:true,
+              passwordEmpty:false     
+
+          //username already exist
+          })} else {   
+            setError({
+              userNameEmptyError:false,
+              userNameExistError:true,
+              firstNameError:false,
+              lastNameError:false,
+              passwordError:false,
+              passwordEmpty:false    
             })
           }
-        } else {
+
+        //username is empty
+        } else {   
           setError({
-            userNameError:true,
-            passwordError:false
+              userNameEmptyError:true,   
+              userNameExistError:false,
+              firstNameError:false,
+              lastNameError:false,
+              passwordError:false
           })}              
   }     
       
-    const submitForm = (event) => {
-        event.preventDefault();
-    }
-
+  
   return (
 
     <div className="register-main">
+      <Form className='form2'>
+        <h1>Register</h1>
+        <Textfield id='admin-username' className='form-control' placeholder='enter name' type='text' >Username:</Textfield>
+        <Error classnames = {isError.userNameEmptyError===true ? 'errortext' : 'hide'}>{userNameError1}</Error>
+        <Error classnames = {isError.userNameExistError===true ? 'errortext' : 'hide'}>{userNameError2}</Error>
+        
+        <Textfield id='admin-firstname' className='form-control' placeholder='enter firstname' type='text' >First Name:</Textfield>
+        <Error classnames = {isError.firstNameError===true ? 'errortext' : 'hide'}>{firstNameError}</Error>
 
-      <form onSubmit={submitForm} className='form2'>
-        
-        <label htmlFor = "name">Username:</label>
-        <input 
-        type='text' 
-        name ='name' id='admin-username' className='form-control' placeholder='enter name' 
-        />
-        <div className = {isError.userNameError===true ? 'registerError' : 'hide'}>{userNameError}</div>
-        
-        <label htmlFor = "firstname">First Name:</label>
-        <input 
-        type='text' name='firstname' id='admin-firstname' className='form-control' placeholder='enter first name' 
-        />
-            
-        <label htmlFor = "lastname">Last Name:</label>
-        <input 
-        type='text' name='lastname' id='admin-lastname' className='form-control' placeholder='enter lastname' 
-        />
-        
-        <label htmlFor = "password">Password:</label>
-        <input 
-        type='text' name='password' id='admin-password' className='form-control' placeholder='enter password' 
-        />
-        <div className = {isError.passwordError===true ? 'registerError' : 'hide'}>{passwordError}</div>
-             
-        <button onClick={save}>Register</button>
-        
-      </form>         
+        <Textfield id='admin-lastname' className='form-control' placeholder='enter lastname' type='text' >Last Name:</Textfield> 
+        <Error classnames = {isError.lastNameError===true ? 'errortext' : 'hide'}>{lastNameError}</Error> 
+
+        <Textfield id='admin-password' className='form-control' placeholder='enter password' type='text' >Password:</Textfield>
+        <Error classnames = {isError.passwordError===true ? 'errortext' : 'hide'}>{passwordError1}</Error> 
+        <Error classnames = {isError.passwordEmpty===true ? 'errortext' : 'hide'}>{passwordError2}</Error>  
+        <span>Use 6 or more characters</span>   
+        <Button classnames="buttons btn1" onclick={save}>Register</Button>   
+      </Form>         
     </div>
   )
 }
