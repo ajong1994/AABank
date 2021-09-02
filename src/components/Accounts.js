@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import Textfield from './Textfield'
 
 
 //component
@@ -7,29 +8,23 @@ import Account from './Account'
 
 
 const Accounts = () => {
-  const [state, setState] = useState({
-    user: '',
-    accounts: []
-  })
-
-  const { user, accounts } = state
   
-  const handleOnChange = (e) => {
-    const { name, value } = e.target
+  //Get list of total customers to loop through from localStorage
+  const customerList = JSON.parse(localStorage.getItem('customerList'));
 
-    setState({ ...state, [name]: value })
-  }
+  //onChange function to filter Accounts display results depending on search
 
-  /* CREATE */
-  const createUsers = () => {
-    const list = accounts // [] - Current
-    list.push(user) // [] - Current + Current User Input
+  //For every customer, get their data from local storage and add it to array for mapping
+  const customerData = [];
+  if (customerList !== null) {
+    for (let customer of customerList) {
+      customerData.push(JSON.parse(localStorage.getItem(customer)));
+    }
+  };
 
-    setState({ user: '', accounts: list })
-  }
+  
 
   return (
-    <>
       <div className="accounts-main">
 
         <header className="App-header">
@@ -39,22 +34,32 @@ const Accounts = () => {
         </ul>
         </header>
 
-        <div className="form-wrapper">
-          <input
-            type="text"
-            name="user"
-            placeholder="Create user"
-            value={user}
-            onChange={handleOnChange}
-          />
-          <button onClick={createUsers}>Add</button>
-        </div>
-        <div className="table-main">
-          <div className="header-wrapper">
-            <span>ALL ACCOUNTS</span>
-          </div>
-          
-          {
+      <Textfield classnames="form-control" id="accounts-search-input" type="text" placeholder="Search"/>
+      <div class="table-main-container">
+        <table class="accounts-table">
+          <thead>
+            <tr>
+              <th>AccNum</th>
+              <th>Customer Name</th>
+              <th>Balance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          { customerData.length ? (<tbody>
+            {customerData.map((customer) => (
+              <tr>
+                <td>{customer.accNum}</td>
+                <td>{`${customer.firstname} ${customer.lastname}`}</td>
+                <td>{customer.balance}</td>
+                <td>icons here</td>
+              </tr>
+            ))}
+          </tbody>) : (
+            "No customer accounts yet."
+          )}
+        </table>
+      </div>
+               {/* {
             accounts.length ?
               accounts.map((value, index) => (
                 //LIST OF ACCOUNTS
@@ -64,11 +69,8 @@ const Accounts = () => {
                   value={value}
                 />
               )) : <span>No records found!</span>
-          }
-         
-        </div>
+          } */}
       </div>
-    </>
   )
 }
 
