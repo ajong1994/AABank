@@ -8,6 +8,7 @@ import Error from './Error'
 
 
 const Create = () => {
+
     const history = useHistory()
     const [isError, setError] = useState({
         firstNameError:false,
@@ -15,7 +16,7 @@ const Create = () => {
         emailError:false,
         balanceError:false,
     });
-
+    
     var accInfo = {};
     var firstNameError = "firstname cannot be blank!"
     var lastNameError = "lastname cannot be blank!"
@@ -24,6 +25,7 @@ const Create = () => {
 
     function saveUser() {
 
+        
         let firstname_input = document.getElementById('user-firstname').value;
         let lastname_input = document.getElementById('user-lastname').value;
         let email_input = document.getElementById('user-email').value;
@@ -61,14 +63,16 @@ const Create = () => {
           })
         } else {
         //create UID
-            if (localStorage.getItem('totalCustomers') === null) {  
-                localStorage.setItem('totalCustomers', 1)
+            if (localStorage.getItem('totalCustomers') === null) {
+                localStorage.setItem('totalCustomers', 1)    
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers
             } else {
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers + 1
+                // totalCustomers + 1
                 localStorage.setItem('totalCustomers', accNum)
+                
             }
 
             if (localStorage.getItem('totalCustomers') !== null) {
@@ -90,6 +94,16 @@ const Create = () => {
                 accInfo.email = email_input;
                 accInfo.balance = user_balance;
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
+
+                
+                if (localStorage.getItem('customerList') === null) {
+                    localStorage.setItem('customerList', JSON.stringify([`user-${accNum}`]))
+                } else  {
+                    const customerList = JSON.parse(localStorage.getItem('customerList'))
+                    customerList.push(`user-${accNum}`)
+                    localStorage.setItem('customerList', JSON.stringify(customerList))
+                }
+
                 history.push('/transactions') 
                 alert(`User ${firstname_input} succesfully created!`)
             }
@@ -102,6 +116,8 @@ const Create = () => {
 
         <Form className='form2'>
         <h1>Create Customer Account</h1>
+
+
         <Textfield id='user-firstname' className='form-control' placeholder='enter firstname' type='text' >First Name:</Textfield>
         <Error classnames = {isError.firstNameError===true ? 'errortext' : 'hide'}>{firstNameError}</Error>    
         
