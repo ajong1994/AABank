@@ -34,7 +34,7 @@ const Accounts = () => {
   //onChange function to filter Accounts display results depending on search
   function handleOnKeyUp(e){
     if (e.key === 'Enter') {
-      const searchQuery = Number(e.target.value);
+      const searchQuery = e.target.value;
       const filteredCustomers = customerData.filter(customer => customer.accNum === searchQuery);
       setCustomerData(filteredCustomers);
     } else if (e.key === 'Backspace' || e.key === 'Clear' || e.key === 'Cut' || e.key === 'Delete' ) {

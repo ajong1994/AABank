@@ -18,7 +18,7 @@ const Login = ({status, updater}) => {
     });
 
     //If user isLoggedIn based on state passed as prop, redirect to accounts component
-    if (status) {
+    if (status.isLoggedIn) {
         return <Redirect to="/accounts"/>
     } 
 
@@ -31,7 +31,10 @@ const Login = ({status, updater}) => {
         var storageUser = JSON.parse(localStorage.getItem(loginUser));
         if (storageUser !== null) {
             if (storageUser.password === loginPass) {
-                updater('true');
+                updater({
+                    isLoggedIn: true, 
+                    currentAdmin: loginUser
+                });
                 history.push("/accounts");
             } else {
                 //If input password does not match stores password, set passworderror state to true which will affect rendered components

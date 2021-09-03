@@ -14,19 +14,21 @@ import Create from './components/Create'
 const App = () => {
 
   //On app pageload/refresh, checks sessionStorage for key 'isLoggedIn' and use that as state.
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    Boolean(JSON.parse(sessionStorage.getItem('isLoggedIn')))
-  );
+  const [loginStatus, setLoginStatus] = useState({
+    isLoggedIn: Boolean(JSON.parse(sessionStorage.getItem('isLoggedIn'))),
+    currentAdmin: JSON.parse(JSON.parse(sessionStorage.getItem('currentAdmin')))
+  });
 
   //Whenever state 'isLoggedIn' is modified, useEffect Hook to change sessionStorage also.
   useEffect(() => {
-    sessionStorage.setItem("isLoggedIn", isLoggedIn)
-  }, [isLoggedIn]);
+    sessionStorage.setItem("isLoggedIn", loginStatus.isLoggedIn)
+    sessionStorage.setItem("currentAdmin", loginStatus.currentAdmin)
+  }, [loginStatus]);
 
   //Named function to change isLoggedIn state
   function updateStatus(newstate) {
-    if (newstate === true || newstate === false) {
-      setIsLoggedIn(newstate);
+    if (newstate.isLoggedIn === true || newstate.isLoggedIn === false) {
+      setLoginStatus(newstate);
     } else {
       console.log('Invalid state value passed to isLoggedIn.')
     }
@@ -35,12 +37,12 @@ const App = () => {
   return (
     <Switch>
         <Route path="/home" component={Home} />
-        <Route path="/login" render={(props) => <Login {...props} status={isLoggedIn} updater={updateStatus}/>} />
-        <Route path="/register" render={(props) => <Register {...props} status={isLoggedIn} />}  /> 
-        <Route path="/accounts" render={(props) => <Accounts {...props} status={isLoggedIn} />} />
-        <Route path="/account" render={(props) => <Account {...props} status={isLoggedIn} />} />
-        <Route path="/create" render={(props) => <Create {...props} status={isLoggedIn} />} /> 
-        <Route path="/transactions" render={(props) => <Transactions {...props} status={isLoggedIn} />}  />
+        <Route path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
+        <Route path="/register" render={(props) => <Register {...props} status={loginStatus} />}  /> 
+        <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} />} />
+        <Route path="/account" render={(props) => <Account {...props} status={loginStatus} />} />
+        <Route path="/create" render={(props) => <Create {...props} status={loginStatus} />} /> 
+        <Route path="/transactions" render={(props) => <Transactions {...props} status={loginStatus} />}  />
         <Route path="/" component={Home} />
     </Switch>
   );
