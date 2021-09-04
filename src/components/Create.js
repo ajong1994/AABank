@@ -8,17 +8,12 @@ import Error from './Error'
 
 
 const Create = ({status}) => {
-    // let currentStatus = useState(status)
-
-    //If user isLoggedIn based on state passed as prop, redirect to accounts component
-    // if (status) {
-    //     return <Redirect to="/accounts"/>
-    // } 
 
     const history = useHistory()
     const [isError, setError] = useState({
         firstNameError:false,
         lastNameError:false,
+        userExistError:false,
         emailblankError:false,
         emailInvalidError:false,
         emailExistError:false,
@@ -28,9 +23,10 @@ const Create = ({status}) => {
     });
     
     var accInfo = {};
-    
+    //Error Messages
     var firstNameErrorMsg = "firstname cannot be blank"
     var lastNameErrorMsg = "lastname cannot be blank"
+    var userExistErrorMsg = 'user already exist'
     var invalidCharMsg = "must not contain numbers and special characters"
     var emailblankErrorMsg = "email cannot be blank" ;
     var emailInvalidErrorMsg = "invalid email" ;
@@ -39,7 +35,6 @@ const Create = ({status}) => {
 
     function saveUser() {
 
-
         let firstname_input = document.getElementById('user-firstname').value;
         let lastname_input = document.getElementById('user-lastname').value;
         let email_input = document.getElementById('user-email').value;
@@ -47,50 +42,54 @@ const Create = ({status}) => {
         let accNum;
         let totalCustomers;
         var populatedCustomerList = []
-        var newList = []
         let email_exist 
+        let user_exist
         let validFirstName
         let validLastName
         let validEmail
 
-
-        // Get list of total customers from localStorage
+        // Get list of total customers from localStorage and get account info for checkings
         const customerList = JSON.parse(localStorage.getItem('customerList'));
                 
             if (customerList !== null) {
                 //loop through customerList
                 for (let customer of customerList) {
                     populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
-                }
-                    //loop through each customer to check each info
-                    for (let i=0; i < populatedCustomerList.length; i++) {
-                        newList.push(populatedCustomerList[i])
-                        //check if user email input matches any stored customer email and return an error
-                        for (let j=0; j < newList.length; j++) {
-                            if (email_input === newList[i].email){
-                                email_exist = true
-                            } else {
-                                email_exist = false
-                            }
-                        }
+                    // console.log(populatedCustomerList) 
+                   } for (let accounts of populatedCustomerList) {
+                    // console.log(accounts)            
+                    if (email_input === accounts.email){
+                        email_exist = true
+                    } else {
+                        email_exist = false
                     }
-            }
 
+                    if ((firstname_input.toLowerCase() + lastname_input.toLowerCase()) === ((accounts.firstname).toLowerCase() + (accounts.lastname).toLowerCase())){
+                        user_exist = true
+                    } else {
+                        user_exist = false
+                    }         
+                }
+        } 
+
+                //else run the code
+                
+        //VALIDATIONS
         //Check if firstname and lastname user input accepts only string
-        var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/;
+        var nameformat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/;
 
-            if (format.test(firstname_input)) {
+            if (nameformat.test(firstname_input)) {
                 validFirstName = true
             } else {
                 validFirstName = false
             }
 
-    
-            if(format.test(lastname_input)) {
+            if(nameformat.test(lastname_input)) {
                 validLastName = true
             } else {
                 validLastName = false
             }
+
         //Check if email has correct format        
         var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if (emailformat.test(email_input)){
@@ -98,13 +97,14 @@ const Create = ({status}) => {
             } else {
                 validEmail = true
             }
-        // str1.toLowerCase() === str2.toLowerCase(); // true
+        
         
         //check if first name input field is not empty
         if (firstname_input === '')  {
             setError({
                 firstNameError:true,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -118,6 +118,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -131,6 +132,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -144,6 +146,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:true,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -151,12 +154,17 @@ const Create = ({status}) => {
                 invalidCharError:false,
                 invalidChar2Error:false
           })
+        
+        } else if (user_exist === true) {
+           alert (userExistErrorMsg)
+
         //check if email input field is not empty
         } else if (email_input === '') {
             
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:true,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -169,6 +177,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:true,
                 emailExistError:false,
@@ -181,6 +190,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:true,
@@ -193,6 +203,7 @@ const Create = ({status}) => {
             setError({
                 firstNameError:false,
                 lastNameError:false,
+                userExistError:false,
                 emailblankError:false,
                 emailInvalidError:false,
                 emailExistError:false,
@@ -201,6 +212,9 @@ const Create = ({status}) => {
                 invalidChar2Error:false
           })
         } else {
+
+        // function create_user() {}
+            
         //create UID and set numbers of totalCustomers
             if (localStorage.getItem('totalCustomers') === null) {
                 localStorage.setItem('totalCustomers', 1)    
@@ -216,6 +230,7 @@ const Create = ({status}) => {
                 setError({
                     firstNameError:false,
                     lastNameError:false,
+                    userExistError:false,
                     emailblankError:false,
                     emailInvalidError:false,
                     balanceError:false,
@@ -237,7 +252,7 @@ const Create = ({status}) => {
                 accInfo.balance = user_balance;
                 //store accInfo to local storage
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
-            
+        }
                 //create an array of 'customerList' for mapping
                 if (localStorage.getItem('customerList') === null) {
                     localStorage.setItem('customerList', JSON.stringify([`user-${accNum}`]))
@@ -247,9 +262,9 @@ const Create = ({status}) => {
                     localStorage.setItem('customerList', JSON.stringify(customerList))
                 }
                 //if successfully created move to accounts page
-                history.push('/accounts') 
+                // history.push('/accounts') 
                 alert(`User ${firstname_input} succesfully created!`)
-            }
+            
         }
     }
 
