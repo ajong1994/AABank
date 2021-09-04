@@ -8,8 +8,6 @@ body {
     font-family: 'Century Gothic';
 }
 
-// .home-main, .accounts-main, .login-main, .register-main, .profile-main, .logout-main {
-
 
 .home-main, .accounts-main  {
     
@@ -20,11 +18,10 @@ body {
         justify-content: center ;
         
         ul { 
-            width: 50%;
+            justify-content: center;
             display: flex;
             list-style-type: none;
             text-decoration: none;
-            justify-content: center;
             padding: 10px;
 
             li {

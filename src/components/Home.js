@@ -1,22 +1,22 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
+import Header from './Header'
+import List from './List'
+// import { useState } from 'react'
 
-const Home = () => {
+
+const Home = ({status}) => {
+  // const [isAuth, setAuth] = useState(true)
+  
+
     return (
         
     <div className="home-main">
-
-      <header className="App-header">
-          
-          <ul>
-            <li><NavLink className="navItem" to='/home'>Home</NavLink></li>
-            <li><NavLink className="navItem" to='/login'>Login</NavLink></li>
-            <li><NavLink className="navItem" to= '/register'>Register</NavLink></li>
-          </ul>
-          
-      </header>  
-
-        <h1>WELCOME!!!</h1>
+      <Header classname ='App-header'>
+        <List liClassname='navItem' location='/home'>Home</List> 
+        <List liClassname='navItem' location='/login'>Login</List>
+        <List liClassname='navItem'  location='/register'>Register</List>
+      </Header> 
+        <h1>WELCOME { status.currentAdmin } !!!</h1> 
     </div>
         
     )

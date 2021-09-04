@@ -1,16 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import Textfield from './Textfield'
 import Form from './Form'
 import Button from './Button'
 import Error from './Error'
 
+
+
 //input status
 const Register = ({status}) => {
-
+  
   const history = useHistory()
-
   //no error state
   const [isError, setError] = useState({
       userNameEmptyError:false,
@@ -20,12 +21,25 @@ const Register = ({status}) => {
       passwordError:false,
       passwordEmpty:false
   });
+  // let isAuth;
+  // {isAuth === true ? '/register' : '#'}
+
+  // if ((status.isLoggedin) && ((status.currentAdmin === 'amcanlubo') || (status.currentAdmin === 'ajong'))){
+  //   alert ('Permitted')
+    
+    
+  // } else {
+  //   alert ('You\'re are not authenticated')
+    
+  // }
+
+
   //if an error is committed display error message/s
   var adminInfo = {};
   var userNameError1 = "username cannot be blank!";
   var userNameError2 =  "username already exist!";
-  var firstNameError = "firstname cannot be blank!"
-  var lastNameError = "lastname cannot be blank!"
+  var firstNameError = "firstname cannot be blank!";
+  var lastNameError = "lastname cannot be blank!";
   var passwordError1 = "password is invalid!" ;
   var passwordError2 = "password cannot be blank!";
 
@@ -37,6 +51,7 @@ const Register = ({status}) => {
         lastname_input = document.getElementById('admin-lastname').value,
         password_input = document.getElementById('admin-password').value;
 
+
         //if username input field is empty
         if (username_input !== '') {  
 
@@ -47,7 +62,7 @@ const Register = ({status}) => {
             adminInfo.password = document.getElementById('admin-password').value;
             localStorage.setItem(username_input, JSON.stringify(adminInfo)); 
             // history.push('/Accounts') 
-            history.push('/login') 
+            history.push('/home') 
             alert(`User ${username_input} succesfully created!`)
 
           //if firstname field is left empty leave an error message
@@ -122,7 +137,8 @@ const Register = ({status}) => {
     <div className="register-main">
       <Form className='form2'>
         <h1>Register</h1>
-        <Textfield id='admin-username' className='form-control' placeholder='enter name' type='text' >Username:</Textfield>
+        <Textfield id='admin-username' className='form-control' required='true' placeholder='enter name' type='text' >Username:</Textfield>
+        
         <Error classnames = {isError.userNameEmptyError===true ? 'errortext' : 'hide'}>{userNameError1}</Error>
         <Error classnames = {isError.userNameExistError===true ? 'errortext' : 'hide'}>{userNameError2}</Error>
         

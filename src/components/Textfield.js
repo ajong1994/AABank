@@ -1,7 +1,6 @@
 
 const Textfield = ({children, id, classnames, placeholder, type, required }) => {
 
-    // const required = (required === true ) ? true : false
 
     return (
         <>
