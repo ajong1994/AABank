@@ -17,7 +17,7 @@ const Account = ({location}) => {
     if (depositAmount && depositAmount > 0) {
       setCustomerData((prevState) => ({
         ...prevState,
-        ['balance']: Number(prevState.balance) + depositAmount
+        balance: Number(prevState.balance) + depositAmount
       }))
     } else if (depositAmount < 0) {
       alert("You can't input a negative value.")
@@ -30,7 +30,7 @@ const Account = ({location}) => {
     if (withdrawAmount && withdrawAmount > 0 && withdrawAmount <= customerData.balance) {
       setCustomerData((prevState) => ({
         ...prevState,
-        ['balance']: Number(prevState.balance) - withdrawAmount
+        balance: Number(prevState.balance) - withdrawAmount
       }))
     } else if (withdrawAmount && withdrawAmount < 0 && withdrawAmount <= customerData.balance) {
       alert("You can't input a negative value.")
@@ -40,12 +40,33 @@ const Account = ({location}) => {
   };
 
   function handleTransfer() {
-    
+    const receivingAccount = document.getElementById('recipient-input').value;
+    const transferAmount = Number(document.getElementById('transfer-input').value);
+    const receivingCustomerData = JSON.parse(localStorage.getItem(`user-${receivingAccount}`));
+    console.log(typeof receivingAccount)
+    console.log(typeof customerData.accNum)
+    console.log(receivingCustomerData)
+    //Check if account exists
+    if (receivingAccount !== customerData.accNum && receivingCustomerData !== null && transferAmount < customerData.balance) {
+      receivingCustomerData.balance = receivingCustomerData.balance + transferAmount;
+      localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
+
+      setCustomerData((prevState) => ({
+        ...prevState,
+        balance: Number(prevState.balance) - transferAmount
+      }))
+    } else if (receivingAccount !== customerData.accNum && receivingCustomerData !== null) {
+      alert("Transfer amount exceeds current balance.")
+    } else if (receivingAccount !== customerData.accNum && transferAmount > customerData.balance){
+      alert("Recipient account number does not exist.")
+    } else {
+      alert("Can't send to own account.")
+    }
+
   };
 
   useEffect(() => {
     // Add handler on mount if id in query is invalid
-    console.log('cdata runs')
     if (customerData) {
       localStorage.setItem(`user-${customerData.accNum}`, JSON.stringify(customerData))
     }
@@ -68,7 +89,8 @@ const Account = ({location}) => {
           <Button onclick={handleWithdraw}>Withdraw Amount</Button>
         </div>
         <div style={{border: '1px solid black', padding: '10px'}}> 
-          <Textfield id="transfer-input" placeholder="Enter your transfer amount" type="number">Transfer</Textfield>
+          <Textfield id="recipient-input" placeholder="Enter receiving account number" type="number">Transfer</Textfield>
+          <Textfield id="transfer-input" placeholder="Enter your transfer amount" type="number"/>
           <Button onclick={handleTransfer}>Transfer Amount</Button>
         </div> 
       </div>
