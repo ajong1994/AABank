@@ -15,8 +15,8 @@ const App = () => {
 
   //On app pageload/refresh, checks sessionStorage for key 'isLoggedIn' and use that as state.
   const [loginStatus, setLoginStatus] = useState({
-    isLoggedIn: Boolean(JSON.parse(sessionStorage.getItem('isLoggedIn'))),
-    currentAdmin: JSON.parse(JSON.parse(sessionStorage.getItem('currentAdmin')))
+    isLoggedIn: Boolean(sessionStorage.getItem('isLoggedIn')),
+    currentAdmin: sessionStorage.getItem('currentAdmin')
   });
 
   //Whenever state 'isLoggedIn' is modified, useEffect Hook to change sessionStorage also.
@@ -36,14 +36,14 @@ const App = () => {
 
   return (
     <Switch>
-        <Route path="/home" component={Home} />
+        <Route path="/home" render={(props) => <Home {...props} status={loginStatus} />} />
         <Route path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/register" render={(props) => <Register {...props} status={loginStatus} />}  /> 
         <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} />} />
         <Route path="/account" render={(props) => <Account {...props} status={loginStatus} />} />
         <Route path="/create" render={(props) => <Create {...props} status={loginStatus} />} /> 
         <Route path="/transactions" render={(props) => <Transactions {...props} status={loginStatus} />}  />
-        <Route path="/" component={Home} />
+        <Route path="/" render={(props) => <Login {...props} status={loginStatus} />} />
     </Switch>
   );
   /* Objectives */
