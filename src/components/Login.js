@@ -35,7 +35,8 @@ const Login = ({status, updater}) => {
                     isLoggedIn: true, 
                     currentAdmin: loginUser
                 });
-                history.push("/accounts");
+                //Use history.replace instead of history.push so that when the user presses back, they don't get directed to Login.js again, instead they will be sent to prev Route
+                history.replace("/accounts");
             } else {
                 //If input password does not match stores password, set passworderror state to true which will affect rendered components
                 setError({

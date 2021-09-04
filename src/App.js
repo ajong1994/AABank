@@ -15,7 +15,7 @@ const App = () => {
 
   //On app pageload/refresh, checks sessionStorage for key 'isLoggedIn' and use that as state.
   const [loginStatus, setLoginStatus] = useState({
-    isLoggedIn: Boolean(sessionStorage.getItem('isLoggedIn')),
+    isLoggedIn: Boolean(JSON.parse(sessionStorage.getItem('isLoggedIn'))),
     currentAdmin: sessionStorage.getItem('currentAdmin')
   });
 
@@ -27,11 +27,7 @@ const App = () => {
 
   //Named function to change isLoggedIn state
   function updateStatus(newstate) {
-    if (newstate.isLoggedIn === true || newstate.isLoggedIn === false) {
       setLoginStatus(newstate);
-    } else {
-      console.log('Invalid state value passed to isLoggedIn.')
-    }
   }
 
   return (

@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
-import Textfield from './Textfield'
-
-
-//component
-import Account from './Account'
+import {useHistory} from 'react-router-dom'
+import Button from './Button'
 
 
 const Accounts = () => {
+
+  const history = useHistory();
   
   //Get list of total customers to loop through from localStorage
   const customerList = JSON.parse(localStorage.getItem('customerList'));
 
+  //Set state of list of customers in data with value of object with account info
   const[customerData, setCustomerData] = useState(list_users());
   
-
-
   //For every customer, get their data from local storage and add it to array for mapping
   function list_users() {
     if (customerList !== null) {
@@ -29,8 +26,6 @@ const Accounts = () => {
     };
   }
 
-
-  
   //onChange function to filter Accounts display results depending on search
   function handleOnKeyUp(e){
     if (e.key === 'Enter') {
@@ -41,6 +36,14 @@ const Accounts = () => {
       setCustomerData(list_users())
     }
 
+  }
+
+  //Redirect to specific account page by passing in customer as prop to Account component on click
+  function handleOnClick(customerId){
+    history.push({
+      pathname: "/account", 
+      search: `?id=${customerId}`
+    });
   }
 
   return (
@@ -62,7 +65,7 @@ const Accounts = () => {
                   <td>{customer.accNum}</td>
                   <td>{`${customer.firstname} ${customer.lastname}`}</td>
                   <td>{customer.balance}</td>
-                  <td>icons here</td>
+                  <td><Button classnames="buttons table-btn" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
                 </tr>
               ))}
             </tbody>) : (
