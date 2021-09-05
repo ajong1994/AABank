@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import {useHistory} from 'react-router-dom'
 import Button from './Button'
+import Header from './Header'
 
 
-const Accounts = () => {
+const Accounts = ({status}) => {
 
   const history = useHistory();
   
@@ -47,6 +48,9 @@ const Accounts = () => {
   }
 
   return (
+    <>
+    <Header />
+    <h1>Welcome { status.currentAdmin }</h1>
       <div className="accounts-main">
         <input type="text" name = "accounts-search-input" id="accounts-search-input" className="form-control" placeholder="Search" onKeyUp={handleOnKeyUp}/>
         <div className="table-main-container">
@@ -74,6 +78,7 @@ const Accounts = () => {
           </table>
         </div>
       </div>
+    </>
   )
 }
 
