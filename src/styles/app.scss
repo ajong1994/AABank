@@ -1,53 +1,52 @@
 * {
     padding:0;
     margin:0;
+    list-style: none;
+    text-decoration: none;
 }
 
 body {
     height:100vh;
     font-family: 'Century Gothic';
+    cursor: pointer;
 }
 
-
-.home-main, .accounts-main  {
-    
-    .App-header {
-        background-color: chartreuse;
-        width: 100%;
-        display: flex;
-        justify-content: center ;
+.App-header {
+    background-color: chartreuse;
+    // background-color: #C9ADA7;
+    width: 100%;
+    display: flex;
+    justify-content: center ;
         
-        ul { 
-            justify-content: center;
+        ul {
+            width: 40rem;
+            justify-content: space-evenly; 
             display: flex;
-            list-style-type: none;
-            text-decoration: none;
-            padding: 10px;
-
-            li {
-                margin: 0 20px;
-            }
+            margin:0 2rem;
+            padding: 10px;           
         }
     }
-
-    h1 {
-        text-align: center;
-        margin-top: 15rem;
-    }
-}
-
-
+  
 .login-main {
     margin: 5rem auto;
-    width: 15rem;
-    height:20rem;
+    // width: 15rem;
+    // height:20rem;
     border:1px solid black;
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     align-content: center;
-    padding:20px;
+    // padding:20px;
+    gap: 20px;
+    width: 250px;
+    max-width: 80%;
+    min-width: 100px;
+    min-height: 250px;
+    padding: 20px 40px;
+    border-radius: 6px;
+    line-height: 2rem;
 
     .form1 {
         width: 20rem;
@@ -112,4 +111,41 @@ body {
 
 .hide {
     display: none;
+}
+
+//temp layout
+.wrapper {
+  height: 97vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;  
+}
+
+.form-wrapper {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 250px;
+  max-width: 80%;
+  min-width: 100px;
+  min-height: 250px;
+  padding: 20px 40px;
+  border-radius: 6px;
+  background-color: #fefefe;
+  line-height: 1.5rem;
+}
+
+.error {
+  font-size:.65rem;
+  font-weight: bold;
+  color: red;
+  display: block;
+  position: relative;
+}
+
+.info {
+  font-size: 0.75rem;
 }
