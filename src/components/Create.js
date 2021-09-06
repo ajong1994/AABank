@@ -86,13 +86,11 @@ const Create = ({status}) => {
                     }
                 }
         } 
-
-
                 if (user_balance  !== '') {
-                    user_balance = user_balance
+                  user_balance = user_balance
+                } else {
+                  user_balance = 0
                 }
-
-                
 
         //create UID and set numbers of totalCustomers
         if (localStorage.getItem('totalCustomers') === null) {
@@ -106,12 +104,14 @@ const Create = ({status}) => {
         }
         
 
-    if (user_exist === true) {
-        alert('user already exist!')
-    } else if(email_exist===true){
-        alert('email already exist!')
-    }
-     else{
+        if (user_exist === true) {
+            alert('user already exist!')
+        } else if(email_input===''){
+            alert('email is empty!')
+        } else if(email_exist===true){
+            alert('email already exist!')
+        } else if ((firstname_input !== '') && (lastname_input !== '') && (email_input !== '')) {
+       
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers
                 //format accNum to 5-digit number
@@ -136,7 +136,9 @@ const Create = ({status}) => {
                 history.push('/accounts') 
                 alert(`User ${firstname_input} succesfully created!`)
             
-            }
+        } else {
+          alert(`Fill all required fields!`)
+        }
 
     }
   
@@ -176,7 +178,7 @@ const Create = ({status}) => {
           errors.balance = 
               value < 0
                 ? balanceErr.balanceShort = 'Balance must not be a negative number'
-                : '';
+                : 0;
             break;
           default:
             break;

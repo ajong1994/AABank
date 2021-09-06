@@ -10,9 +10,10 @@ const Header = ({status}) => {
             <ul>
                 <li><Link className='navItem' to='/accounts'>Accounts</Link></li>
                 <li><Link className='navItem' to='/register'>Register</Link></li>
-                <li><Link className='navItem' to='/create'>Create</Link></li>
+                <li><Link className='navItem' to='/create'>Create Account</Link></li>
+                <li><Link className='navItem' to='/'><Logout /></Link></li> 
                 {/* <li><Link className='navItem' to='/logout'>Logout</Link></li> */}
-                <li><Logout /></li>     
+                    
             </ul>           
         </header>
     )       
