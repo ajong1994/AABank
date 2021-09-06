@@ -6,8 +6,7 @@ const Form = ({classnames, children}) => {
     }
 
     return (
-        // <form onSubmit={submitForm} className={classnames}>
-        <form onClick={submitForm} className={classnames} action="/" method="GET">
+        <form onSubmit={submitForm} className={classnames} action="/" method="GET">
             {children}
         </form>
     )

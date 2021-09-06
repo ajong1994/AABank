@@ -3,14 +3,12 @@ import { Switch, Route } from 'react-router-dom'
 
 /* Components */
 // import Home from './components/Home'
-import Accounts from './components/Accounts'
-import Account from './components/Account'
+import Accounts from './pages/Accounts'
+import Account from './pages/Account'
 import Login from './components/Login'
 import Logout from './components/Logout'
-import Register from './components/Register'
-import Transactions from './components/Transactions'
-import Create from './components/Create'
-// import Header from './components/Header'
+import Register from './pages/Register'
+import Create from './pages/Create'
 
 
 const App = () => {
@@ -41,7 +39,6 @@ const App = () => {
         <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} />} />
         <Route path="/account" render={(props) => <Account {...props} status={loginStatus} />} />
         <Route path="/create" render={(props) => <Create {...props} status={loginStatus} />} /> 
-        <Route path="/transactions" render={(props) => <Transactions {...props} status={loginStatus} />}  />
         <Route path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
     </Switch>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {useHistory} from 'react-router-dom'
-import Button from './Button'
-import Header from './Header'
+import Button from '../components/Button'
+import Header from '../parts/Header'
 
 
 const Accounts = ({status}) => {

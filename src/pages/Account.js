@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
-import Textfield from './Textfield'
-import Button from './Button'
+import Textfield from '../components/Textfield'
+import Button from '../components/Button'
 import Deposit from '../parts/Deposit'
-import Form from './Form'
+import Form from '../components/Form'
 
 
 const Account = ({location}) => {

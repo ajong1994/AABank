@@ -1,11 +1,6 @@
-import React from 'react'
-import {useState} from 'react'
+import React, {useState}  from 'react'
 import { useHistory } from 'react-router-dom'
-// import Textfield from './Textfield'
-// import Form from './Form'
-// import Button from './Button'
-// import Error from './Error'
-import Header from './Header'
+import Header from '../parts/Header'
 
 
 const Create = ({status}) => {

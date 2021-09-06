@@ -5,7 +5,7 @@ import { useState } from 'react'
 // import Form from './Form'
 // import Button from './Button'
 // import Error from './Error'
-import Header from './Header'
+import Header from '../parts/Header'
 
 
 const Register = ({status}) => {
