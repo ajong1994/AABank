@@ -1,5 +1,5 @@
 
-export function format_money(amount) {
+export function formatMoney(amount) {
 
     const formatter = new Intl.NumberFormat('en-ES', {
         style: 'currency',
