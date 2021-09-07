@@ -1,5 +1,5 @@
 
-function get_balance(input) {
+export function list_users(input) {
     return (
         <div>
             
@@ -7,4 +7,3 @@ function get_balance(input) {
     )
 }
 
-export default get_balance
