@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
-import Textfield from '../components/Textfield'
-import Button from '../components/Button'
 import Deposit from '../parts/Deposit'
+import Withdraw from '../parts/Withdraw'
+import Transfer from '../parts/Transfer'
 import Form from '../components/Form'
+import {deposit} from '../utils/DepositUtil'
+import {withdraw} from '../utils/WithdrawUtil'
+import {send} from '../utils/SendUtil'
 
 
 const Account = ({location}) => {
@@ -36,13 +39,13 @@ const Account = ({location}) => {
         setDepositAmount(Number(e.target.value) || '');
         break;
       case 'withdraw' :
-        setWithdrawAmount(Number(e.target.value));
+        setWithdrawAmount(Number(e.target.value) || '');
         break;
       case 'transfer-amount' :
-        setTransferAmount(Number(e.target.value));
+        setTransferAmount(Number(e.target.value) || '');
         break;
       case 'transfer-account' :
-        setReceivingAccount(Number(e.target.value));
+        setReceivingAccount(e.target.value);
         break;
       default:
         break;
@@ -62,9 +65,10 @@ const Account = ({location}) => {
   
   function handleDeposit() {
     if (depositAmount && depositAmount > 0) {
+      const new_balance = deposit(customerData.accNum, depositAmount);
       setCustomerData((prevState) => ({
         ...prevState,
-        balance: Number(prevState.balance) + depositAmount
+        balance: new_balance
       }));
       setModalStat((prevState) => ({
         ...prevState,
@@ -77,13 +81,18 @@ const Account = ({location}) => {
   };
 
   function handleWithdraw() {
-    withdrawAmount = Number(document.getElementById('withdraw-input').value);
     //Error handling to ensure customer can't withdraw more than their account balance
     if (withdrawAmount && withdrawAmount > 0 && withdrawAmount <= customerData.balance) {
+      const new_balance = withdraw(customerData.accNum, withdrawAmount);
       setCustomerData((prevState) => ({
         ...prevState,
-        balance: Number(prevState.balance) - withdrawAmount
-      }))
+        balance: new_balance
+      }));
+      setModalStat((prevState) => ({
+        ...prevState,
+        status: 'paid'
+      }));
+      setWithdrawAmount('');
     } else if (withdrawAmount && withdrawAmount < 0 && withdrawAmount <= customerData.balance) {
       alert("You can't input a negative value.")
     } else {
@@ -92,21 +101,25 @@ const Account = ({location}) => {
   };
 
   function handleTransfer() {
-    receivingAccount = document.getElementById('recipient-input').value;
-    transferAmount = Number(document.getElementById('transfer-input').value);
     const receivingCustomerData = JSON.parse(localStorage.getItem(`user-${receivingAccount}`));
+    const {from_newBalance, to_newBalance} = send(customerData.accNum, receivingAccount, transferAmount);
     //Check if account exists
-    if (receivingAccount !== customerData.accNum && receivingCustomerData !== null && transferAmount < customerData.balance) {
-      receivingCustomerData.balance = receivingCustomerData.balance + transferAmount;
+    if (receivingAccount !== customerData.accNum && receivingCustomerData !== null && transferAmount <= customerData.balance) {
+      receivingCustomerData.balance = to_newBalance
       localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
       setCustomerData((prevState) => ({
         ...prevState,
-        balance: Number(prevState.balance) - transferAmount
+        balance: from_newBalance
       }));
-    } else if (receivingAccount !== customerData.accNum && receivingCustomerData !== null) {
-      alert("Transfer amount exceeds current balance.")
-    } else if (receivingAccount !== customerData.accNum && transferAmount > customerData.balance){
+      setModalStat((prevState) => ({
+        ...prevState,
+        status: 'paid'
+      }));
+      setTransferAmount('');
+    } else if (receivingAccount !== customerData.accNum && receivingCustomerData === null) {
       alert("Recipient account number does not exist.")
+    } else if (receivingAccount !== customerData.accNum && transferAmount > customerData.balance){
+      alert("Transfer amount exceeds current balance.")
     } else {
       alert("Can't send to own account.")
     }
@@ -129,16 +142,10 @@ const Account = ({location}) => {
         <div>Email: {customerData.email}</div>
         <div>Balance: {customerData.balance}</div>
         <Form>
-          <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit}/>
-          <div style={{border: '1px solid black', padding: '10px'}}> 
-            <Textfield id="withdraw-input" placeholder="Enter your withdraw amount" type="number">Withdraw</Textfield>
-            <Button onclick={handleWithdraw}>Withdraw Amount</Button>
-          </div>
-          <div style={{border: '1px solid black', padding: '10px'}}> 
-            <Textfield id="recipient-input" placeholder="Enter receiving account number" type="number">Transfer</Textfield>
-            <Textfield id="transfer-input" placeholder="Enter your transfer amount" type="number"/>
-            <Button onclick={handleTransfer}>Transfer Amount</Button>
-          </div>
+          <Deposit key={modalStat} modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit}/>
+          <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw}/>
+          <Transfer modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} transferAmount={transferAmount} onChangeAmount={(e) => handleOnChange(e, 'transfer-amount')} 
+            onChangeAccount={(e) => handleOnChange(e, 'transfer-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleTransfer={handleTransfer}/>
         </Form>
       </div>
     ) : (

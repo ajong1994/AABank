@@ -1,8 +1,7 @@
-import React from 'react'
 
 const Transactions = () => {
   return (
-    <div className="transactions-main">
+    <div>
       HELLO
     </div>
   )
