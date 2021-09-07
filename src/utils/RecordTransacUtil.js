@@ -1,5 +1,4 @@
 import {getISOdate} from './ISODateUtil'
-import {increase_transactions} from './IncTransactUtil'
 
 
 export function record_transaction(customerData, amount, transac_type, transac_count, user) {
