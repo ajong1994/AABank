@@ -9,16 +9,17 @@ const Accounts = ({status}) => {
   const history = useHistory();
 
   //Set state of list of customers in data with value of object with account info
-  const[customerData, setCustomerData] = useState(list_users());
+  const generatedList = list_users();
+  const[customerList, setCustomerList] = useState(generatedList);
 
   //onChange function to filter Accounts display results depending on search
   function handleOnKeyUp(e){
     if (e.key === 'Enter') {
       const searchQuery = e.target.value;
-      const filteredCustomers = customerData.filter(customer => customer.accNum === searchQuery);
-      setCustomerData(filteredCustomers);
+      const filteredCustomers = customerList.filter(customer => customer.accNum === searchQuery);
+      setCustomerList(filteredCustomers);
     } else if (e.key === 'Backspace' || e.key === 'Clear' || e.key === 'Cut' || e.key === 'Delete' ) {
-      setCustomerData(list_users())
+      setCustomerList(list_users())
     }
   }
 
@@ -46,8 +47,8 @@ const Accounts = ({status}) => {
                 <th>Actions</th>
               </tr>
             </thead>
-            { customerData.length ? (<tbody>
-              {customerData.map((customer) => (
+            { customerList.length ? (<tbody>
+              {customerList.map((customer) => (
                 <tr key = {customer.accNum}>
                   <td>{customer.accNum}</td>
                   <td>{`${customer.firstname} ${customer.lastname}`}</td>
@@ -57,6 +58,7 @@ const Accounts = ({status}) => {
               ))}
             </tbody>) : (
               "No customer accounts yet."
+              // Include state implementation here so that 2 different messages are displayed: no customer accounts and no search results
             )}
           </table>
         </div>

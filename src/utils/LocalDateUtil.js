@@ -1,4 +1,5 @@
 
 export function getLocalDate(ISOdate) {
-    return ISOdate.toLocaleString('en-US')
+    const d = new Date(ISOdate);
+    return d.toLocaleString('en-US')
 }

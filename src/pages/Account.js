@@ -4,6 +4,7 @@ import Deposit from '../parts/Deposit'
 import Withdraw from '../parts/Withdraw'
 import Send from '../parts/Send'
 import Form from '../components/Form'
+import Transactions from '../parts/Transactions'
 import { deposit } from '../utils/DepositUtil'
 import { withdraw } from '../utils/WithdrawUtil'
 import { send } from '../utils/SendUtil'
@@ -29,9 +30,7 @@ const Account = ({location}) => {
   const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')) || []);
 
   // Initialize state for send function customer state
-  const [receivingCustomerData, setReceivingCD] = useState(JSON.parse(localStorage.getItem(`user-${receivingAccount}`)));
-
-
+  // const [receivingCustomerData, setReceivingCD] = useState(JSON.parse(localStorage.getItem(`user-${receivingAccount}`)));
 
   //Initialize states for transaction modals
   const [modalStat, setModalStat] = useState({
@@ -97,7 +96,7 @@ const Account = ({location}) => {
     //Error handling to ensure customer can't withdraw more than their account balance
     if (withdrawAmount && withdrawAmount > 0 && withdrawAmount <= customerData.balance) {
       const new_balance = withdraw(customerData.accNum, withdrawAmount);
-      const {new_transactions, latest_transaction} = record_transaction(customerData, withdrawAmount, 'withdraw', totalTransactions)
+      const {new_transactions, latest_transaction} = record_transaction(customerData, withdrawAmount, 'withdrawal', totalTransactions)
       setCustomerData((prevState) => ({
         ...prevState,
         balance: new_balance,
@@ -119,16 +118,16 @@ const Account = ({location}) => {
 
   function handleSend() {
     //Check if account exists
-    setReceivingCD(JSON.parse(localStorage.getItem(`user-${receivingAccount}`)));
+    const receivingCustomerData = JSON.parse(localStorage.getItem(`user-${receivingAccount}`));
     if (receivingAccount !== customerData.accNum && receivingCustomerData !== null && sendAmount <= customerData.balance) {
       const {from_newBalance, to_newBalance} = send(customerData.accNum, receivingAccount, sendAmount);
-      const {new_transactions, latest_transaction} = record_transaction(customerData, sendAmount, 'send', totalTransactions, receivingAccount);
-      const receivingTransData = record_transaction(customerData, sendAmount, 'receive', totalTransactions, customerData.accNum);
-      setReceivingCD((prevState) => ({
-        ...prevState,
-        balance: to_newBalance,
-        transactions: receivingTransData.new_transactions
-      }));
+      const {new_transactions, latest_transaction} = record_transaction(customerData, sendAmount, 'sent', totalTransactions, receivingAccount);
+      //Update receiving customer's data on the back-end/localStorage. Dev Notes: Removed State implementation for this because it doesn't affect any rendering elements anyway and to reduce re-rendering.
+      const receivingTransData = record_transaction(receivingCustomerData, sendAmount, 'received', totalTransactions, customerData.accNum);
+      receivingCustomerData.balance = to_newBalance;
+      receivingCustomerData.transactions = receivingTransData.new_transactions;
+      localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
+      //End of receiving customer data update and start of localstate updating
       setCustomerData((prevState) => ({
         ...prevState,
         balance: from_newBalance,
@@ -163,14 +162,14 @@ const Account = ({location}) => {
   }, [totalTransactions])
 
   useEffect(() => {
-    localStorage.setItem('transactionList', (JSON.stringify(transactionList)));
+    localStorage.setItem('transactionList', JSON.stringify(transactionList));
   }, [transactionList])
 
-  useEffect(() => {
-    if (receivingAccount !== '') {
-      localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
-    }
-  }, [receivingCustomerData])
+  // useEffect(() => {
+  //   if (receivingAccount !== null) {
+  //     localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
+  //   }
+  // }, [receivingCustomerData])
 
   return (
     <div> 
@@ -181,11 +180,12 @@ const Account = ({location}) => {
         <div>Email: {customerData.email}</div>
         <div>Balance: {customerData.balance}</div>
         <Form>
-          <Deposit key={modalStat} modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit}/>
+          <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit}/>
           <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw}/>
           <Send modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} sendAmount={sendAmount} onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
             onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleSend={handleSend}/>
         </Form>
+        <Transactions customerData={customerData}/>
       </div>
     ) : (
       <div>
