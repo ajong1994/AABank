@@ -57,20 +57,20 @@ const App = () => {
 // - New user has zero balance (or an optional initial balance)
 // - user (argument) is any string value. We should add propTypes.string
 
-//Function deposit(user, amount)
+//Function deposit(user, amount) [DONE]
 // - Function increases user's balance by amount value
 // - Returns new_balance of the user
 
-//Function withdraw(user,amount)
+//Function withdraw(user,amount) [DONE]
 // - Function decreases user's balance by amoutnt value
 // - Returns new-blance of the user
 
-//Function send(from_user, to_user, amount)
+//Function send(from_user, to_user, amount) [DONE -- except returning in a given format cause it doesn't make sense]
 // - Function decreases from_user's balance by amount value
 // - Function increases to_user's balance by amount value
 // - Returns balance of from_user and to_user in given format (Phpxx,xxx.xx)
 
-//Function get_balance(user)
+//Function get_balance(user) [DONE]
 // - Returns balance of the user in given format (Phpxx,xxx.xx)
 
 //Function list_users() [DONE]

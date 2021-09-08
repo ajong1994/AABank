@@ -2,30 +2,14 @@ import React, { useState } from 'react'
 import {useHistory} from 'react-router-dom'
 import Button from '../components/Button'
 import Header from '../parts/Header'
-
+import {list_users} from '../utils/ListUsersUtil'
 
 const Accounts = ({status}) => {
 
   const history = useHistory();
-  
-  //Get list of total customers to loop through from localStorage
-  const customerList = JSON.parse(localStorage.getItem('customerList'));
 
   //Set state of list of customers in data with value of object with account info
   const[customerData, setCustomerData] = useState(list_users());
-  
-  //For every customer, get their data from local storage and add it to array for mapping
-  function list_users() {
-    if (customerList !== null) {
-      var populatedCustomerList = []
-      for (let customer of customerList) {
-         populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
-      }
-      return populatedCustomerList;
-    } else {
-      return [];
-    };
-  }
 
   //onChange function to filter Accounts display results depending on search
   function handleOnKeyUp(e){
@@ -36,7 +20,6 @@ const Accounts = ({status}) => {
     } else if (e.key === 'Backspace' || e.key === 'Clear' || e.key === 'Cut' || e.key === 'Delete' ) {
       setCustomerData(list_users())
     }
-
   }
 
   //Redirect to specific account page by passing in customer as prop to Account component on click
