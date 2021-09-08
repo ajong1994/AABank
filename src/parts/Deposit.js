@@ -2,13 +2,13 @@ import Textfield from '../components/Textfield'
 import Button from '../components/Button'
 import Modal from './Modal'
 import {get_balance} from '../utils/GetBalanceUtil'
-import {format_money} from '../utils/FormatMoneyUtil'
+import {formatMoney} from '../utils/FormatMoneyUtil'
 
 
 const Deposit = ({modalStat, customerData, depositAmount, onChange, handleModalClose, handleModalOpen, handleDeposit}) => {
 
     const formattedBalance = get_balance(customerData);
-    const formattedDeposit = format_money(depositAmount);
+    const formattedDeposit = formatMoney(depositAmount);
 
     return (
         <>

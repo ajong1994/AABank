@@ -132,6 +132,8 @@ const Create = ({status}) => {
                 accInfo.transaction = []; 
 
                 // totalTransactions = JSON.parse((localStorage.getItem('totalTransactions'))
+                // accInfo.balance = Number(user_balance);
+                // accInfo.transactions = [];
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
                 
               
