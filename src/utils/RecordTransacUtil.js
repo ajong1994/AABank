@@ -8,7 +8,7 @@ export function record_transaction(customerData, amount, transac_type, transac_c
     const today = getISOdate();
     let transaction_details = {}
 
-    if (transac_type === 'send') {
+    if (transac_type === 'sent') {
         transaction_details = {
             date: today,
             amount: amount,
@@ -16,7 +16,7 @@ export function record_transaction(customerData, amount, transac_type, transac_c
             transactionId: transacId,
             notes: `To: ${user}`
         }
-    } else if (transac_type === 'receive'){
+    } else if (transac_type === 'received'){
         transaction_details = {
             date: today,
             amount: amount,

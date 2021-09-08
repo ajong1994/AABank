@@ -128,7 +128,7 @@ const Create = ({status}) => {
                 accInfo.lastname = lastname_input;
                 accInfo.email = email_input;
                 accInfo.balance = Number(user_balance);
-                accInfo.transaction = []; 
+                accInfo.transactions = []; 
                 // totalTransactions = JSON.parse((localStorage.getItem('totalTransactions'))
 
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
