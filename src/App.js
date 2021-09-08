@@ -9,6 +9,7 @@ import Login from './components/Login'
 import Logout from './components/Logout'
 import Register from './pages/Register'
 import Create from './pages/Create'
+import TotalTransactions from './pages/TotalTransactions'
 
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} />} />
         <Route path="/account" render={(props) => <Account {...props} status={loginStatus} />} />
         <Route path="/create" render={(props) => <Create {...props} status={loginStatus} />} /> 
+        <Route path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
     </Switch>
   );
