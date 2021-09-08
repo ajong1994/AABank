@@ -1,19 +1,21 @@
 import React, {useState}  from 'react'
 import { useHistory } from 'react-router-dom'
 import Header from '../parts/Header'
+import {format_idNumber} from '../utils/UserIdUtil'
+import {format_money} from '../utils/FormatMoneyUtil'
+
 
 
 const Create = ({status}) => {
-
-    const validNameRegex = RegExp(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/);
-    const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-    
+    //checkers
+    const validNameRegex = RegExp(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
+    const validEmailRegex = RegExp(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i);
     const validateForm = (errors) => {
-    let valid = true;
-    Object.values(errors).forEach(
-        (val) => val.length > 0 && (valid = false)
-    );
-    return valid;
+      let valid = true;
+      Object.values(errors).forEach(
+          (val) => val.length > 0 && (valid = false)
+      );
+      return valid;
 }
 
     const history = useHistory()
@@ -22,8 +24,7 @@ const Create = ({status}) => {
         firstname: null,
         lastname: null,
         email: null,
-        balance:0,
-        
+        balance:null,
         errors:  {
             firstname: '',
             lastname: '',
@@ -32,7 +33,6 @@ const Create = ({status}) => {
       }
     })
 
-    
     const [firstnameErr, SetfirstnameErr] = useState({})
     const [lastnameErr, SetlastnameErr] = useState({})
     const [emailErr, SetemailErr] = useState({})
@@ -51,7 +51,7 @@ const Create = ({status}) => {
         var populatedCustomerList = []
         let email_exist 
         let user_exist
-
+        //Set input to lowercase
         firstname_input = firstname_input.toLowerCase()
         lastname_input = lastname_input.toLowerCase()
         email_input = email_input.toLowerCase()
@@ -66,7 +66,7 @@ const Create = ({status}) => {
                 populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
             }
                 for (let accounts of populatedCustomerList) {
-                    console.log(accounts)   
+                    // console.log(accounts)   
 
                     if ((firstname_input + lastname_input) === ((accounts.firstname) + (accounts.lastname))){
                         user_exist = true
@@ -80,12 +80,25 @@ const Create = ({status}) => {
                         email_exist = false
                     }
                 }
-        } 
+        }       //if there's no input set automatically to 0
                 if (user_balance  !== '') {
                   user_balance = user_balance
                 } else {
                   user_balance = 0
                 }
+
+      //   let totalTransactions;
+      //   //create and set total transactions
+      //   if (localStorage.getItem('totalTransactions') === null) {
+      //     localStorage.setItem('totalTransactions', 1)    
+      //     totalTransactions = Number(localStorage.getItem('totalTransactions'))
+          
+      // } else {
+      //     totalTransactions = Number(localStorage.getItem('totalTransactions'))
+      //     totalTransactions =  totalTransactions + 1
+      //     localStorage.setItem('totalTransactions')           
+      // }
+
 
         //create UID and set numbers of totalCustomers
         if (localStorage.getItem('totalCustomers') === null) {
@@ -106,19 +119,21 @@ const Create = ({status}) => {
         } else if(email_exist===true){
             alert('email already exist!')
         } else if ((firstname_input !== '') && (lastname_input !== '') && (email_input !== '')) {
-       
+                // accInfo.accNum = accNum
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers
-                //format accNum to 5-digit number
-                accNum = String(accNum).padStart(5, '0')
+                accNum = format_idNumber(accNum)
                 accInfo.accNum = accNum
                 accInfo.firstname = firstname_input;
                 accInfo.lastname = lastname_input;
                 accInfo.email = email_input;
                 accInfo.balance = Number(user_balance);
-                accInfo.transactions = [];
+                accInfo.transaction = []; 
+                // totalTransactions = JSON.parse((localStorage.getItem('totalTransactions'))
+
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
-        
+                
+              
 
                 if (localStorage.getItem('customerList') === null) {
                     localStorage.setItem('customerList', JSON.stringify([`user-${accNum}`]))
@@ -147,8 +162,8 @@ const Create = ({status}) => {
         switch (name) {
           case 'firstname': 
           errors.firstname = 
-              value.length < 2
-                ? firstnameErr.firstNameShort = 'First name is too short'
+              value.length < 3
+                ? firstnameErr.firstNameShort = 'First name must be at least 3 characters'
                 :
               validNameRegex.test(value)
                 ? firstnameErr.firstNameShort = 'First name must not include numbers and special characters!'
@@ -157,8 +172,8 @@ const Create = ({status}) => {
          
           case 'lastname': 
           errors.lastname = 
-              value.length < 2
-                ? lastnameErr.lastNameShort = 'Last name is too short'
+              value.length < 3
+                ? lastnameErr.lastNameShort = 'Last name must be at least 3 characters'
                 :
                 validNameRegex.test(value)
                 ? lastnameErr.lastNameShort = 'Last name must not include numbers and special characters!'
@@ -184,9 +199,9 @@ const Create = ({status}) => {
     
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(validateForm(check.errors)) {
+        if (validateForm(check.errors)) {
           console.info('Valid Form')
-        }else{
+        } else{
           console.error('Invalid Form')
         }
     } 
@@ -203,25 +218,25 @@ const Create = ({status}) => {
 
             <div className='fullName'>
               <label htmlFor="firstname">First Name</label>
-              <input type='text' id='user-firstname' name='firstname' onChange={handleChange} noValidate />
+              <input type='text' id='user-firstname' name='firstname' onChange={handleChange} required />
               {errors.firstname.length > 0 && <span className='error'>{errors.firstname}</span>}
             </div>
 
             <div className='fullName'>
               <label htmlFor="lastname">Last Name</label>
-              <input type='text' id='user-lastname' name='lastname' onChange={handleChange} noValidate />
+              <input type='text' id='user-lastname' name='lastname' onChange={handleChange} required />
               {errors.lastname.length > 0 && <span className='error'>{errors.lastname}</span>}
             </div>
 
             <div className='email'>
               <label htmlFor="email">Email</label>
-              <input type='email' id='user-email' name='email' onChange={handleChange} noValidate />
+              <input type='email' id='user-email' name='email' onChange={handleChange} required />
               {errors.email.length > 0 && <span className='error'>{errors.email}</span>}
             </div>
 
             <div className='balance'> 
               <label htmlFor="balance">Balance</label>
-              <input type='number' id='user-balance'name='balance' onChange={handleChange} noValidate placeholder='0'/>
+              <input type='number' id='user-balance'name='balance' onChange={handleChange}  placeholder='0'/>
               {errors.balance.length > 0 && <span className='error'>{errors.balance}</span>}
             </div>
             <div className='submit'>
