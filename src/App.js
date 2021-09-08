@@ -31,15 +31,16 @@ const App = () => {
       setLoginStatus(newstate);
   }
 
+
   return (
     <Switch>
         {/* <Route path="/home" render={(props) => <Home {...props} status={loginStatus} />} /> */}
         <Route path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/logout" render={(props) => <Logout {...props} status={loginStatus} updater={updateStatus}/>} />
-        <Route path="/register" render={(props) => <Register {...props} status={loginStatus} />}  /> 
-        <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} />} />
-        <Route path="/account" render={(props) => <Account {...props} status={loginStatus} />} />
-        <Route path="/create" render={(props) => <Create {...props} status={loginStatus} />} /> 
+        <Route path="/register" render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
+        <Route path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route path="/account" render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route path="/create" render={(props) => <Create {...props} status={loginStatus}  updater={updateStatus}/>} /> 
         <Route path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
     </Switch>

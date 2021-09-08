@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import Deposit from '../parts/Deposit'
 import Withdraw from '../parts/Withdraw'
 import Send from '../parts/Send'
@@ -11,7 +11,7 @@ import { send } from '../utils/SendUtil'
 import { record_transaction } from '../utils/RecordTransacUtil'
 
 
-const Account = ({location}) => {
+const Account = ({status, location}) => {
 
   //Use URL API to create new URLSearchParams instance  from location.search 
   const searchQuery = new URLSearchParams(location.search)
@@ -29,9 +29,6 @@ const Account = ({location}) => {
   const [totalTransactions, setTotalTransactions] = useState(localStorage.getItem('totalTransactions') || 0);
   const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')) || []);
 
-  // Initialize state for send function customer state
-  // const [receivingCustomerData, setReceivingCD] = useState(JSON.parse(localStorage.getItem(`user-${receivingAccount}`)));
-
   //Initialize states for transaction modals
   const [modalStat, setModalStat] = useState({
     show: false, 
@@ -40,6 +37,26 @@ const Account = ({location}) => {
     withdrawal: false,
     send: false
   });
+
+  useEffect(() => {
+    // Add handler on mount if id in query is invalid
+    if (customerData) {
+      localStorage.setItem(`user-${customerData.accNum}`, JSON.stringify(customerData));
+    }
+  }, [customerData])
+
+  useEffect(() => {
+    localStorage.setItem('totalTransactions', (totalTransactions))
+  }, [totalTransactions])
+
+  useEffect(() => {
+    localStorage.setItem('transactionList', JSON.stringify(transactionList));
+  }, [transactionList])
+
+  //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+  if (!status.isLoggedIn) {
+    return <Redirect to="/login"/>
+  } 
   
   function handleOnChange(e, state) {
     switch (state) {
@@ -149,27 +166,6 @@ const Account = ({location}) => {
     }
 
   };
-
-  useEffect(() => {
-    // Add handler on mount if id in query is invalid
-    if (customerData) {
-      localStorage.setItem(`user-${customerData.accNum}`, JSON.stringify(customerData));
-    }
-  }, [customerData])
-
-  useEffect(() => {
-    localStorage.setItem('totalTransactions', (totalTransactions))
-  }, [totalTransactions])
-
-  useEffect(() => {
-    localStorage.setItem('transactionList', JSON.stringify(transactionList));
-  }, [transactionList])
-
-  // useEffect(() => {
-  //   if (receivingAccount !== null) {
-  //     localStorage.setItem(`user-${receivingAccount}`, JSON.stringify(receivingCustomerData));
-  //   }
-  // }, [receivingCustomerData])
 
   return (
     <div> 

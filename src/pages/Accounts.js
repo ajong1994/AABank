@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import {useHistory} from 'react-router-dom'
+import {Redirect, useHistory} from 'react-router-dom'
 import Button from '../components/Button'
 import Header from '../parts/Header'
 import {list_users} from '../utils/ListUsersUtil'
 
-const Accounts = ({status}) => {
+const Accounts = ({status, updater}) => {
 
   const history = useHistory();
 
@@ -12,7 +12,17 @@ const Accounts = ({status}) => {
   const generatedList = list_users();
   const[customerList, setCustomerList] = useState(generatedList);
 
+  //State of error message
+  //setState when input state is empty and customerList is empty then change to 'No customer accounts yet'. otherwise it's 'No search results. Try again.'
+  const [errorMsg, setErrorMsg] = useState('No customer accounts yet.')
+
+  //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+  if (!status.isLoggedIn) {
+    return <Redirect to="/login"/>
+  } 
+
   //onChange function to filter Accounts display results depending on search
+  //Convert this to state implementation
   function handleOnKeyUp(e){
     if (e.key === 'Enter') {
       const searchQuery = e.target.value;
@@ -56,9 +66,11 @@ const Accounts = ({status}) => {
                   <td><Button classnames="buttons table-btn" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
                 </tr>
               ))}
-            </tbody>) : (
-              "No customer accounts yet."
-              // Include state implementation here so that 2 different messages are displayed: no customer accounts and no search results
+            </tbody>) : ( 
+            <tbody>
+              <tr><td>{errorMsg}</td></tr>
+              {/* Use state to trigger 2 states, no search result and no customer accounts */}
+            </tbody>
             )}
           </table>
         </div>
