@@ -5,7 +5,7 @@ import {get_balance} from '../utils/GetBalanceUtil'
 import {formatMoney} from '../utils/FormatMoneyUtil'
 
 
-const Withdraw = ({modalStat, customerData, withdrawAmount, onChange, handleModalClose, handleModalOpen, handleWithdraw}) => {
+const Withdraw = ({modalStat, customerData, withdrawAmount, onChange, handleModalClose, handleModalOpen, handleWithdraw, error}) => {
 
 
     const formattedBalance = get_balance(customerData);
@@ -14,13 +14,14 @@ const Withdraw = ({modalStat, customerData, withdrawAmount, onChange, handleModa
     return (
         <div>
             <div className="transaction-container"> 
-            <Textfield id="withdraw-input" placeholder="Enter your withdrawal amount" type="number" value={withdrawAmount} onChange={onChange}>Withdraw</Textfield>
+            <Textfield id="withdraw-input" placeholder="Enter your withdrawal amount" type="number" value={withdrawAmount} onChange={onChange} min={0}>Withdraw</Textfield>
+            <p className={`${error ? 'show' : 'hidden'} error`}>Amount must not be blank.</p>
             <Button type="submit"onclick={() => handleModalOpen({
                 show: true, 
                 status: 'confirmation',
                 deposit: false,
                 withdrawal: true,
-                transfer: false
+                send: false
             })}>Withdraw Amount</Button>
             </div>
             <Modal header="Withdrawal" show={modalStat.show && modalStat.withdrawal ? 'show':'hide'} status={modalStat.status} 
