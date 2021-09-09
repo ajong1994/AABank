@@ -25,7 +25,7 @@ const Accounts = ({status, updater}) => {
     } else if (searchQuery !== '' && customerList.length === 0) {
       setErrorMsg('No user with that account number.')
     }
-  },[setCustomerList])
+  },[customerList])
 
   //If user not isLoggedIn based on state passed as prop, redirect to accounts component
   if (!status.isLoggedIn) {
