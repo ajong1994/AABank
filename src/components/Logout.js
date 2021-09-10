@@ -1,10 +1,11 @@
 import React from 'react'
 
 
-const Logout = ({status}) => {
+const Logout = ({status, updater}) => {
 
-    // const history = useHistory()
-    function clear() { 
+    
+    function clear() {
+    
         alert(`User succesfully logged out!`)
         sessionStorage.clear();
         window.location.href='/Login'    

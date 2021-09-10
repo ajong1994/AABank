@@ -1,106 +1,111 @@
 import React, {useState}  from 'react'
 import { useHistory } from 'react-router-dom'
+import { Redirect } from "react-router";
 import Header from '../parts/Header'
+import Textfield from '../components/Textfield'
 import {format_idNumber} from '../utils/UserIdUtil'
-import {format_money} from '../utils/FormatMoneyUtil'
-
-
 
 const Create = ({status}) => {
-    //checkers
-    const validNameRegex = RegExp(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
-    const validEmailRegex = RegExp(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i);
-    const validateForm = (errors) => {
-      let valid = true;
-      Object.values(errors).forEach(
-          (val) => val.length > 0 && (valid = false)
-      );
-      return valid;
-}
 
+  
     const history = useHistory()
 
-    const [check, setCheck] = useState({
-        firstname: null,
-        lastname: null,
-        email: null,
-        balance:null,
-        errors:  {
-            firstname: '',
-            lastname: '',
-            email: '',
-            balance:''
-      }
+    const [error, setError] = useState({
+        firstnameErr  : '',
+        lastnameErr   : '',
+        emailErr      : '',
+        balanceErr    : ''
     })
 
-    const [firstnameErr, SetfirstnameErr] = useState({})
-    const [lastnameErr, SetlastnameErr] = useState({})
-    const [emailErr, SetemailErr] = useState({})
-    const [balanceErr, SetbalanceErr] = useState({})
-    
-    var accInfo = {};
+    const [firstname, setFirstname] = useState('')
+    const [lastname, setLastname] = useState('')
+    const [email, setEmail] = useState('')
+    const [balance, setBalance] = useState('')
 
-    function create_user() {
+    //email cannot be the same
+    //firstname + lastname cannot be the same
+    let user_exist,
+        email_exist,
+        form_valid
         
-        let firstname_input = document.getElementById('user-firstname').value;
-        let lastname_input = document.getElementById('user-lastname').value;
-        let email_input = document.getElementById('user-email').value;
-        let user_balance = document.getElementById('user-balance').value;
-        let accNum;
-        let totalCustomers;
-        var populatedCustomerList = []
-        let email_exist 
-        let user_exist
-        //Set input to lowercase
-        firstname_input = firstname_input.toLowerCase()
-        lastname_input = lastname_input.toLowerCase()
-        email_input = email_input.toLowerCase()
+    
+    //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+    if (!status.isLoggedIn) {
+      return <Redirect to="/login"/>
+    }       
+        
+    //Regular expression for pattern matching to check 
+    const validNameRegex = RegExp(/[~`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
+    const validEmailRegex = RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    // const validBalanceRegex = RegExp(/(^[0-9]+[-]*[0-9]+$)/);
+
+    
+    const validateUser = () => {
+     
+      // Get list of total customers from localStorage 
+      const customerList = JSON.parse(localStorage.getItem('customerList'));
+
+      if (customerList !== null) {
+          //loop through each customer accounts and cross-check
+          for (let customer of customerList) {
+              populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
+          }
+          
+              for (let accounts of populatedCustomerList) { 
+                  if ((firstname.toLowerCase() + lastname.toLowerCase()) === ((accounts.firstname) + (accounts.lastname))){
+                      user_exist = true
+                      // console.log(user_exist)
+                  } else {
+                      user_exist = false
+                  }
+              }     
+                         
+      } return user_exist
+    }
 
 
+      const validateEmail = (e) => {
+        let email = e.target.value
         // Get list of total customers from localStorage 
         const customerList = JSON.parse(localStorage.getItem('customerList'));
-
+  
         if (customerList !== null) {
-            //loop through each cutomer accounts and cross-check
+            //loop through each customer accounts and cross-check
             for (let customer of customerList) {
-                populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
+                populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
             }
+            
                 for (let accounts of populatedCustomerList) {
-                    // console.log(accounts)   
-
-                    if ((firstname_input + lastname_input) === ((accounts.firstname) + (accounts.lastname))){
-                        user_exist = true
-                    } else {
-                        user_exist = false
-                    }
-
-                    if (email_input === accounts.email){
+                    
+                    if (email.toLowerCase() === accounts.email){
                         email_exist = true
                     } else {
                         email_exist = false
-                    }
+                    }           
                 }
-        }       //if there's no input set automatically to 0
-                if (user_balance  !== '') {
-                  user_balance = user_balance
-                } else {
-                  user_balance = 0
-                }
+        }
+    }
 
-      //   let totalTransactions;
-      //   //create and set total transactions
-      //   if (localStorage.getItem('totalTransactions') === null) {
-      //     localStorage.setItem('totalTransactions', 1)    
-      //     totalTransactions = Number(localStorage.getItem('totalTransactions'))
+    let accInfo = {}  
+    let populatedCustomerList = []
+    
+
+    const create_user = () => {
+
+        validateUser()     
+        let totalCustomers;
+        let accNum;
+
+        if (user_exist === true) {
+          alert('user already exist!')
+        }
+        else {
+      
+          if ((firstname !== '') && (lastname !== '') && (email !== '')) {  
+            
           
-      // } else {
-      //     totalTransactions = Number(localStorage.getItem('totalTransactions'))
-      //     totalTransactions =  totalTransactions + 1
-      //     localStorage.setItem('totalTransactions')           
-      // }
-
-
-        //create UID and set numbers of totalCustomers
+ 
+        //Set UID and numbers of totalCustomers
         if (localStorage.getItem('totalCustomers') === null) {
             localStorage.setItem('totalCustomers', 1)    
             totalCustomers = Number(localStorage.getItem('totalCustomers'))
@@ -111,139 +116,201 @@ const Create = ({status}) => {
             localStorage.setItem('totalCustomers', accNum)           
         }
         
+        let totalTransactions;
+        //Set total transactions of each user
+        if (localStorage.getItem('totalTransactions') === null) {
+          localStorage.setItem('totalTransactions', 1)    
+          totalTransactions = Number(localStorage.getItem('totalTransactions'))
+          
+      } else {
+          totalTransactions = Number(localStorage.getItem('totalTransactions'))
+          totalTransactions =  totalTransactions + 1
+          localStorage.setItem('totalTransactions', totalTransactions)           
+      }
 
-        if (user_exist === true) {
-            alert('user already exist!')
-        } else if(email_input===''){
-            alert('email is empty!')
-        } else if(email_exist===true){
-            alert('email already exist!')
-        } else if ((firstname_input !== '') && (lastname_input !== '') && (email_input !== '')) {
-                // accInfo.accNum = accNum
+           
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers
                 accNum = format_idNumber(accNum)
                 accInfo.accNum = accNum
-                accInfo.firstname = firstname_input;
-                accInfo.lastname = lastname_input;
-                accInfo.email = email_input;
-                accInfo.balance = Number(user_balance);
+                accInfo.firstname = firstname.toLowerCase();
+                accInfo.lastname = lastname.toLowerCase();
+                accInfo.email = email.toLowerCase();
+                accInfo.balance = Number(balance);
                 accInfo.transactions = []; 
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
-                
-              
-
-                if (localStorage.getItem('customerList') === null) {
-                    localStorage.setItem('customerList', JSON.stringify([`user-${accNum}`]))
-                } else  {
-                    const customerList = JSON.parse(localStorage.getItem('customerList'))
-                    customerList.push(`user-${accNum}`)
-                    localStorage.setItem('customerList', JSON.stringify(customerList))
-                }
-
                 //if account is successfully created move to accounts page
                 history.push('/accounts') 
-                alert(`User ${firstname_input} succesfully created!`)
-            
-        } else {
-          alert(`Fill all required fields!`)
-        }
+                alert(`User ${firstname} succesfully created!`)
 
+                //Set for mapping of customerlist
+                if (localStorage.getItem('customerList') === null) {
+                  localStorage.setItem('customerList', JSON.stringify([`user-${accNum}`]))
+              } else  {
+                  const customerList = JSON.parse(localStorage.getItem('customerList'))
+                  customerList.push(`user-${accNum}`)
+                  localStorage.setItem('customerList', JSON.stringify(customerList))
+              }
+
+
+          } else {   
+            alert ('Please fill required fields!')   
+          }    
+        }
+    }            
+  
+    //form validator checks/counts errors
+    const validateForm = (error) => {
+        let valid=true;
+        Object.values(error).forEach(
+        (val) => val.length > 0 && (valid = false)
+        );
+        if (valid === true){
+        console.log("Registering can be done");
+        }   else{
+        console.log("You cannot be registered!!!")
+        }
+        return valid;
     }
   
-    const handleChange = (event) => { 
-        event.preventDefault();
-        const { name, value } = event.target;
-        let errors = check.errors;
-        
-    //error handling
-        switch (name) {
-          case 'firstname': 
-          errors.firstname = 
-              value.length < 3
-                ? firstnameErr.firstNameShort = 'First name must be at least 3 characters'
+    const handleChange = (e, state) => { 
+        e.preventDefault()
+        // validateUser()
+          switch (state) {
+            case 'firstname' :
+              error.firstnameErr = 
+                e.target.value === ''
+                ? setError((prevState) => ({
+                  ...prevState,
+                  firstnameErr   : 'Firstname must not be empty'}))
                 :
-              validNameRegex.test(value)
-                ? firstnameErr.firstNameShort = 'First name must not include numbers and special characters!'
-                : '';
-            break;
-         
-          case 'lastname': 
-          errors.lastname = 
-              value.length < 3
-                ? lastnameErr.lastNameShort = 'Last name must be at least 3 characters'
+                validNameRegex.test(e.target.value)
+                ? setError((prevState) => ({
+                  ...prevState,
+                  firstnameErr   : 'First name must not include numbers and special characters!'}))
                 :
-                validNameRegex.test(value)
-                ? lastnameErr.lastNameShort = 'Last name must not include numbers and special characters!'
-                : '';
-            break;
-        case 'email': 
-            errors.email = 
-                validEmailRegex.test(value)
-                  ? ''
-                  : 'Email is not valid!';
+                e.target.value.length < 2
+                ? setError((prevState) => ({
+                  ...prevState,
+                  firstnameErr   : 'Firstname must be at least 2 characters long'}))
+                : ''
+                setFirstname(e.target.value)
               break;
-          case 'balance': 
-          errors.balance = 
-              value < 0
-                ? balanceErr.balanceShort = 'Balance must not be a negative number'
-                : 0;
-            break;
-          default:
-            break;
-        }
-        setCheck({errors, [name]: value});
+
+            case 'lastname':
+              
+              error.lastnameErr =
+              e.target.value === ''
+              ? setError((prevState) => ({
+                ...prevState,
+                lastnameErr   : 'Lastname must not be empty'}))
+              : 
+              (e.target.value.length < 2)
+              ? setError((prevState) => ({
+                ...prevState,
+                lastnameErr   : 'Last name must be at least 2 characters long'}))
+              :
+              (validNameRegex.test(e.target.value))
+              ? setError((prevState) => ({
+                ...prevState,
+                lastnameErr   : 'Must not include numbers and special characters!'}))
+              :''
+              setLastname(e.target.value)
+              break;
+
+            case 'email' :
+              validateEmail(e)
+              error.emailErr =
+              e.target.value === ''
+              ? setError((prevState) => ({
+                ...prevState,
+                emailErr   : 'Email must not be empty'}))
+              : 
+              email_exist === true
+              ? setError((prevState) => ({
+                ...prevState,
+                emailErr   : 'Email already exist'}))
+              : 
+              
+              validEmailRegex.test(e.target.value)
+              ? ''
+              : setError((prevState) => ({
+                ...prevState,
+                emailErr   : 'Email invalid!'}))
+              
+              setEmail(e.target.value)
+              break;
+
+            case 'balance' :
+              error.balanceErr =
+              e.target.value < 0
+              ? setError((prevState) => ({
+                ...prevState,
+                balanceErr   : 'Balance must not be a negative number!'}))
+              : 
+              e.target.value.length === ''
+              ? setBalance((prevState) => ({
+                ...prevState,
+                balance  : 0}))
+              : ''
+              setBalance(e.target.value)
+              break;
+            default:
+              break
+          }
     }
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (validateForm(check.errors)) {
-          console.info('Valid Form')
-        } else{
-          console.error('Invalid Form')
-        }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+            if (validateForm(error))  {
+              form_valid = true
+              console.info('Form submitted')
+              create_user()
+            } 
+           
+            else{
+              form_valid = false
+              console.error('Form has errors')
+              alert('Please check errors!')
+            }
     } 
-    
-    const {errors} = check;
-      
+
     return (
         <> 
-        <Header />
+        <Header status={status} />
         <div className='wrapper'>
         <div className='form-wrapper'>
           <h2>Create User</h2>
           <form onSubmit={handleSubmit} noValidate>
 
             <div className='fullName'>
-              <label htmlFor="firstname">First Name</label>
-              <input type='text' id='user-firstname' name='firstname' onChange={handleChange} required />
-              {errors.firstname.length > 0 && <span className='error'>{errors.firstname}</span>}
+            <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
+            {error.firstnameErr !== '' && <span className='error'>{error.firstnameErr}</span>} 
             </div>
 
             <div className='fullName'>
-              <label htmlFor="lastname">Last Name</label>
-              <input type='text' id='user-lastname' name='lastname' onChange={handleChange} required />
-              {errors.lastname.length > 0 && <span className='error'>{errors.lastname}</span>}
+            <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
+            {error.lastnameErr !== '' && <span className='error'>{error.lastnameErr}</span>} 
             </div>
 
             <div className='email'>
-              <label htmlFor="email">Email</label>
-              <input type='email' id='user-email' name='email' onChange={handleChange} required />
-              {errors.email.length > 0 && <span className='error'>{errors.email}</span>}
+            <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
+            {error.emailErr !== '' && <span className='error'>{error.emailErr}</span>} 
             </div>
 
             <div className='balance'> 
-              <label htmlFor="balance">Balance</label>
-              <input type='number' id='user-balance'name='balance' onChange={handleChange}  placeholder='0'/>
-              {errors.balance.length > 0 && <span className='error'>{errors.balance}</span>}
+            <Textfield id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>First Name</Textfield>
+            {error.balanceErr !== '' && <span className='error'>{error.balanceErr}</span>} 
             </div>
+
             <div className='submit'>
-              <button onClick={create_user}>Create</button>
+              <button>Create</button>
             </div>
-          </form>
-        </div>
-      </div>   
+        </form>
+    </div>
+    </div>   
     </>
+
     )
 }
 
