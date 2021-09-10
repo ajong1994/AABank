@@ -43,7 +43,7 @@ const Accounts = ({status, updater}) => {
 
   return (
     <>
-    <Header />
+    <Header status={status} />
     <h1>Welcome { status.currentAdmin }</h1>
       <div className="accounts-main">
         <input type="text" name = "accounts-search-input" id="accounts-search-input" className="form-control" placeholder="Search" onKeyUp={handleOnKeyUp}/>

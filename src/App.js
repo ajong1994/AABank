@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { Switch, Route } from 'react-router-dom'
+// import { Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 /* Components */
 // import Home from './components/Home'
@@ -10,6 +11,7 @@ import Logout from './components/Logout'
 import Register from './pages/Register'
 import Create from './pages/Create'
 import TotalTransactions from './pages/TotalTransactions'
+import PageNotFound from './pages/PageNotFound'
 
 
 const App = () => {
@@ -33,8 +35,8 @@ const App = () => {
 
 
   return (
+    <Router>
     <Switch>
-        {/* <Route path="/home" render={(props) => <Home {...props} status={loginStatus} />} /> */}
         <Route path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/logout" render={(props) => <Logout {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route path="/register" render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
@@ -42,8 +44,12 @@ const App = () => {
         <Route path="/account" render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
         <Route path="/create" render={(props) => <Create {...props} status={loginStatus}  updater={updateStatus}/>} /> 
         <Route path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
-        <Route path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route exact path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route path = "*"><PageNotFound /></Route>
     </Switch>
+    </Router>
+
+    
   );
   /* Objectives */
   // - App should have a page to display all users (can be a table where the name and balance are visible) -> Route /accounts with account modal
