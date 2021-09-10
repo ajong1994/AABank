@@ -3,6 +3,8 @@ import {Redirect, useHistory} from 'react-router-dom'
 import Button from '../components/Button'
 import Header from '../parts/Header'
 import {list_users} from '../utils/ListUsersUtil'
+import {SearchIcon} from '@heroicons/react/outline'
+import {formatMoney} from '../utils/FormatMoneyUtil'
 
 const Accounts = ({status, updater}) => {
 
@@ -20,8 +22,8 @@ const Accounts = ({status, updater}) => {
   const [errorMsg, setErrorMsg] = useState('No customer accounts yet.')
 
   useEffect(() => {
-    if (searchQuery === '' && customerList.length === 0) {
-      setErrorMsg('No users yet.')
+    if (searchQuery === '' && generatedList.length === 0) {
+      setErrorMsg('No customer accounts yet.')
     } else if (searchQuery !== '' && customerList.length === 0) {
       setErrorMsg('No user with that account number.')
     }
@@ -59,26 +61,31 @@ const Accounts = ({status, updater}) => {
     <>
     <Header status={status} />
     <h1>Welcome { status.currentAdmin }</h1>
-      <div className="accounts-main">
-      <input type="text" name = "accounts-search-input" id="accounts-search-input" className="form-control" placeholder="Search" onChange={handleOnChange} onKeyUp={handleOnKeyUp} value={searchQuery}/>
+      <div className="accounts-main container m-auto">
+        <div className="flex align-middle">
+        <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
+          <SearchIcon className="h-5 w-5inline-block"/>
+        </span>
+        <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} onKeyUp={handleOnKeyUp} value={searchQuery}
+        className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"/>
+        </div>
         { customerList.length ? (
-        <div className="table-main-container">
-          <table className="accounts-table">
-              <thead>
+        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
                 <tr>
-                  <th>AccNum</th>
-                  <th>Customer Name</th>
-                  <th>Balance</th>
-                  <th>Actions</th>
+                  <th className="cstm-th">Account Number</th>
+                  <th className="cstm-th">Customer Name</th>
+                  <th className="cstm-th">Balance</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {customerList.map((customer) => (
                   <tr key = {customer.accNum}>
-                    <td>{customer.accNum}</td>
-                    <td>{`${customer.firstname} ${customer.lastname}`}</td>
-                    <td>{customer.balance}</td>
-                    <td><Button classnames="buttons table-btn" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
+                    <td className="cstm-td"><p className="cstm-td-text">{customer.accNum}</p></td>
+                    <td className="cstm-td"><p className="cstm-td-text">{`${customer.firstname} ${customer.lastname}`}</p></td>
+                    <td className="cstm-td"><p className="cstm-td-text">{formatMoney(customer.balance)}</p></td>
+                    <td className="cstm-td text-sm"><Button classnames="text-primary hover:underline cursor-pointer" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
                   </tr>
                 ))}
               </tbody>
