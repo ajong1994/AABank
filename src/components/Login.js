@@ -111,7 +111,7 @@ const Login = ({status, updater}) => {
                 <Error classnames={isError.userNameError === true ? 'errortext show' : 'hidden'}>{userNameError}</Error>
                 <Textfield id="login-userpass" classnames="form-control" placeholder="Enter your password" type="password" value={passwordInput} onChange={(e) => handleInputChange(e, 'password')}>Password</Textfield>
                 <Error classnames={isError.passwordError === true ? 'errortext show' : 'hidden'}>{passwordError}</Error>
-                <Button classnames="bg-purple-500 py-2 px-1 rounded-md text-white" onclick={handleLogin}>Login</Button>
+                <Button classnames="bg-primary py-2 px-1 rounded-md text-white font-Lato" onclick={handleLogin}>Login</Button>
                 </div>
 
             </Form>
