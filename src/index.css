@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+
+    .hidden {
+        transform: scale(0);
+        -webkit-animation: fadeOut 1s;
+        animation: fadeOut 1s;
+    }
+
+    .show {
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+    }
+
+    @-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes fadeIn {
+    from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @-webkit-keyframes fadeOut {
+    from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    @keyframes fadeOut {
+    from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+    .hide {
+        display: none;
+    }
+    
+}
+
+
+
+
+
+.errortext {
+    color:red;
+    font-weight: bold;
+    font-size:10px;
+} 
+
+.error {
+    font-size:.65rem;
+    font-weight: bold;
+    color: red;
+    display: block;
+    position: relative;
+  }
