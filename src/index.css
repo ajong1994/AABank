@@ -9,8 +9,7 @@
 @tailwind utilities;
 
 @layer utilities {
-
-    .hidden {
+    .hide {
         transform: scale(0);
         -webkit-animation: fadeOut 1s;
         animation: fadeOut 1s;
@@ -38,27 +37,31 @@
     from { opacity: 1; }
         to { opacity: 0; }
     }
-
-    .hide {
-        display: none;
-    }
-    
 }
 
+@layer base {
+    html, body {
+        height: 100%;
+    }
+    h5, h4, h3, h2, h1 {
+        font-family: 'Lato', 'sans-serif';
+    }
+    p, a, li, span, label, input {
+        font-family: 'Source Sans Pro', 'sans-serif';
+    }
+}
 
+@layer components {
+    .cstm-th {
+        @apply px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider;
+        font-family: 'Lato', 'sans-serif';
+    }
+    .cstm-td {
+        @apply px-6 py-4 whitespace-nowrap;
+    }
+    .cstm-td-text {
+        @apply text-sm text-gray-900 capitalize;
+        font-family: 'Source Sans Pro', 'sans-serif';
+    }
+}
 
-
-
-.errortext {
-    color:red;
-    font-weight: bold;
-    font-size:10px;
-} 
-
-.error {
-    font-size:.65rem;
-    font-weight: bold;
-    color: red;
-    display: block;
-    position: relative;
-  }
