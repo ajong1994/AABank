@@ -103,14 +103,17 @@ const Login = ({status, updater}) => {
 
 
     return (
-        <div className="login-main">
-            <Form classnames="form1" >
-                <h1>Sign-in</h1>
-                <Textfield id="login-userinput" classnames="form-control" placeholder="Enter your username" type="text" value={usernameInput} onChange={(e) => handleInputChange(e, 'username')}>Username</Textfield>
+        <div className="flex">
+            <Form classnames="px-4 py-8 rounded-sm shadow-md mt-20 max-w-md flex-grow ml-auto mr-20" >
+                <h2 className="text-2xl font-bold">Sign-in</h2>
+                <div className="mt-8 grid grid-cols-1 gap-6">
+                <Textfield id="login-userinput" placeholder="Enter your username" type="text" value={usernameInput} onChange={(e) => handleInputChange(e, 'username')}>Username</Textfield>
                 <Error classnames={isError.userNameError === true ? 'errortext show' : 'hidden'}>{userNameError}</Error>
                 <Textfield id="login-userpass" classnames="form-control" placeholder="Enter your password" type="password" value={passwordInput} onChange={(e) => handleInputChange(e, 'password')}>Password</Textfield>
                 <Error classnames={isError.passwordError === true ? 'errortext show' : 'hidden'}>{passwordError}</Error>
-                <Button classnames="buttons btn1" onclick={handleLogin}>Login</Button>
+                <Button classnames="bg-purple-500 py-2 px-1 rounded-md text-white" onclick={handleLogin}>Login</Button>
+                </div>
+
             </Form>
         </div>
     )
