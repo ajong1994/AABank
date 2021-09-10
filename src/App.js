@@ -46,6 +46,14 @@ const App = () => {
         <Route path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route exact path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
         <Route path = "*"><PageNotFound /></Route>
+        {/* <Route exact path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
+        <Route exact path="/logout" render={(props) => <Logout {...props} status={loginStatus} updater={updateStatus}/>} />
+        <Route exact path="/register" render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
+        <Route exact path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route exact path="/account" render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
+        <Route exact path="/create" render={(props) => <Create {...props} status={loginStatus}  updater={updateStatus}/>} /> 
+        <Route exact path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
+        <Route exact path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} /> */}
     </Switch>
     </Router>
 
