@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Redirect } from "react-router";
 import { useState } from 'react'
 import Header from '../parts/Header'
+import Error from '../components/Error'
 import Textfield from '../components/Textfield'
 
 
@@ -22,7 +23,6 @@ const Register = ({status}) => {
   const [firstName, setfirstName] = useState('')
   const [lastName, setlastName] = useState('')
   const [passWord, setpassWord] = useState('')
-
 
 
 // If currentAdmin is not amcanlubo or ajong, do not authorize to register other accounts
@@ -48,8 +48,7 @@ let user_exist,
 //Regular expression for pattern matching to check 
 const validNameRegex = RegExp(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
 
-//local storage data
-// let adminInfo = {};
+
 
 // validate user input
 const validateUser = (e) => {
@@ -221,30 +220,30 @@ const handleSubmit = (e) => {
 
   <> 
     <Header status={status} />
-    <div className='wrapper'>
-        <div className='form-wrapper'>
-          <h2>Register Admin</h2>
 
-          <form onSubmit={handleSubmit}>
-
+        <div className="flex bg-white">
+        
+          <form onSubmit={handleSubmit} className="px-4 py-8 rounded-sm shadow-md mt-10 max-w-md flex-grow ml-auto mr-auto">
+          <h2 className="text-2xl font-bold">Register Admin</h2>
+          <div className="mt-8 grid grid-cols-1 gap-4">
           <div className='fullName'>
             <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
-            {error.usernameErr !== '' && <span className='error'>{error.usernameErr}</span>} 
-            </div>
+            {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
+          </div>
 
             <div className='fullName'>
             <Textfield id="admin-firstname" type="text"  onChange={(e) => handleChange (e, 'firstName')} value={firstName}>First Name</Textfield>
-            {error.firstnameErr !== '' && <span className='error'>{error.firstnameErr}</span>} 
+            {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
             </div>
 
             <div className='fullName'>
             <Textfield id="admin-lastname" type="text" value={lastName} onChange={(e) => handleChange (e, 'lastName')}>Last Name</Textfield>
-            {error.lastnameErr !== '' && <span className='error'>{error.lastnameErr}</span>}
+            {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>}
             </div>
 
             <div className='password'>
             <Textfield id="admin-password" type="password" value={passWord} onChange={(e) => handleChange (e, 'passWord')}>Password</Textfield>
-            {error.passwordErr !== '' && <span className='error'>{error.passwordErr}</span>}
+            {error.passwordErr !== '' && <Error>{error.passwordErr}</Error>}
 
             </div>
    
@@ -252,10 +251,11 @@ const handleSubmit = (e) => {
               <small>Password must be six characters in length.</small>
             </div>
             <div className='submit'>
-              <button>Register</button>
+              <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
+              </div>
             </div>
           </form>
-        </div>
+        
       </div>
   </>
   )

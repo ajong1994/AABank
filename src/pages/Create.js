@@ -3,7 +3,9 @@ import { useHistory } from 'react-router-dom'
 import { Redirect } from "react-router";
 import Header from '../parts/Header'
 import Textfield from '../components/Textfield'
+import Error from '../components/Error'
 import {format_idNumber} from '../utils/UserIdUtil'
+import {getISOdate} from '../utils/ISODateUtil'
 
 const Create = ({status}) => {
 
@@ -116,19 +118,18 @@ const Create = ({status}) => {
             localStorage.setItem('totalCustomers', accNum)           
         }
         
-        let totalTransactions;
+        var totalTransactions;
         //Set total transactions of each user
         if (localStorage.getItem('totalTransactions') === null) {
           localStorage.setItem('totalTransactions', 1)    
           totalTransactions = Number(localStorage.getItem('totalTransactions'))
           
-      } else {
-          totalTransactions = Number(localStorage.getItem('totalTransactions'))
-          totalTransactions =  totalTransactions + 1
-          localStorage.setItem('totalTransactions', totalTransactions)           
-      }
+        } else {
+            totalTransactions = Number(localStorage.getItem('totalTransactions'))
+            totalTransactions =  totalTransactions + 1
+            localStorage.setItem('totalTransactions', totalTransactions)           
+        }
 
-           
                 totalCustomers = Number(localStorage.getItem('totalCustomers'))
                 accNum = totalCustomers
                 accNum = format_idNumber(accNum)
@@ -137,7 +138,13 @@ const Create = ({status}) => {
                 accInfo.lastname = lastname.toLowerCase();
                 accInfo.email = email.toLowerCase();
                 accInfo.balance = Number(balance);
-                accInfo.transactions = []; 
+                accInfo.transactions = [{
+                  date: getISOdate(),
+                  amount: Number(balance),
+                  transaction: 'deposit', 
+                  transactionId: format_idNumber(totalTransactions)
+              }];
+                
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
                 //if account is successfully created move to accounts page
                 history.push('/accounts') 
@@ -278,35 +285,40 @@ const Create = ({status}) => {
     return (
         <> 
         <Header status={status} />
-        <div className='wrapper'>
-        <div className='form-wrapper'>
-          <h2>Create User</h2>
+        <div className="bg-white min-h-screen flex items-center">
+        <div className="w-full">
+          
+          <div className="bg-white p-10 rounded-lg shadow md:w-3/4 mx-auto lg:w-1/2">
           <form onSubmit={handleSubmit} noValidate>
-
-            <div className='fullName'>
-            <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
-            {error.firstnameErr !== '' && <span className='error'>{error.firstnameErr}</span>} 
+          <h2 className="text-center font-bold text-2xl uppercase mb-10">Create User</h2>
+          <div class="mb-5">
+            <div className='fullName mb-5'>
+            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
+            {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
             </div>
 
-            <div className='fullName'>
-            <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
-            {error.lastnameErr !== '' && <span className='error'>{error.lastnameErr}</span>} 
+            <div className='fullName mb-5'>
+            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
+            {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
             </div>
 
-            <div className='email'>
-            <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
-            {error.emailErr !== '' && <span className='error'>{error.emailErr}</span>} 
+            <div className='email mb-5'>
+            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
+            {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
             </div>
 
-            <div className='balance'> 
-            <Textfield id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>First Name</Textfield>
-            {error.balanceErr !== '' && <span className='error'>{error.balanceErr}</span>} 
+            <div className='balance mb-5'> 
+            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
+            {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
             </div>
 
             <div className='submit'>
-              <button>Create</button>
+              <button className="block w-full mt-8 bg-primary py-2 px-1 rounded-md text-white font-Lato p-4">Create</button>
+              
             </div>
+          </div>
         </form>
+        </div>
     </div>
     </div>   
     </>

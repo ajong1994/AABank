@@ -1,7 +1,14 @@
 import React from 'react'
 
-
 const Logout = ({status, updater}) => {
+
+    // if (status.isLoggedIn){
+    //     updater({
+    //         isLoggedIn: false, 
+    //         currentAdmin: ''
+    //     });
+    //     clear()
+    // }
 
     
     function clear() {
@@ -19,22 +26,3 @@ const Logout = ({status, updater}) => {
 }
 
 export default Logout
-
-        // import { useState } from 'react'
-        // import {Redirect, useHistory} from 'react-router-dom'
-
-        //   const history = useHistory()
-
-        // sessionStorage.removeItem('isLoggedIn');
-        // sessionStorage.removeItem('currentAdmin');
-        
-        // updater({
-        //     isLoggedIn: false, 
-        //     currentAdmin: ''
-        // });
-
-        // remove all stored values
-        // sessionStorage.clear('isLoggedIn');
-        // sessionStorage.clear('currentAdmin');
-        
-        // return <Redirect to="/Login"/>
