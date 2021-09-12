@@ -11,6 +11,7 @@ import { send } from '../utils/SendUtil'
 import { record_transaction } from '../utils/RecordTransacUtil'
 import Toast from '../parts/Toast'
 import { formatMoney } from '../utils/FormatMoneyUtil'
+import {AlertVector} from '../components/AlertVector'
 
 
 const Account = ({status, location}) => {
@@ -35,7 +36,7 @@ const Account = ({status, location}) => {
   const [receivingAccount, setReceivingAccount] = useState('');
 
   //Initialize state for transaction State
-  const [totalTransactions, setTotalTransactions] = useState(localStorage.getItem('totalTransactions') || 0);
+  const [totalTransactions, setTotalTransactions] = useState(Number(localStorage.getItem('totalTransactions')) || 0);
   const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')) || []);
 
   useEffect(() => {
@@ -270,7 +271,7 @@ const Account = ({status, location}) => {
   }
 
   return (
-    <div> 
+    <div className="container m-auto"> 
       {(customerData !== null) 
       ? (
         <div>

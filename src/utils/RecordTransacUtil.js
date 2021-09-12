@@ -1,10 +1,11 @@
 import {getISOdate} from './ISODateUtil'
+import {format_idNumber} from './UserIdUtil'
 
 
 export function record_transaction(customerData, amount, transac_type, transac_count, user) {
     
     const transactions = customerData.transactions;
-    const transacId = transac_count + 1 
+    const transacId = format_idNumber(transac_count + 1); 
     const today = getISOdate();
     let transaction_details = {}
 

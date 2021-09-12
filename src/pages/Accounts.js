@@ -5,6 +5,8 @@ import Header from '../parts/Header'
 import {list_users} from '../utils/ListUsersUtil'
 import {SearchIcon} from '@heroicons/react/outline'
 import {formatMoney} from '../utils/FormatMoneyUtil'
+import {AlertVector} from '../components/AlertVector'
+import {NewAccVector} from '../components/NewAccVector'
 
 const Accounts = ({status, updater}) => {
 
@@ -60,17 +62,17 @@ const Accounts = ({status, updater}) => {
   return (
     <>
     <Header status={status} />
-    <h1>Welcome { status.currentAdmin }</h1>
-      <div className="accounts-main container m-auto">
+      <div className="container m-auto">
+        {/* <h1>Welcome, { status.currentAdmin }!</h1> */}
         <div className="flex align-middle">
         <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
           <SearchIcon className="h-5 w-5inline-block"/>
         </span>
         <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} onKeyUp={handleOnKeyUp} value={searchQuery}
-        className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"/>
+        className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-transparent focus:bg-white focus:ring-0 text-sm flex-grow"/>
         </div>
         { customerList.length ? (
-        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">
           <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -91,8 +93,9 @@ const Accounts = ({status, updater}) => {
               </tbody>
             </table>
         </div>) : ( 
-        <div>
-          <p>{errorMsg}</p>
+        <div className="mt-8 py-8 rounded-md bg-white">
+          <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center">{errorMsg === 'No customer accounts yet.' ? <NewAccVector width="74%" height="auto"/> : <AlertVector width="100%" height="auto"/>}</div>
+          <p className="mx-auto text-center">{errorMsg}</p>
         </div>
         )}
       </div>
