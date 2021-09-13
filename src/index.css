@@ -42,7 +42,7 @@
 }
 
 @layer base {
-    html {
+    html,body {
         height: 100%;
     }
     h5, h4, h3, h2, h1 {

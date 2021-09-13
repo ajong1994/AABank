@@ -12,6 +12,7 @@ import { record_transaction } from '../utils/RecordTransacUtil'
 import Toast from '../parts/Toast'
 import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
+import Header from '../parts/Header'
 
 
 const Account = ({status, location}) => {
@@ -271,7 +272,9 @@ const Account = ({status, location}) => {
   }
 
   return (
-    <div className="container m-auto"> 
+    <div className="container flex h-full">
+      <Header status={status}/>
+      <div className="m-auto px-10"> 
       {(customerData !== null) 
       ? (
         <div>
@@ -291,11 +294,14 @@ const Account = ({status, location}) => {
         )
       : (
         <div>
+          <AlertVector/>
           <p>"Customer account number does not exist."</p>
           <Link to="/accounts">Return to accounts</Link>
         </div>
         )}
     </div>
+  </div>
+
   )
 }
 
