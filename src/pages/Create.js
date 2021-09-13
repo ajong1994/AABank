@@ -6,10 +6,12 @@ import Textfield from '../components/Textfield'
 import Error from '../components/Error'
 import {format_idNumber} from '../utils/UserIdUtil'
 import {getISOdate} from '../utils/ISODateUtil'
+import { record_transaction } from '../utils/RecordTransacUtil'
+import Deposit from '../parts/Deposit'
+
 
 const Create = ({status}) => {
 
-  
     const history = useHistory()
 
     const [error, setError] = useState({
@@ -26,11 +28,9 @@ const Create = ({status}) => {
 
     //email cannot be the same
     //firstname + lastname cannot be the same
-    let user_exist,
-        email_exist,
-        form_valid
+    let user_exist;
+    let email_exist;
         
-    
     //If user not isLoggedIn based on state passed as prop, redirect to accounts component
     if (!status.isLoggedIn) {
       return <Redirect to="/login"/>
@@ -40,8 +40,7 @@ const Create = ({status}) => {
     const validNameRegex = RegExp(/[~`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
     const validEmailRegex = RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
     // const validBalanceRegex = RegExp(/(^[0-9]+[-]*[0-9]+$)/);
-
-    
+ 
     const validateUser = () => {
      
       // Get list of total customers from localStorage 
@@ -91,8 +90,9 @@ const Create = ({status}) => {
     let accInfo = {}  
     let populatedCustomerList = []
     
-
     const create_user = () => {
+     
+
 
         validateUser()     
         let totalCustomers;
@@ -117,6 +117,7 @@ const Create = ({status}) => {
             accNum = totalCustomers + 1
             localStorage.setItem('totalCustomers', accNum)           
         }
+        
         
         var totalTransactions;
         //Set total transactions of each user
@@ -143,8 +144,9 @@ const Create = ({status}) => {
                   amount: Number(balance),
                   transaction: 'deposit', 
                   transactionId: format_idNumber(totalTransactions)
-              }];
-                
+                }];
+
+
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
                 //if account is successfully created move to accounts page
                 history.push('/accounts') 
@@ -266,8 +268,10 @@ const Create = ({status}) => {
               break
           }
     }
-
+    
+    let form_valid;
     const handleSubmit = (e) => {
+      
         e.preventDefault();
             if (validateForm(error))  {
               form_valid = true
@@ -283,46 +287,45 @@ const Create = ({status}) => {
     } 
 
     return (
-        <> 
-        <Header status={status} />
-        <div className="bg-white min-h-screen flex items-center">
-        <div className="w-full">
+
+    <> 
+      <Header status={status} />
+
+        <div className="container flex h-screen">
           
-          <div className="bg-white p-10 rounded-lg shadow md:w-3/4 mx-auto lg:w-1/2">
-          <form onSubmit={handleSubmit} noValidate>
-          <h2 className="text-center font-bold text-2xl uppercase mb-10">Create User</h2>
-          <div class="mb-5">
-            <div className='fullName mb-5'>
-            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
-            {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 mb-5 max-w-md flex-grow ml-auto mr-auto">
+          <h2 className="text-2xl text-primary font-bold">Create User</h2>
+          
+          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
+            
+            <div className='fullName'>
+              <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
+              {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
             </div>
 
-            <div className='fullName mb-5'>
-            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
-            {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
+            <div className='fullName'>
+              <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
+              {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
             </div>
 
-            <div className='email mb-5'>
-            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
-            {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
+            <div className='email'>
+              <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
+              {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
             </div>
 
-            <div className='balance mb-5'> 
-            <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
-            {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
+            <div className='balance'> 
+              <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
+              {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
             </div>
 
-            <div className='submit'>
-              <button className="block w-full mt-8 bg-primary py-2 px-1 rounded-md text-white font-Lato p-4">Create</button>
-              
+            <div className='submit mt-8'>
+              <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Create</button>    
             </div>
+
           </div>
-        </form>
+          </form>  
         </div>
-    </div>
-    </div>   
     </>
-
     )
 }
 
