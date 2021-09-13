@@ -1,10 +1,11 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Redirect } from "react-router";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../parts/Header'
 import Error from '../components/Error'
 import Textfield from '../components/Textfield'
+import Toast from '../parts/Toast'
 
 
 const Register = ({status}) => {
@@ -23,6 +24,21 @@ const Register = ({status}) => {
   const [firstName, setfirstName] = useState('')
   const [lastName, setlastName] = useState('')
   const [passWord, setpassWord] = useState('')
+
+  // //Initialize error message text
+  // const [toastErrMsg, setToastErrMsg] = useState('');
+  // const [toastSuccessMsg, setToastSuccessMsg] = useState('');
+
+  // //Initialize error message visibility
+  // const [showToastErr, setShowToastErr] = useState('');
+
+  // //Initialize success message visibility
+  // const [showToastSuccess, setShowToastSuccess] = useState('');
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => closeToast, 5000)
+  //   return () => clearTimeout(timer);
+  // },[toastErrMsg, toastSuccessMsg])
 
 
 // If currentAdmin is not amcanlubo or ajong, do not authorize to register other accounts
@@ -81,12 +97,14 @@ const saveAccount = () => {
       localStorage.setItem(userName, JSON.stringify(adminInfo)); 
       history.push('/accounts') 
       alert(`User ${userName} succesfully created!`)
+      // handleSuccess(`User ${userName} succesfully created!`)
     } else {   
       form_valid=false
       alert(`Invalid!`)
     }     
   } else {
       form_valid=false
+      // handleError('Please fill required fields!')
       alert ('Please fill required fields!')
   }
 } 
@@ -132,7 +150,7 @@ const handleChange = (e, state) => {
             ...prevState,
             usernameErr: 'Username already exist' }))
           : 
-          e.target.value === 'ajong'
+          e.target.value === 'ajong1994'
           ? setError((prevState) => ({
             ...prevState,
             usernameErr: 'Username already exist' }))
@@ -215,20 +233,40 @@ const handleSubmit = (e) => {
       }
 } 
 
+// const handleSuccess =(success) => {
+//   setShowToastSuccess(true)
+//   setToastSuccessMsg(success);
+// }
+
+// const handleError =(err) => {
+//   setShowToastErr(true)
+//   setToastErrMsg(err);
+// }
+
+// const closeToast =() =>{
+//   setShowToastErr(false)
+//   showToastSuccess(false)
+// }
+
 
   return (
 
   <> 
-    <Header status={status} />
+    
 
-        <div className="flex bg-white">
+        <div className="flex justify-between container m-auto h-screen">
+
         
-          <form onSubmit={handleSubmit} className="px-4 py-8 rounded-sm shadow-md mt-10 max-w-md flex-grow ml-auto mr-auto">
-          <h2 className="text-2xl font-bold">Register Admin</h2>
-          <div className="mt-8 grid grid-cols-1 gap-4">
+        <Header status={status} />
+        
+
+        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">
+          
+          <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
           <div className='fullName'>
-            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
-            {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
+          <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
+          {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
           </div>
 
             <div className='fullName'>
@@ -246,15 +284,14 @@ const handleSubmit = (e) => {
             {error.passwordErr !== '' && <Error>{error.passwordErr}</Error>}
 
             </div>
-   
-            <div className='info'>
-              <small>Password must be six characters in length.</small>
-            </div>
-            <div className='submit'>
+  
+            <div className='submit mt-8'>
               <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
-              </div>
             </div>
-          </form>
+            </div>
+        </form>
+          {/* {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastSuccessMsg}</Toast>} */}
+          {/* {showToastErr === true && <Toast type="success" onClick={closeToast}>{toastErrMsg}</Toast>} */}
         
       </div>
   </>
