@@ -40,8 +40,11 @@
 }
 
 @layer base {
-    html,body {
+    html {
         height: 100%;
+    }
+    body {
+        min-height: 100%
     }
     h5, h4, h3, h2, h1 {
         font-family: 'Lato', 'sans-serif';
@@ -62,6 +65,9 @@
     .cstm-td-text {
         @apply text-sm text-gray-900 capitalize;
         font-family: 'Source Sans Pro', 'sans-serif';
+    }
+    .transaction-container {
+        @apply p-4 bg-white flex-grow;
     }
 }
 
