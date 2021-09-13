@@ -6,8 +6,8 @@ import {XIcon} from '@heroicons/react/outline'
 
 function Toast({type, children, onClick}) {
     return (
-        <div className="flex justify-between align-middle absolute w-3/4 ">
-            
+        <>
+        <div className="flex justify-between align-middle absolute w-48 border-2 border-blue-500">        
             {type === 'success'
             ? <div className="p-1 border-2 rounded-full inline-block border-green-900"> 
             <CheckCircleIcon className="w-5 h-5 text-green-900 text-sm" /> 
@@ -21,10 +21,10 @@ function Toast({type, children, onClick}) {
             </div>
             )
             }
-           
             <p>{children}</p>
             <div className="close-icon" onClick={onClick}><XIcon className="w-5 h-5"/></div>
         </div>
+        </>
     )
 }
 

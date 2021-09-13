@@ -43,7 +43,7 @@ const Register = ({status}) => {
 
 // If currentAdmin is not amcanlubo or ajong, do not authorize to register other accounts
 if(status.isLoggedIn){
-  if ((status.currentAdmin === 'amcanlubo') || (status.currentAdmin === 'ajong')){
+  if ((status.currentAdmin === 'amcanlubo') || (status.currentAdmin === 'ajong1994')){
   
   } else {     
     console.log('ACCESS DENIED');  
@@ -253,7 +253,7 @@ const handleSubmit = (e) => {
 
   <> 
     
-
+<div className="container">
         <div className="flex justify-between container m-auto h-screen">
 
         
@@ -292,7 +292,7 @@ const handleSubmit = (e) => {
         </form>
           {/* {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastSuccessMsg}</Toast>} */}
           {/* {showToastErr === true && <Toast type="success" onClick={closeToast}>{toastErrMsg}</Toast>} */}
-        
+          </div>
       </div>
   </>
   )
