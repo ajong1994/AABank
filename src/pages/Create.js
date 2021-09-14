@@ -147,8 +147,6 @@ const Create = ({status}) => {
 
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
                 
-                transactionList = JSON.parse(localStorage.getItem('transactionList'))
-                
                 transaction_details = {
                   date: getISOdate(),
                   amount: Number(balance),
@@ -158,9 +156,16 @@ const Create = ({status}) => {
               }
 
 
-              console.log(transaction_details)   
-              transactionList.push(transaction_details) 
-              localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
+                if (localStorage.getItem('transactionList') === null) {
+                  transactionList.push(transaction_details) 
+                  localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
+                }
+                else{
+                transactionList = JSON.parse(localStorage.getItem('transactionList'))
+                transactionList.push(transaction_details) 
+                localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
+                }
+
                 
                 
                 alert(`User ${firstname} succesfully created!`)
@@ -306,11 +311,12 @@ const Create = ({status}) => {
     return (
 
     <> 
-      <Header status={status} />
+      
 
-        <div className="container flex h-screen">
-          
-          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 mb-5 max-w-md flex-grow ml-auto mr-auto">
+        <div className="container">
+        <div className="flex justify-between container m-auto h-screen">
+        <Header status={status} />
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">
           <h2 className="text-2xl text-primary font-bold">Create User</h2>
           
           <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
@@ -341,6 +347,7 @@ const Create = ({status}) => {
 
           </div>
           </form>  
+        </div>
         </div>
     </>
     )

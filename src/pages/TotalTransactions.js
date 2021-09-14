@@ -16,19 +16,17 @@ function TotalTransactions({status}) {
 
   return (
       <>
-      <div className="container grid grid-rows-1 grid-flow-col gap-6 h-screen">
-          <div className="row-span-3">
-          <Header status={status}/>
-          </div>
-        
-      <div> 
+      <div className="flex">
+        <Header status={status}/>
+        <div className="mx-auto px-10 w-7/12 mt-8">
           <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
-          <div className="row-span-1 w-full p-8">
+          
           {transactionList.length 
           ? 
-          <>            
-            <table className="h-full w-full divide-y divide-gray-200" id="all-transactions-table"> 
-              <thead className="bg-gray-50 text-center">
+          <>   
+          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">       
+            <table className="min-w-full divide-y divide-gray-200" id="all-transactions-table"> 
+              <thead className="bg-gray-50">
                 <tr>
                   <th className="cstm-th text-center" >Transaction ID</th>
                   <th className="cstm-th text-center">Transaction Type</th>
@@ -49,7 +47,7 @@ function TotalTransactions({status}) {
               ))}
               </tbody>
             </table>
-          
+          </div> 
           </> 
           : <div className="mt-8 py-8 rounded-md bg-white">
               <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center">icon or graphic for no transaction here</div>
@@ -65,9 +63,8 @@ function TotalTransactions({status}) {
             sheet="Sheet"
             buttonText='⭳ Download '
           />
-        </div>
-      </div> 
-    </div> 
+        </div>    
+      </div>
     </div> 
     </>
   )
