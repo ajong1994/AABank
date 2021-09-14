@@ -61,8 +61,9 @@ const Accounts = ({status, updater}) => {
 
   return (
     <>
-    <Header status={status} />
-      <div className="container m-auto">
+    <div className="flex">
+      <Header status={status} />
+      <div className="mx-auto px-10 w-7/12 mt-8">
         {/* <h1>Welcome, { status.currentAdmin }!</h1> */}
         <div className="flex align-middle">
         <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
@@ -99,6 +100,8 @@ const Accounts = ({status, updater}) => {
         </div>
         )}
       </div>
+    </div>
+      
     </>
   )
 }

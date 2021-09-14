@@ -12,6 +12,7 @@ import { record_transaction } from '../utils/RecordTransacUtil'
 import Toast from '../parts/Toast'
 import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
+import Header from '../parts/Header'
 
 
 const Account = ({status, location}) => {
@@ -271,31 +272,38 @@ const Account = ({status, location}) => {
   }
 
   return (
-    <div className="container m-auto"> 
+    <div className="flex h-full">
+      <Header status={status}/>
+      <div className="container my-auto px-8 flex-shrink"> 
       {(customerData !== null) 
       ? (
-        <div>
-          <div>Account Number: {customerData.accNum}</div>
-          <div>Full Name: {customerData.firstname} {customerData.lastname}</div>
-          <div>Email: {customerData.email}</div>
-          <div>Balance: {formatMoney(customerData.balance)}</div>
-          <Form>
+        <div className="py-8">
+          <div className='grid grid-cols-2 grid-rows-3'>
+            <h2 className='text-xl font-bold'>Account Number: {customerData.accNum}</h2>
+            <p className='capitalize col-start-1'>Full Name: {customerData.firstname} {customerData.lastname}</p>
+            <p className='col-start-1 text-gray-500'>Email: {customerData.email}</p>
+            <h2 className='row-start-1 row-end-4 col-start-2 text-2xl font-bold text-right item-center'>Balance: {formatMoney(customerData.balance)}</h2>
+          </div>
+          <div className="flex gap-4 py-8">
             <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit} error={inputErrs.depositInputErr}/>
             <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw} error={inputErrs.withdrawInputErr}/>
             <Send modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} sendAmount={sendAmount} onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
               onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleSend={handleSend} accErr={inputErrs.receiverInputErr} amtErr={inputErrs.sendInputErr}/>
-          </Form>
+          </div>
           <Transactions customerData={customerData}/>
           {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>}
         </div>
         )
       : (
         <div>
+          <AlertVector/>
           <p>"Customer account number does not exist."</p>
           <Link to="/accounts">Return to accounts</Link>
         </div>
         )}
     </div>
+  </div>
+
   )
 }
 

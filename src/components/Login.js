@@ -161,7 +161,7 @@ const Login = ({status, updater}) => {
 
 
     return (
-        <div className="flex justify-between container m-auto">
+        <div className="flex justify-between container m-20">
             <div className="w-2/5 px-4 py-8 mt-20">
                 <HomeHero/>
             </div>
@@ -178,9 +178,7 @@ const Login = ({status, updater}) => {
                     </div>
                 <Button classnames="mt-8 bg-primary py-2 px-1 rounded-md text-white font-Lato" onclick={handleLogin}>Login</Button>
                 </div>
-
             </Form>
-
         </div>
     )
 }

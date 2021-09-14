@@ -2,7 +2,7 @@ import Button from '../components/Button'
 
 const Modal = ({header, show, children, status, onClose, buttonClick}) => {
     return (
-        <div className={show === 'show' ? 'show' : 'hide'}>
+        <div className={show === 'show' ? 'show absolute bg-white p-2' : 'hide hidden'}>
             <header className="modal-header">
                 <p>Confirm {header}</p>
             </header>
