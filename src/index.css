@@ -11,13 +11,13 @@
 @layer utilities {
     .hide {
         transform: scale(0);
-        -webkit-animation: fadeOut 1s;
-        animation: fadeOut 1s;
+        -webkit-animation: fadeOut .5s;
+        animation: fadeOut .5s;
     }
 
     .show {
     -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s;
+    animation: fadeIn .5s;
     }
 
     @-webkit-keyframes fadeIn {
@@ -67,7 +67,7 @@
         font-family: 'Source Sans Pro', 'sans-serif';
     }
     .transaction-container {
-        @apply p-4 bg-white flex-grow;
+        @apply p-4 bg-white flex-grow shadow;
     }
 }
 

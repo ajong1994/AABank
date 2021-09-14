@@ -282,7 +282,7 @@ const Account = ({status, location}) => {
             <h2 className='text-xl font-bold'>Account Number: {customerData.accNum}</h2>
             <p className='capitalize col-start-1'>Full Name: {customerData.firstname} {customerData.lastname}</p>
             <p className='col-start-1 text-gray-500'>Email: {customerData.email}</p>
-            <h2 className='row-start-1 row-end-4 col-start-2 text-2xl font-bold text-right item-center'>Balance: {formatMoney(customerData.balance)}</h2>
+            <h2 className='row-start-2 row-end-4 col-start-2 text-2xl font-bold text-right'>Balance: {formatMoney(customerData.balance)}</h2>
           </div>
           <div className="flex gap-4 py-8">
             <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit} error={inputErrs.depositInputErr}/>
