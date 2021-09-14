@@ -12,7 +12,6 @@ const Register = ({status}) => {
 
   const history = useHistory()
 
-
   const [error, setError] = useState({
     usernameErr   : '',
     firstnameErr  : '',
@@ -25,20 +24,23 @@ const Register = ({status}) => {
   const [lastName, setlastName] = useState('')
   const [passWord, setpassWord] = useState('')
 
-  // //Initialize error message text
+  //Initialize error/success message text
   // const [toastErrMsg, setToastErrMsg] = useState('');
   // const [toastSuccessMsg, setToastSuccessMsg] = useState('');
 
-  // //Initialize error message visibility
-  // const [showToastErr, setShowToastErr] = useState('');
-
-  // //Initialize success message visibility
+  //Initialize error/success message visibility
   // const [showToastSuccess, setShowToastSuccess] = useState('');
+  // const [showToastErr, setShowToastErr] = useState('');
 
   // useEffect(() => {
   //   const timer = setTimeout(() => closeToast, 5000)
   //   return () => clearTimeout(timer);
-  // },[toastErrMsg, toastSuccessMsg])
+  // },[toastErrMsg])
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => closeToast, 5000)
+  //   return () => clearTimeout(timer);
+  // },[toastSuccessMsg])
 
 
 // If currentAdmin is not amcanlubo or ajong, do not authorize to register other accounts
@@ -47,7 +49,7 @@ if(status.isLoggedIn){
   
   } else {     
     console.log('ACCESS DENIED');  
-    alert('ACCESS DENIED'); 
+    // alert('ACCESS DENIED'); 
     history.push('/accounts') 
   }
 } else {
@@ -101,11 +103,12 @@ const saveAccount = () => {
     } else {   
       form_valid=false
       alert(`Invalid!`)
+      // handleError(`Invalid!`)
     }     
   } else {
       form_valid=false
+      alert('Please fill required fields!')
       // handleError('Please fill required fields!')
-      alert ('Please fill required fields!')
   }
 } 
 
@@ -233,41 +236,35 @@ const handleSubmit = (e) => {
       }
 } 
 
-// const handleSuccess =(success) => {
+
+// function handleSuccess(success) {
 //   setShowToastSuccess(true)
-//   setToastSuccessMsg(success);
+//   setToastSuccessMsg(toastSuccessMsg);
 // }
 
-// const handleError =(err) => {
+// function handleError(err) {
 //   setShowToastErr(true)
-//   setToastErrMsg(err);
+//   setToastErrMsg(toastErrMsg);
 // }
 
-// const closeToast =() =>{
+// function closeToast() {
 //   setShowToastErr(false)
-//   showToastSuccess(false)
 // }
-
 
   return (
-
-  <> 
-    
-<div className="container">
-        <div className="flex justify-between container m-auto h-screen">
-
-        
+  
+    <div className="container">
+      <div className="flex justify-between container m-auto h-screen">
         <Header status={status} />
-        
-
-        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">
-          
+        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">     
           <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
+          
           <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
-          <div className='fullName'>
-          <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
-          {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
-          </div>
+          
+            <div className='fullName'>
+            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
+            {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
+            </div>
 
             <div className='fullName'>
             <Textfield id="admin-firstname" type="text"  onChange={(e) => handleChange (e, 'firstName')} value={firstName}>First Name</Textfield>
@@ -282,24 +279,19 @@ const handleSubmit = (e) => {
             <div className='password'>
             <Textfield id="admin-password" type="password" value={passWord} onChange={(e) => handleChange (e, 'passWord')}>Password</Textfield>
             {error.passwordErr !== '' && <Error>{error.passwordErr}</Error>}
-
             </div>
   
             <div className='submit mt-8'>
               <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
             </div>
-            </div>
-        </form>
-          {/* {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastSuccessMsg}</Toast>} */}
-          {/* {showToastErr === true && <Toast type="success" onClick={closeToast}>{toastErrMsg}</Toast>} */}
+
           </div>
+        </form>
+        {/* {showToastSuccess === true && <Toast type="success" onClick={closeToast}>{toastSuccessMsg}</Toast>}
+        {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>} */}
       </div>
-  </>
+    </div>
   )
-
-
-
-
 }
 
 export default Register

@@ -6,12 +6,11 @@ import Textfield from '../components/Textfield'
 import Error from '../components/Error'
 import {format_idNumber} from '../utils/UserIdUtil'
 import {getISOdate} from '../utils/ISODateUtil'
-import { record_transaction } from '../utils/RecordTransacUtil'
-import Deposit from '../parts/Deposit'
 
 
 const Create = ({status}) => {
-
+  // const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')));
+      
     const history = useHistory()
 
     const [error, setError] = useState({
@@ -92,9 +91,10 @@ const Create = ({status}) => {
     
     const create_user = () => {
      
+      let transaction_details = {},
+      transactionList=[]
 
-
-        validateUser()     
+       validateUser()     
         let totalCustomers;
         let accNum;
 
@@ -104,8 +104,7 @@ const Create = ({status}) => {
         else {
       
           if ((firstname !== '') && (lastname !== '') && (email !== '')) {  
-            
-          
+             
  
         //Set UID and numbers of totalCustomers
         if (localStorage.getItem('totalCustomers') === null) {
@@ -144,13 +143,36 @@ const Create = ({status}) => {
                   amount: Number(balance),
                   transaction: 'deposit', 
                   transactionId: format_idNumber(totalTransactions)
-                }];
-
+                }]
 
                 localStorage.setItem(`user-${accNum}`, JSON.stringify(accInfo)); 
-                //if account is successfully created move to accounts page
-                history.push('/accounts') 
+                
+                transaction_details = {
+                  date: getISOdate(),
+                  amount: Number(balance),
+                  transaction: 'deposit', 
+                  transactionId: format_idNumber(totalTransactions),
+                  user: accNum
+              }
+
+
+                if (localStorage.getItem('transactionList') === null) {
+                  transactionList.push(transaction_details) 
+                  localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
+                }
+                else{
+                transactionList = JSON.parse(localStorage.getItem('transactionList'))
+                transactionList.push(transaction_details) 
+                localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
+                }
+
+                
+                
                 alert(`User ${firstname} succesfully created!`)
+
+
+              //if account is successfully created move to accounts page
+              history.push('/accounts') 
 
                 //Set for mapping of customerlist
                 if (localStorage.getItem('customerList') === null) {
@@ -289,11 +311,12 @@ const Create = ({status}) => {
     return (
 
     <> 
-      <Header status={status} />
+      
 
-        <div className="container flex h-screen">
-          
-          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 mb-5 max-w-md flex-grow ml-auto mr-auto">
+        <div className="container">
+        <div className="flex justify-between container m-auto h-screen">
+        <Header status={status} />
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">
           <h2 className="text-2xl text-primary font-bold">Create User</h2>
           
           <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
@@ -324,6 +347,7 @@ const Create = ({status}) => {
 
           </div>
           </form>  
+        </div>
         </div>
     </>
     )

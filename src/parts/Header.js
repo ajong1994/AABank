@@ -23,11 +23,11 @@ const Header = ({status}) => {
 
             <ul class="flex flex-col py-5">
 
-                <li className="flex flex-row items-center h-12 text-primary">
+                <li className="flex flex-row items-center h-12">
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
-                    <UserCircleIcon className="h-6 w-6" />
+                    {/* <UserCircleIcon className="h-6 w-6" /> */}
                     </span>
-                    <span className="text-sm font-medium">{ status.currentAdmin }</span>
+                    <span className="text-sm font-bold text-gray-600">{ status.currentAdmin }</span>
                 </li>
 
                 <li>
