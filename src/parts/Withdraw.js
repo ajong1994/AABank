@@ -18,7 +18,7 @@ const Withdraw = ({modalStat, customerData, withdrawAmount, onChange, handleModa
                 <Form classnames='h-full'>
                     <div className='flex flex-col h-full'>
                         <h4 className='mb-4'>Cash Out</h4>
-                        <Textfield id="withdraw-input" placeholder="Enter withdrawal amount" type="number" value={withdrawAmount} onChange={onChange} min={0}>Withdraw</Textfield>
+                        <Textfield id="withdraw-input" placeholder="Enter withdrawal amount" type="number" value={withdrawAmount} onChange={onChange} min={0}>Withdrawal Amount</Textfield>
                         <Error classnames={error ? 'show' : 'hide'}>Amount must not be blank.</Error>
                         <Button classnames='justify-self-end self-end mt-auto bg-primary text-white py-1 px-2 rounded text-sm' type="submit"onclick={() => handleModalOpen({
                             show: true, 
@@ -33,8 +33,8 @@ const Withdraw = ({modalStat, customerData, withdrawAmount, onChange, handleModa
                 <Modal header="Withdrawal" show={modalStat.show && modalStat.withdrawal ? 'show':'hide'} status={modalStat.status} 
                     buttonClick={handleWithdraw} onClose={handleModalClose}> 
                     {modalStat.status === 'confirmation' ? 
-                        (`You are withdrawing ${formattedWithdraw} from Account Number: ${customerData.accNum}`) :
-                        (`Withdrawal successful! Account balance is now ${formattedBalance}`)
+                        (`You are withdrawing ${formattedWithdraw} from Account Number: ${customerData.accNum}.`) :
+                        (`Withdrawal successful! Account balance is now ${formattedBalance}.`)
                     }
                 </Modal> 
             </div>
