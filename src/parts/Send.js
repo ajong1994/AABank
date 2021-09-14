@@ -19,7 +19,7 @@ const Send = ({modalStat, customerData, receivingAccount, sendAmount, onChangeAm
                         <Textfield id="recipient-input" placeholder="Enter receiving account number" type="number" onChange={onChangeAccount} value={receivingAccount}>Receiving Account</Textfield>
                         <Error classnames={accErr ? 'show' : 'hide'}>Account number must not be blank.</Error>
                         <Textfield id="transfer-input" placeholder="Enter transfer amount" type="number" value={sendAmount} onChange={onChangeAmount} min={0}>Transfer Amount</Textfield>
-                        <Error classnames={amtErr ? 'show' : 'hide'}>Amount must not be blank.</Error>
+                        <Error classnames={amtErr ? 'show' : 'hide'}>{sendAmount < 0 ? 'Amount cannot be negative.' : 'Amount must not be blank.' }</Error>
                         <Button classnames='justify-self-end self-end mt-auto bg-primary text-white py-1 px-2 rounded text-sm' type="submit"onclick={() => handleModalOpen({
                             show: true, 
                             status: 'confirmation',

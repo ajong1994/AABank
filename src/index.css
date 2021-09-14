@@ -68,6 +68,7 @@
     }
     .transaction-container {
         @apply p-4 bg-white flex-grow shadow;
+        max-width: calc((100% - 2rem)/3)
     }
 }
 

@@ -4,6 +4,7 @@ import { Redirect } from "react-router";
 import ReactToExcel from 'react-html-table-to-excel'
 import {formatMoney} from '../utils/FormatMoneyUtil'
 import Header from "../parts/Header";
+import { AlertVector } from "../components/AlertVector";
 
 
 function TotalTransactions({status}) {
@@ -18,12 +19,11 @@ function TotalTransactions({status}) {
       <>
       <div className="flex">
         <Header status={status}/>
-        <div className="mx-auto px-10 w-7/12 mt-8">
+        <div className="mx-auto px-10 w-9/12 mt-8">
           <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
           
           {transactionList.length 
           ? 
-          <>   
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">       
             <table className="min-w-full divide-y divide-gray-200" id="all-transactions-table"> 
               <thead className="bg-gray-50">
@@ -48,10 +48,9 @@ function TotalTransactions({status}) {
               </tbody>
             </table>
           </div> 
-          </> 
-          : <div className="mt-8 py-8 rounded-md bg-white">
-              <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center">icon or graphic for no transaction here</div>
-              <p>No transactions yet.</p>
+        :   <div className="flex flex-col items-center">
+              <AlertVector width="40%" height="auto"/>
+              <p className="mx-auto text-center pt-4">No transactions yet.</p>
             </div>
           }   
           

@@ -1,4 +1,4 @@
-import React, {useState}  from 'react'
+import React, {useState, useEffect}  from 'react'
 import { useHistory } from 'react-router-dom'
 import { Redirect } from "react-router";
 import Header from '../parts/Header'
@@ -6,6 +6,7 @@ import Textfield from '../components/Textfield'
 import Error from '../components/Error'
 import {format_idNumber} from '../utils/UserIdUtil'
 import {getISOdate} from '../utils/ISODateUtil'
+import Toast from '../parts/Toast'
 
 
 const Create = ({status}) => {
@@ -24,10 +25,28 @@ const Create = ({status}) => {
     const [lastname, setLastname] = useState('')
     const [email, setEmail] = useState('')
     const [balance, setBalance] = useState('')
+    
+  //Initialize error/success message text
+  const [toastMsg, setToastMsg] = useState('');
+
+  //Initialize error/success message visibility
+  const [showToastMsg, setShowToastMsg] = useState('');
+
+  //Initialize toast type 
+  const [toastType, setToastType] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => closeToast(), 5000)
+    return () => clearTimeout(timer);
+  },[showToastMsg])
+
+
+    let accInfo = {}  
+    let populatedCustomerList = []
 
     //email cannot be the same
     //firstname + lastname cannot be the same
-    let user_exist;
+    let user_exist = false;
     let email_exist;
         
     //If user not isLoggedIn based on state passed as prop, redirect to accounts component
@@ -50,17 +69,16 @@ const Create = ({status}) => {
           for (let customer of customerList) {
               populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
           }
-          
-              for (let accounts of populatedCustomerList) { 
-                  if ((firstname.toLowerCase() + lastname.toLowerCase()) === ((accounts.firstname) + (accounts.lastname))){
-                      user_exist = true
-                      // console.log(user_exist)
-                  } else {
-                      user_exist = false
-                  }
-              }     
-                         
-      } return user_exist
+          console.log(populatedCustomerList)
+          for (let accounts of populatedCustomerList) { 
+            console.log('State input: ' + (firstname.toLowerCase() + lastname.toLowerCase()))
+            console.log('Account compared to: ' + (accounts.firstname + accounts.lastname))
+              if ((firstname.toLowerCase() + lastname.toLowerCase()) === ((accounts.firstname) + (accounts.lastname))){
+                  user_exist = true;
+                  return user_exist;
+              }
+          }                      
+      } return user_exist;
     }
 
 
@@ -85,9 +103,6 @@ const Create = ({status}) => {
                 }
         }
     }
-
-    let accInfo = {}  
-    let populatedCustomerList = []
     
     const create_user = () => {
      
@@ -99,7 +114,8 @@ const Create = ({status}) => {
         let accNum;
 
         if (user_exist === true) {
-          alert('user already exist!')
+          // alert('User already exists!')
+          handleError('User already exists!');
         }
         else {
       
@@ -165,14 +181,11 @@ const Create = ({status}) => {
                 transactionList.push(transaction_details) 
                 localStorage.setItem(`transactionList`, JSON.stringify(transactionList)); 
                 }
-
-                
-                
-                alert(`User ${firstname} succesfully created!`)
-
+                // alert(`User ${firstname} succesfully created!`)
+                handleSuccess(`User ${firstname} succesfully created!`);
 
               //if account is successfully created move to accounts page
-              history.push('/accounts') 
+              setTimeout(() => history.push('/accounts'),3000) 
 
                 //Set for mapping of customerlist
                 if (localStorage.getItem('customerList') === null) {
@@ -304,52 +317,61 @@ const Create = ({status}) => {
             else{
               form_valid = false
               console.error('Form has errors')
-              alert('Please check errors!')
+              // alert('Please check errors!')
+              handleError('Please check errors!')
             }
-    } 
+    }
+    
+    function handleSuccess(success) {
+      setShowToastMsg(true);
+      setToastMsg(success);
+      setToastType('success')
+    }
+    
+    function handleError(err) {
+      setShowToastMsg(true);
+      setToastMsg(err);
+      setToastType('error')
+    }
+    
+    function closeToast() {
+      setShowToastMsg(false)
+    }
 
     return (
+        <div className="flex justify-between m-auto h-screen">
+          <Header status={status} />
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">
+            <h2 className="text-2xl text-primary font-bold">Create User</h2>
+            <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
+    
+              <div className='fullName'>
+                <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
+                {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
+              </div>
 
-    <> 
-      
+              <div className='fullName'>
+                <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
+                {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
+              </div>
 
-        <div className="container">
-        <div className="flex justify-between container m-auto h-screen">
-        <Header status={status} />
-          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">
-          <h2 className="text-2xl text-primary font-bold">Create User</h2>
-          
-          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
-            
-            <div className='fullName'>
-              <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
-              {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
+              <div className='email'>
+                <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
+                {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
+              </div>
+
+              <div className='balance'> 
+                <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
+                {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
+              </div>
+              <div className='submit mt-8'>
+                <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Create</button>    
+              </div>
+
             </div>
-
-            <div className='fullName'>
-              <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
-              {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
-            </div>
-
-            <div className='email'>
-              <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
-              {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
-            </div>
-
-            <div className='balance'> 
-              <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
-              {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
-            </div>
-
-            <div className='submit mt-8'>
-              <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Create</button>    
-            </div>
-
-          </div>
-          </form>  
+          </form>
+          {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
         </div>
-        </div>
-    </>
     )
 }
 
