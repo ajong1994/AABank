@@ -16,7 +16,7 @@ const Header = ({status, updater}) => {
     <div className="flex flex-col bg-white h-full min-h-screen sticky top-0">
         <div className="flex flex-col w-56 h-full min-h-screen bg-white overflow-hidden shadow">
             <div className="flex items-center justify-center h-20">
-                <img className='h-24' src={logo} alt="Logo" />
+                <img className='w-36' src={logo} alt="Logo" />
             </div>
             
 

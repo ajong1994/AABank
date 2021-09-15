@@ -13,7 +13,7 @@ const Accounts = ({status, updater}) => {
   const history = useHistory();
 
   //Set state of list of customers in data with value of object with account info
-  const generatedList = list_users();
+  const [generatedList, setGeneratedList] = useState(list_users());
   const[customerList, setCustomerList] = useState(generatedList);
 
   //Set state of searchquery
@@ -23,6 +23,19 @@ const Accounts = ({status, updater}) => {
   //setState when input state is empty and customerList is empty then change to 'No customer accounts yet'. otherwise it's 'No search results. Try again.'
   const [errorMsg, setErrorMsg] = useState('No customer accounts yet.')
 
+  //Every time the input value of the search changes, as long as it's not empty, filter through the list of total customers and check if the account exists
+  //If input is blank, then display total list of customers
+  useEffect(() => {
+    if (searchQuery !== '') {
+      const filteredCustomers = generatedList.filter(customer => customer.accNum === searchQuery);
+      setCustomerList(filteredCustomers);
+    } else {
+      setCustomerList(generatedList)
+    }
+  },[searchQuery])
+
+  //If filtered customers was changed, check if search query is blank and if total list if customers is empty. if both true, display no customer UI. 
+  //If filtered customer list is empty but search query is not empty, then display no search match UI.
   useEffect(() => {
     if (searchQuery === '' && generatedList.length === 0) {
       setErrorMsg('No customer accounts yet.')
@@ -35,17 +48,6 @@ const Accounts = ({status, updater}) => {
   if (!status.isLoggedIn) {
     return <Redirect to="/login"/>
   } 
-
-  //onChange function to filter Accounts display results depending on search
-  //Convert this to state implementation
-  function handleOnKeyUp(e){
-    if (e.key === 'Enter') {
-      const filteredCustomers = customerList.filter(customer => customer.accNum === searchQuery);
-      setCustomerList(filteredCustomers);
-    } else if (e.target.value === '') {
-      setCustomerList(list_users())
-    }
-  }
 
   function handleOnChange(e) {
     setSearchQuery(e.target.value);
@@ -69,7 +71,7 @@ const Accounts = ({status, updater}) => {
         <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
           <SearchIcon className="h-5 w-5inline-block"/>
         </span>
-        <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} onKeyUp={handleOnKeyUp} value={searchQuery}
+        <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} value={searchQuery}
         className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-transparent focus:bg-white focus:ring-0 text-sm flex-grow"/>
         </div>
         { customerList.length ? (
