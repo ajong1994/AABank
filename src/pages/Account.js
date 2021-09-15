@@ -3,7 +3,6 @@ import { Redirect, Link } from 'react-router-dom'
 import Deposit from '../parts/Deposit'
 import Withdraw from '../parts/Withdraw'
 import Send from '../parts/Send'
-import Form from '../components/Form'
 import Transactions from '../parts/Transactions'
 import { deposit } from '../utils/DepositUtil'
 import { withdraw } from '../utils/WithdrawUtil'
@@ -13,6 +12,7 @@ import Toast from '../parts/Toast'
 import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
 import Header from '../parts/Header'
+import {ArrowRightIcon} from '@heroicons/react/outline'
 
 
 const Account = ({status, location}) => {
@@ -64,7 +64,7 @@ const Account = ({status, location}) => {
   const [showToastErr, setShowToastErr] = useState('');
 
   useEffect(() => {
-    const timer = setTimeout(() => closeToast, 5000)
+    const timer = setTimeout(() => closeToast(), 5000)
     return () => clearTimeout(timer);
   },[toastErrMsg])
 
@@ -138,19 +138,19 @@ const Account = ({status, location}) => {
   }
   
   function handleDeposit() {
-    if (depositAmount) {
+    if (depositAmount && depositAmount > 0) {
       const new_balance = deposit(customerData.accNum, depositAmount);
       const {new_transactions, latest_transaction} = record_transaction(customerData, depositAmount, 'deposit', totalTransactions)
       updateBalance(new_balance, new_transactions);
       updateModalToPaid();
       setDepositAmount('');
       updateTransactions(latest_transaction); 
-    } 
+    }
   };
 
   function handleWithdraw() {
     //Error handling to ensure customer can't withdraw more than their account balance
-    if (withdrawAmount && withdrawAmount <= customerData.balance) {
+    if ((withdrawAmount && withdrawAmount > 0) && withdrawAmount <= customerData.balance) {
       const new_balance = withdraw(customerData.accNum, withdrawAmount);
       const {new_transactions, latest_transaction} = record_transaction(customerData, withdrawAmount, 'withdrawal', totalTransactions)
       updateBalance(new_balance, new_transactions);
@@ -166,7 +166,7 @@ const Account = ({status, location}) => {
   function handleSend() {
     //Check if account exists
     const receivingCustomerData = JSON.parse(localStorage.getItem(`user-${receivingAccount}`));
-    if (receivingAccount && sendAmount && receivingAccount !== customerData.accNum && receivingCustomerData !== null && sendAmount <= customerData.balance) {
+    if (receivingAccount && (sendAmount && sendAmount > 0 ) && receivingAccount !== customerData.accNum && receivingCustomerData !== null && sendAmount <= customerData.balance) {
       const {from_newBalance, to_newBalance} = send(customerData.accNum, receivingAccount, sendAmount);
       const {new_transactions, latest_transaction} = record_transaction(customerData, sendAmount, 'sent', totalTransactions, receivingAccount);
       //Update receiving customer's data on the back-end/localStorage. Dev Notes: Removed State implementation for this because it doesn't affect any rendering elements anyway and to reduce re-rendering.
@@ -215,13 +215,13 @@ const Account = ({status, location}) => {
 
   function handleModalOpen(newstate) {
     //Validate fields before showing modal
-    if (newstate.deposit && !depositAmount) {
+    if (newstate.deposit && !depositAmount || (newstate.deposit && depositAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         depositInputErr: true,
       }))
       return
-    } else if(newstate.withdrawal && !withdrawAmount) {
+    } else if(newstate.withdrawal && !withdrawAmount || (newstate.withdrawal && withdrawAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         withdrawInputErr: true,
@@ -232,22 +232,23 @@ const Account = ({status, location}) => {
         ...prevState,
         receiverInputErr: true,
       }));
-      if(newstate.send && !sendAmount) {
+      if(newstate.send && !sendAmount || (newstate.send && sendAmount < 0)) {
         setInputErrs((prevState) => ({
           ...prevState,
           sendInputErr: true,
         }))
       }
       return
-    } else if(newstate.send && !sendAmount) {
+    } else if(newstate.send && !sendAmount || (newstate.send && sendAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         sendInputErr: true,
       }))
       return
     }
-    setModalStat(newstate)
-    setToastErrMsg('')
+    setModalStat(newstate);
+    setShowToastErr(false);
+    setToastErrMsg('');
   }
 
   function handleModalClose() {
@@ -295,10 +296,10 @@ const Account = ({status, location}) => {
         </div>
         )
       : (
-        <div>
-          <AlertVector/>
-          <p>"Customer account number does not exist."</p>
-          <Link to="/accounts">Return to accounts</Link>
+        <div className="flex flex-col items-center">
+          <AlertVector width="40%" height="auto"/>
+          <p className="mx-auto text-center pt-4">Customer account number does not exist.</p>
+          <Link to="/accounts" className="pt-8 text-primary block hover:underline">Return to accounts<ArrowRightIcon className="w-4 h-4 inline ml-2 -mt-1" /></Link>
         </div>
         )}
     </div>
