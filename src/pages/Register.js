@@ -8,7 +8,7 @@ import Textfield from '../components/Textfield'
 import Toast from '../parts/Toast'
 
 
-const Register = ({status}) => {
+const Register = ({status, updater}) => {
 
   const history = useHistory()
 
@@ -253,7 +253,7 @@ function closeToast() {
   return (
   
       <div className="flex justify-between m-auto h-screen">
-        <Header status={status} />
+        <Header status={status} updater={updater} />
         <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">     
           <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
           

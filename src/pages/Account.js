@@ -15,7 +15,7 @@ import Header from '../parts/Header'
 import {ArrowRightIcon} from '@heroicons/react/outline'
 
 
-const Account = ({status, location}) => {
+const Account = ({status, updater, location}) => {
 
   //Use URL API to create new URLSearchParams instance  from location.search 
   const searchQuery = new URLSearchParams(location.search)
@@ -215,13 +215,13 @@ const Account = ({status, location}) => {
 
   function handleModalOpen(newstate) {
     //Validate fields before showing modal
-    if (newstate.deposit && !depositAmount || (newstate.deposit && depositAmount < 0)) {
+    if ((newstate.deposit && !depositAmount) || (newstate.deposit && depositAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         depositInputErr: true,
       }))
       return
-    } else if(newstate.withdrawal && !withdrawAmount || (newstate.withdrawal && withdrawAmount < 0)) {
+    } else if((newstate.withdrawal && !withdrawAmount) || (newstate.withdrawal && withdrawAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         withdrawInputErr: true,
@@ -232,14 +232,14 @@ const Account = ({status, location}) => {
         ...prevState,
         receiverInputErr: true,
       }));
-      if(newstate.send && !sendAmount || (newstate.send && sendAmount < 0)) {
+      if((newstate.send && !sendAmount) || (newstate.send && sendAmount < 0)) {
         setInputErrs((prevState) => ({
           ...prevState,
           sendInputErr: true,
         }))
       }
       return
-    } else if(newstate.send && !sendAmount || (newstate.send && sendAmount < 0)) {
+    } else if((newstate.send && !sendAmount) || (newstate.send && sendAmount < 0)) {
       setInputErrs((prevState) => ({
         ...prevState,
         sendInputErr: true,
@@ -274,7 +274,7 @@ const Account = ({status, location}) => {
 
   return (
     <div className="flex h-full">
-      <Header status={status}/>
+      <Header status={status} updater={updater}/>
       <div className="container my-auto px-8 flex-shrink"> 
       {(customerData !== null) 
       ? (

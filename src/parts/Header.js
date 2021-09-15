@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logout from '../components/Logout'
-import logo from './logo2.png'
+import logo from '../components/logo.png'
 import {CashIcon} from '@heroicons/react/outline'
 import {UserAddIcon} from '@heroicons/react/outline'
 import {UserGroupIcon} from '@heroicons/react/outline'
 import {LogoutIcon} from '@heroicons/react/outline'
-import {UserCircleIcon} from '@heroicons/react/outline'
 
 
-const Header = ({status}) => {
+const Header = ({status, updater}) => {
     
     
     return (        
@@ -65,7 +64,7 @@ const Header = ({status}) => {
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
                     <LogoutIcon className="h-6 w-6"/>
                     </span>
-                    <span className="text-sm font-medium"><Logout /></span>
+                    <span className="text-sm font-medium"><Logout status={status} updater={updater} /></span>
                     </Link>
                 </li>
             </ul>

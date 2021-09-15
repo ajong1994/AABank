@@ -9,7 +9,7 @@ import {getISOdate} from '../utils/ISODateUtil'
 import Toast from '../parts/Toast'
 
 
-const Create = ({status}) => {
+const Create = ({status, updater}) => {
   // const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')));
       
     const history = useHistory()
@@ -345,7 +345,7 @@ const Create = ({status}) => {
 
     return (
         <div className="flex justify-between m-auto h-screen">
-          <Header status={status} />
+          <Header status={status} updater={updater} />
           <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">
             <h2 className="text-2xl text-primary font-bold">Create User</h2>
             <div className="mt-5 grid grid-cols-1 gap-4 m-auto">

@@ -1,21 +1,18 @@
-import React from 'react'
+import { useHistory } from "react-router";
 
 const Logout = ({status, updater}) => {
 
-    // if (status.isLoggedIn){
-    //     updater({
-    //         isLoggedIn: false, 
-    //         currentAdmin: ''
-    //     });
-    //     clear()
-    // }
-
+    const history = useHistory();
     
     function clear() {
-    
-        alert(`User succesfully logged out!`)
-        sessionStorage.clear();
-        window.location.href='/Login'    
+        if (status.isLoggedIn){
+            updater({
+                isLoggedIn: false, 
+                currentAdmin: null
+            });
+        }
+        // sessionStorage.clear();
+        history.push('/login')    
     }
    
     return (

@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Accounts from './pages/Accounts'
 import Account from './pages/Account'
 import Login from './pages/Login'
-import Logout from './components/Logout'
 import Register from './pages/Register'
 import Create from './pages/Create'
 import TotalTransactions from './pages/TotalTransactions'
@@ -38,7 +37,6 @@ const App = () => {
     <Router>
     <Switch>
         <Route exact path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
-        <Route exact path="/logout" render={(props) => <Logout {...props} status={loginStatus} updater={updateStatus}/>} />
         <Route exact path="/register" render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
         <Route exact path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} updater={updateStatus} />} />
         <Route exact path="/account" render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
