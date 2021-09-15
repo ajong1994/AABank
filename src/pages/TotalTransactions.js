@@ -7,7 +7,7 @@ import Header from "../parts/Header";
 import { AlertVector } from "../components/AlertVector";
 
 
-function TotalTransactions({status}) {
+function TotalTransactions({status, updater}) {
 
   const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')).reverse() || []);
     //If user not isLoggedIn based on state passed as prop, redirect to accounts component
@@ -18,7 +18,7 @@ function TotalTransactions({status}) {
   return (
       <>
       <div className="flex">
-        <Header status={status}/>
+        <Header status={status} updater={updater}/>
         <div className="mx-auto px-10 w-9/12 mt-8">
           <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
           

@@ -4,6 +4,7 @@ import Textfield from '../components/Textfield'
 import Form from '../components/Form'
 import Button from '../components/Button'
 import Error from '../components/Error'
+import logo from '../components/logo.png'
 
 
 
@@ -162,11 +163,12 @@ const Login = ({status, updater}) => {
 
 
     return (
-        <div className="flex justify-between container m-20">
+        <div className="flex justify-between container pt-20 mx-auto">
             <div className="w-2/5 px-4 py-8 mt-20">
                 <HomeHero/>
             </div>
-            <Form classnames="px-4 py-8 bg-white rounded shadow-md mt-20 max-w-md flex-grow" >
+            <Form classnames="px-8 pt-8 pb-16 bg-white rounded shadow-md mt-8 max-w-md flex-grow" >
+                <img src={logo} className="w-24 pb-4 -ml-4"/>
                 <h2 className="text-4xl font-bold">Sign In</h2>
                 <div className="mt-8 grid grid-cols-1 gap-2">
                     <div>
