@@ -168,7 +168,7 @@ const Login = ({status, updater}) => {
                 <HomeHero/>
             </div>
             <Form classnames="px-8 pt-8 pb-16 bg-white rounded shadow-md mt-8 max-w-md flex-grow" >
-                <img src={logo} className="w-24 pb-4 -ml-4"/>
+                <img src={logo} className="w-24 pb-8"/>
                 <h2 className="text-4xl font-bold">Sign In</h2>
                 <div className="mt-8 grid grid-cols-1 gap-2">
                     <div>
