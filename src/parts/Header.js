@@ -21,13 +21,10 @@ const Header = ({status}) => {
             </div>
             
 
-            <ul class="flex flex-col py-5">
+            <ul className="flex flex-col py-5">
 
                 <li className="flex flex-row items-center h-12">
-                    <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
-                    {/* <UserCircleIcon className="h-6 w-6" /> */}
-                    </span>
-                    <span className="text-sm font-bold text-gray-600">{ status.currentAdmin }</span>
+                    <span className="text-md font-bold text-gray-600 pl-3">Welcome, { status.currentAdmin }!</span>
                 </li>
 
                 <li>
@@ -51,7 +48,7 @@ const Header = ({status}) => {
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
                     <UserAddIcon className="h-6 w-6"/>
                     </span>
-                    <span className="text-sm font-medium">Create Admin</span>
+                    <span className="text-sm font-medium">Register Admin</span>
                     </Link>
                 </li>
                 <li>
@@ -59,7 +56,7 @@ const Header = ({status}) => {
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
                     <UserAddIcon className="h-6 w-6"/>
                     </span>
-                    <span className="text-sm font-medium">Create Account</span>
+                    <span className="text-sm font-medium">Create User</span>
                     </Link>
                 </li>
                  

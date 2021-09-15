@@ -18,7 +18,7 @@ const Deposit = ({modalStat, customerData, depositAmount, onChange, handleModalC
                     <div className='flex flex-col h-full'>
                         <h4 className='mb-4'>Cash In</h4>
                         <Textfield id="deposit-input" placeholder="Enter deposit amount" type="number" value={depositAmount} onChange={onChange} min={0}>Deposit Amount</Textfield>
-                        <Error classnames={error ? 'show' : 'hide'}>Amount must not be blank.</Error>
+                        <Error classnames={error ? 'show' : 'hide'}>{depositAmount < 0 ? 'Amount cannot be negative.' : 'Amount must not be blank.' }</Error>
                         <Button classnames='justify-self-end self-end mt-auto bg-primary text-white py-1 px-2 rounded text-sm' type="submit" onclick={() => handleModalOpen({
                             show: true, 
                             status: 'confirmation',

@@ -1,9 +1,9 @@
 import {useState} from 'react'
 import {Redirect, useHistory} from 'react-router-dom'
-import Textfield from './Textfield'
-import Form from './Form'
-import Button from './Button'
-import Error from './Error'
+import Textfield from '../components/Textfield'
+import Form from '../components/Form'
+import Button from '../components/Button'
+import Error from '../components/Error'
 
 
 
@@ -59,6 +59,7 @@ const Login = ({status, updater}) => {
     }
 
     function handleLogin() {
+        //run validator / authentication logic against default credentials listed above
         for (let i = 0; i < 2; i++) {
             if (usernameInput in default_credentials[i]) {
                 if (passwordInput === default_credentials[i][usernameInput].password) {
@@ -76,7 +77,7 @@ const Login = ({status, updater}) => {
                 }
             }
         }
- 
+        //run validator / authentication logic against credentials stored in localStorage
         var storedUser = JSON.parse(localStorage.getItem(usernameInput));
         if (storedUser !== null) {
             if (storedUser.password === passwordInput) {

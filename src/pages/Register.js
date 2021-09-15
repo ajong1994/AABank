@@ -25,22 +25,18 @@ const Register = ({status}) => {
   const [passWord, setpassWord] = useState('')
 
   //Initialize error/success message text
-  // const [toastErrMsg, setToastErrMsg] = useState('');
-  // const [toastSuccessMsg, setToastSuccessMsg] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
 
   //Initialize error/success message visibility
-  // const [showToastSuccess, setShowToastSuccess] = useState('');
-  // const [showToastErr, setShowToastErr] = useState('');
+  const [showToastMsg, setShowToastMsg] = useState('');
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => closeToast, 5000)
-  //   return () => clearTimeout(timer);
-  // },[toastErrMsg])
+  //Initialize toast type 
+  const [toastType, setToastType] = useState('');
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => closeToast, 5000)
-  //   return () => clearTimeout(timer);
-  // },[toastSuccessMsg])
+  useEffect(() => {
+    const timer = setTimeout(() => closeToast(), 5000)
+    return () => clearTimeout(timer);
+  },[showToastMsg])
 
 
 // If currentAdmin is not amcanlubo or ajong, do not authorize to register other accounts
@@ -89,26 +85,23 @@ return user_exist
 const saveAccount = () => {
 
   if ((userName !== '') && (firstName !== '') && (lastName !== '') && (passWord !== '')) {
-    
-    
     if (form_valid===true) {
-
       adminInfo.firstname = firstName
       adminInfo.lastname = lastName
       adminInfo.password = passWord
       localStorage.setItem(userName, JSON.stringify(adminInfo)); 
-      history.push('/accounts') 
-      alert(`User ${userName} succesfully created!`)
-      // handleSuccess(`User ${userName} succesfully created!`)
+      // history.push('/accounts') 
+      // alert(`User ${userName} succesfully created!`)
+      handleSuccess(`User ${userName} succesfully created!`)
     } else {   
       form_valid=false
-      alert(`Invalid!`)
-      // handleError(`Invalid!`)
+      // alert(`Invalid!`)
+      handleError('Invalid!')
     }     
   } else {
       form_valid=false
-      alert('Please fill required fields!')
-      // handleError('Please fill required fields!')
+      // alert('Please fill required fields!')
+      handleError('Please fill required fields!')
   }
 } 
 
@@ -136,27 +129,27 @@ const handleChange = (e, state) => {
           e.target.value === ''
           ? setError((prevState) => ({
             ...prevState,
-            usernameErr:'Username must not be empty'}))
+            usernameErr:'Username must not be blank.'}))
           :
           e.target.value.length < 5
           ? setError((prevState) => ({
             ...prevState,
-            usernameErr: 'Username must be at least 5 characters long'}))
+            usernameErr: 'Username must be at least 5 characters long.'}))
           :
           user_exist===true
           ? setError((prevState) => ({
             ...prevState,
-            usernameErr: 'Username already exist' }))
+            usernameErr: 'Username already exists.' }))
           :
           e.target.value === 'amcanlubo'
           ? setError((prevState) => ({
             ...prevState,
-            usernameErr: 'Username already exist' }))
+            usernameErr: 'Username already exists.' }))
           : 
           e.target.value === 'ajong1994'
           ? setError((prevState) => ({
             ...prevState,
-            usernameErr: 'Username already exist' }))
+            usernameErr: 'Username already exists.' }))
           : ''
           setuserName(e.target.value)
   
@@ -166,7 +159,7 @@ const handleChange = (e, state) => {
           e.target.value === ''
           ? setError((prevState) => ({
             ...prevState,
-            firstnameErr   : 'Firstname must not be empty'}))
+            firstnameErr   : 'First name must not be blank.'}))
           :
           validNameRegex.test(e.target.value)
           ? setError((prevState) => ({
@@ -176,7 +169,7 @@ const handleChange = (e, state) => {
           e.target.value.length < 2
           ? setError((prevState) => ({
             ...prevState,
-            firstnameErr   : 'Firstname must be at least 2 characters long'}))
+            firstnameErr   : 'Firstname must be at least 2 characterslong.'}))
           : ''
           setfirstName(e.target.value)
         break;
@@ -185,12 +178,12 @@ const handleChange = (e, state) => {
         e.target.value === ''
         ? setError((prevState) => ({
           ...prevState,
-          lastnameErr   : 'Lastname must not be empty'}))
+          lastnameErr   : 'Last name must not be blank.'}))
         : 
         (e.target.value.length < 2)
         ? setError((prevState) => ({
           ...prevState,
-          lastnameErr   : 'Last name must be at least 2 characters long'}))
+          lastnameErr   : 'Last name must be at least 2 characters long.'}))
         :
         (validNameRegex.test(e.target.value))
         ? setError((prevState) => ({
@@ -204,7 +197,7 @@ const handleChange = (e, state) => {
         e.target.value === ''
         ? setError((prevState) => ({
           ...prevState,
-          passwordErr   : 'Password must not be empty'}))
+          passwordErr   : 'Password must not be blank.'}))
         : 
         (e.target.value.length < 6)
         ? setError((prevState) => ({
@@ -237,32 +230,37 @@ const handleSubmit = (e) => {
 } 
 
 
-// function handleSuccess(success) {
-//   setShowToastSuccess(true)
-//   setToastSuccessMsg(toastSuccessMsg);
-// }
+function handleSuccess(success) {
+  setShowToastMsg(true)
+  setToastMsg(success);
+  setToastType('success');
+  setuserName('');
+  setfirstName('');
+  setlastName('');
+  setpassWord('');
+}
 
-// function handleError(err) {
-//   setShowToastErr(true)
-//   setToastErrMsg(toastErrMsg);
-// }
+function handleError(err) {
+  setShowToastMsg(true)
+  setToastMsg(err);
+  setToastType('error');
+}
 
-// function closeToast() {
-//   setShowToastErr(false)
-// }
+function closeToast() {
+  setShowToastMsg(false)
+}
 
   return (
   
-    <div className="container">
-      <div className="flex justify-between container m-auto h-screen">
+      <div className="flex justify-between m-auto h-screen">
         <Header status={status} />
-        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-5 m-auto max-w-md flex-grow">     
+        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">     
           <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
           
           <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
           
             <div className='fullName'>
-            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
+            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>Username</Textfield>
             {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
             </div>
 
@@ -287,10 +285,8 @@ const handleSubmit = (e) => {
 
           </div>
         </form>
-        {/* {showToastSuccess === true && <Toast type="success" onClick={closeToast}>{toastSuccessMsg}</Toast>}
-        {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>} */}
+        {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
       </div>
-    </div>
   )
 }
 

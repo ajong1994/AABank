@@ -7,7 +7,7 @@ const Modal = ({header, show, children, status, onClose, buttonClick}) => {
             </div>
             <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded flex flex-col z-10 w-96'>
                 <header className="modal-header">
-                    <h5 className='mb-4'>Confirm {header}</h5>
+                    {status === 'confirmation' ? <h5 className='mb-4'>Confirm {header}</h5> : <h5 className='mb-4'>Successful {header}</h5> }
                 </header>
                 <div className="modal-body py-4">
                     <p className='text-sm'>{children}</p>
