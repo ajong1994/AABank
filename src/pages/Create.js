@@ -10,8 +10,7 @@ import Toast from '../parts/Toast'
 
 
 const Create = ({status, updater}) => {
-  // const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')));
-      
+  
     const history = useHistory()
 
     const [error, setError] = useState({
@@ -73,7 +72,7 @@ const Create = ({status, updater}) => {
           for (let accounts of populatedCustomerList) { 
             console.log('State input: ' + (firstname.toLowerCase() + lastname.toLowerCase()))
             console.log('Account compared to: ' + (accounts.firstname + accounts.lastname))
-              if ((firstname.toLowerCase() + lastname.toLowerCase()) === ((accounts.firstname) + (accounts.lastname))){
+              if ((firstname.toLowerCase().trim() + lastname.toLowerCase().trim()) === ((accounts.firstname) + (accounts.lastname))){
                   user_exist = true;
                   return user_exist;
               }
@@ -83,6 +82,7 @@ const Create = ({status, updater}) => {
 
 
       const validateEmail = (e) => {
+        
         let email = e.target.value
         // Get list of total customers from localStorage 
         const customerList = JSON.parse(localStorage.getItem('customerList'));
@@ -92,16 +92,14 @@ const Create = ({status, updater}) => {
             for (let customer of customerList) {
                 populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
             }
-            
                 for (let accounts of populatedCustomerList) {
                     
-                    if (email.toLowerCase() === accounts.email){
+                    if (email.toLowerCase().trim() === accounts.email) {
                         email_exist = true
-                    } else {
-                        email_exist = false
-                    }           
+                        return email_exist;
+                    } 
                 }
-        }
+        } return email_exist;
     }
     
     const create_user = () => {
