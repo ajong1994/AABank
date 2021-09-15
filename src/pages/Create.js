@@ -198,7 +198,8 @@ const Create = ({status}) => {
 
 
           } else {   
-            alert ('Please fill required fields!')   
+            // alert ('Please fill required fields!')  
+            handleError('Please fill required fields!'); 
           }    
         }
     }            
@@ -264,7 +265,7 @@ const Create = ({status}) => {
 
             case 'email' :
               validateEmail(e)
-              error.emailErr =
+              error.emailErr = 
               e.target.value === ''
               ? setError((prevState) => ({
                 ...prevState,
@@ -286,7 +287,7 @@ const Create = ({status}) => {
               break;
 
             case 'balance' :
-              error.balanceErr =
+              error.balanceErr = 
               e.target.value < 0
               ? setError((prevState) => ({
                 ...prevState,
@@ -326,6 +327,10 @@ const Create = ({status}) => {
       setShowToastMsg(true);
       setToastMsg(success);
       setToastType('success')
+      setFirstname('');
+      setLastname('');
+      setEmail('');
+      setBalance(0);
     }
     
     function handleError(err) {

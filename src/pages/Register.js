@@ -234,6 +234,10 @@ function handleSuccess(success) {
   setShowToastMsg(true)
   setToastMsg(success);
   setToastType('success');
+  setuserName('');
+  setfirstName('');
+  setlastName('');
+  setpassWord('');
 }
 
 function handleError(err) {
@@ -256,7 +260,7 @@ function closeToast() {
           <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
           
             <div className='fullName'>
-            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>User Name</Textfield>
+            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>Username</Textfield>
             {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
             </div>
 

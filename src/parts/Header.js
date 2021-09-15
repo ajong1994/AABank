@@ -48,7 +48,7 @@ const Header = ({status}) => {
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
                     <UserAddIcon className="h-6 w-6"/>
                     </span>
-                    <span className="text-sm font-medium">Create Admin</span>
+                    <span className="text-sm font-medium">Register Admin</span>
                     </Link>
                 </li>
                 <li>
@@ -56,7 +56,7 @@ const Header = ({status}) => {
                     <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
                     <UserAddIcon className="h-6 w-6"/>
                     </span>
-                    <span className="text-sm font-medium">Create Account</span>
+                    <span className="text-sm font-medium">Create User</span>
                     </Link>
                 </li>
                  
