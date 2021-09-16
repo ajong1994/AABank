@@ -5,9 +5,6 @@ import Form from '../components/Form'
 import Button from '../components/Button'
 import Error from '../components/Error'
 import logo from '../components/logo.png'
-import loginBg from '../components/loginBg.jpg'
-import loginBg2 from '../components/loginBg2.jpg'
-
 
 
 const Login = ({status, updater}) => {
