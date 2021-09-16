@@ -13,8 +13,8 @@ const Header = ({status, updater}) => {
     
     return (        
         
-    <div className="flex flex-col bg-white h-full min-h-screen sticky top-0">
-        <div className="flex flex-col w-56 h-full min-h-screen bg-white overflow-hidden shadow">
+    <div className="flex flex-col bg-white h-full">
+        <div className="flex flex-col w-56 h-full bg-white overflow-hidden shadow">
             <div className="flex items-center justify-center h-20">
                 <img className='w-36' src={logo} alt="Logo" />
             </div>

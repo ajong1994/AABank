@@ -7,6 +7,7 @@ import {SearchIcon} from '@heroicons/react/outline'
 import {formatMoney} from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
 import {NewAccVector} from '../components/NewAccVector'
+import PageContent from '../parts/PageContent';
 
 const Accounts = ({status, updater}) => {
 
@@ -62,49 +63,47 @@ const Accounts = ({status, updater}) => {
   }
 
   return (
-    <>
-    <div className="flex">
+    <div className="flex h-full">
       <Header status={status} updater={updater} />
-      <div className="mx-auto px-10 w-7/12 my-8">
-        {/* <h1>Welcome, { status.currentAdmin }!</h1> */}
-        <div className="flex align-middle">
-        <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
-          <SearchIcon className="h-5 w-5inline-block"/>
-        </span>
-        <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} value={searchQuery}
-        className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-transparent focus:bg-white focus:ring-0 text-sm flex-grow"/>
-        </div>
-        { customerList.length ? (
-        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">
-          <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="cstm-th">Account Number</th>
-                  <th className="cstm-th">Customer Name</th>
-                  <th className="cstm-th">Balance</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {customerList.map((customer) => (
-                  <tr key = {customer.accNum}>
-                    <td className="cstm-td"><p className="cstm-td-text">{customer.accNum}</p></td>
-                    <td className="cstm-td"><p className="cstm-td-text">{`${customer.firstname} ${customer.lastname}`}</p></td>
-                    <td className="cstm-td"><p className="cstm-td-text">{formatMoney(customer.balance)}</p></td>
-                    <td className="cstm-td text-sm"><Button classnames="text-primary hover:underline cursor-pointer" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
+      <PageContent>
+        <div className="mx-auto px-10 w-7/12 my-8">
+          <div className="flex align-middle">
+          <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
+            <SearchIcon className="h-5 w-5inline-block"/>
+          </span>
+          <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} value={searchQuery}
+          className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-transparent focus:bg-white focus:ring-0 text-sm flex-grow"/>
+          </div>
+          { customerList.length ? (
+          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="cstm-th">Account Number</th>
+                    <th className="cstm-th">Customer Name</th>
+                    <th className="cstm-th">Balance</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-        </div>) : ( 
-        <div className="mt-8 py-8 rounded-md bg-white">
-          <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center">{errorMsg === 'No customer accounts yet.' ? <NewAccVector width="74%" height="auto"/> : <AlertVector width="100%" height="auto"/>}</div>
-          <p className="mx-auto text-center">{errorMsg}</p>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {customerList.map((customer) => (
+                    <tr key = {customer.accNum}>
+                      <td className="cstm-td"><p className="cstm-td-text">{customer.accNum}</p></td>
+                      <td className="cstm-td"><p className="cstm-td-text">{`${customer.firstname} ${customer.lastname}`}</p></td>
+                      <td className="cstm-td"><p className="cstm-td-text">{formatMoney(customer.balance)}</p></td>
+                      <td className="cstm-td text-sm"><Button classnames="text-primary hover:underline cursor-pointer" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          </div>) : ( 
+          <div className="mt-8 py-8 rounded-md bg-white">
+            <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center">{errorMsg === 'No customer accounts yet.' ? <NewAccVector width="74%" height="auto"/> : <AlertVector width="100%" height="auto"/>}</div>
+            <p className="mx-auto text-center">{errorMsg}</p>
+          </div>
+          )}
         </div>
-        )}
-      </div>
-    </div>
-      
-    </>
+      </PageContent>
+    </div>    
   )
 }
 

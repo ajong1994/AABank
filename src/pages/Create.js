@@ -7,6 +7,7 @@ import Error from '../components/Error'
 import {format_idNumber} from '../utils/UserIdUtil'
 import {getISOdate} from '../utils/ISODateUtil'
 import Toast from '../parts/Toast'
+import PageContent from '../parts/PageContent';
 
 
 const Create = ({status, updater}) => {
@@ -342,39 +343,41 @@ const Create = ({status, updater}) => {
     }
 
     return (
-        <div className="flex justify-between m-auto h-screen">
-          <Header status={status} updater={updater} />
-          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">
-            <h2 className="text-2xl text-primary font-bold">Create User</h2>
-            <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
-    
-              <div className='fullName'>
-                <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
-                {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
-              </div>
-
-              <div className='fullName'>
-                <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
-                {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
-              </div>
-
-              <div className='email'>
-                <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
-                {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
-              </div>
-
-              <div className='balance'> 
-                <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
-                {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
-              </div>
-              <div className='submit mt-8'>
-                <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Create</button>    
-              </div>
-
+      <div className="flex h-full">
+        <Header status={status} updater={updater} />
+        <PageContent>
+        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">
+          <h2 className="text-2xl text-primary font-bold">Create User</h2>
+          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
+  
+            <div className='fullName'>
+              <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
+              {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
             </div>
-          </form>
-          {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
-        </div>
+
+            <div className='fullName'>
+              <Textfield id="user-lastname" type="text" onChange={(e) => handleChange (e, 'lastname')} value={lastname}>Last Name</Textfield>
+              {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>} 
+            </div>
+
+            <div className='email'>
+              <Textfield id="user-email" type="email" onChange={(e) => handleChange (e, 'email')} value={email}>Email</Textfield>  
+              {error.emailErr !== '' && <Error>{error.emailErr}</Error>} 
+            </div>
+
+            <div className='balance'> 
+              <Textfield className="border border-gray-300 shadow p-3 w-full rounded mb-" id="user-balance" type="number" onChange={(e) => handleChange (e, 'balance')} value={balance}  placeholder='0'>Balance</Textfield>
+              {error.balanceErr !== '' && <Error>{error.balanceErr}</Error>} 
+            </div>
+            <div className='submit mt-8'>
+              <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Create</button>    
+            </div>
+
+          </div>
+        </form>
+        {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
+        </PageContent>
+      </div>
     )
 }
 

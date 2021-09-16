@@ -13,6 +13,8 @@ import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
 import Header from '../parts/Header'
 import {ArrowRightIcon} from '@heroicons/react/outline'
+import PageContent from '../parts/PageContent';
+
 
 
 const Account = ({status, updater, location}) => {
@@ -275,35 +277,37 @@ const Account = ({status, updater, location}) => {
   return (
     <div className="flex h-full">
       <Header status={status} updater={updater}/>
-      <div className="container my-auto px-8 flex-shrink"> 
-      {(customerData !== null) 
-      ? (
-        <div className="py-8">
-          <div className='grid grid-cols-2 grid-rows-3'>
-            <h2 className='text-xl font-bold'>Account Number: {customerData.accNum}</h2>
-            <p className='capitalize col-start-1'>Full Name: {customerData.firstname} {customerData.lastname}</p>
-            <p className='col-start-1 text-gray-500'>Email: {customerData.email}</p>
-            <h2 className='row-start-2 row-end-4 col-start-2 text-2xl font-bold text-right'>Balance: {formatMoney(customerData.balance)}</h2>
+      <PageContent>
+        <div className="my-auto px-8 flex-shrink"> 
+        {(customerData !== null) 
+        ? (
+          <div className="py-8">
+            <div className='grid grid-cols-2 grid-rows-3'>
+              <h2 className='text-xl font-bold'>Account Number: {customerData.accNum}</h2>
+              <p className='capitalize col-start-1'>Full Name: {customerData.firstname} {customerData.lastname}</p>
+              <p className='col-start-1 text-gray-500'>Email: {customerData.email}</p>
+              <h2 className='row-start-2 row-end-4 col-start-2 text-2xl font-bold text-right'>Balance: {formatMoney(customerData.balance)}</h2>
+            </div>
+            <div className="flex gap-4 py-8">
+              <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit} error={inputErrs.depositInputErr}/>
+              <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw} error={inputErrs.withdrawInputErr}/>
+              <Send modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} sendAmount={sendAmount} onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
+                onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleSend={handleSend} accErr={inputErrs.receiverInputErr} amtErr={inputErrs.sendInputErr}/>
+            </div>
+            <Transactions customerData={customerData}/>
+            {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>}
           </div>
-          <div className="flex gap-4 py-8">
-            <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit} error={inputErrs.depositInputErr}/>
-            <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw} error={inputErrs.withdrawInputErr}/>
-            <Send modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} sendAmount={sendAmount} onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
-              onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleSend={handleSend} accErr={inputErrs.receiverInputErr} amtErr={inputErrs.sendInputErr}/>
+          )
+        : (
+          <div className="flex flex-col items-center">
+            <AlertVector width="40%" height="auto"/>
+            <p className="mx-auto text-center pt-4">Customer account number does not exist.</p>
+            <Link to="/accounts" className="pt-8 text-primary block hover:underline">Return to accounts<ArrowRightIcon className="w-4 h-4 inline ml-2 -mt-1" /></Link>
           </div>
-          <Transactions customerData={customerData}/>
-          {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>}
+          )}
         </div>
-        )
-      : (
-        <div className="flex flex-col items-center">
-          <AlertVector width="40%" height="auto"/>
-          <p className="mx-auto text-center pt-4">Customer account number does not exist.</p>
-          <Link to="/accounts" className="pt-8 text-primary block hover:underline">Return to accounts<ArrowRightIcon className="w-4 h-4 inline ml-2 -mt-1" /></Link>
-        </div>
-        )}
+      </PageContent>
     </div>
-  </div>
 
   )
 }
