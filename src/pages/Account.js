@@ -13,8 +13,8 @@ import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
 import Header from '../parts/Header'
 import {ArrowRightIcon} from '@heroicons/react/outline'
-import PageContent from '../parts/PageContent';
-
+import PageContent from '../parts/PageContent'
+import { VisaVector } from '../components/VisaVector'
 
 
 const Account = ({status, updater, location}) => {
@@ -50,7 +50,17 @@ const Account = ({status, updater, location}) => {
     localStorage.setItem('totalTransactions', (totalTransactions))
   }, [totalTransactions])
 
-  //Initialize states for transaction modals
+  //Initialize state for initial transaction modal (input forms)
+  const [transactModal, setTransactModal] = useState({
+    depositModal: false,
+    withdrawalModal: false,
+    sendModal: false
+  })
+
+  //Initialize state for Modal overlay background
+  const [modalOverlay, setModalOverlay] =useState(false);
+
+  //Initialize states for general confirmation and success modals applicable to all transactions
   const [modalStat, setModalStat] = useState({
     show: false, 
     status: 'confirmation',
@@ -251,13 +261,27 @@ const Account = ({status, updater, location}) => {
     setModalStat(newstate);
     setShowToastErr(false);
     setToastErrMsg('');
+    setTransactModal({
+      depositModal: false,
+      withdrawalModal: false,
+      sendModal: false
+    })
   }
 
-  function handleModalClose() {
+  function handleNewTransaction() {
     setModalStat((prevState) => ({
       ...prevState,
       show: false
-      }))
+      }));
+    setModalOverlay(false);
+  }
+
+  function handleTransBack(trigger) {
+    setModalStat((prevState) => ({
+      ...prevState,
+      show: false
+      }));
+      handleTransactModalClick(trigger)
   }
 
   function updateTransactions(latest_transaction) {
@@ -274,6 +298,64 @@ const Account = ({status, updater, location}) => {
     setShowToastErr(false)
   }
 
+  function handleTransactModalClick(trigger){
+    if (trigger === 'deposit') {
+      setTransactModal({
+        depositModal: true,
+        withdrawalModal: false,
+        sendModal: false
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: true,
+        withdrawal: false,
+        send: false
+    })
+    } else if(trigger === 'withdrawal') {
+      setTransactModal({
+        depositModal: false,
+        withdrawalModal: true,
+        sendModal: false
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: false,
+        withdrawal: true,
+        send: false
+    })
+    } else {
+      setTransactModal({
+        depositModal: false,
+        withdrawalModal: false,
+        sendModal: true
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: false,
+        withdrawal: false,
+        send: true
+    })
+    }
+    setModalOverlay(true);
+  }
+
+  //Function to handle close action or cancel button click of the top-most level Transaction Modal
+  function handletransactModalClose(){
+    setModalStat((prevState) => ({
+      ...prevState,
+      show: false
+      }));
+    setTransactModal({
+      depositModal: false,
+      withdrawalModal: false,
+      sendModal: false
+    })
+    setModalOverlay(false);
+  }
+
   return (
     <div className="flex h-full">
       <Header status={status} updater={updater}/>
@@ -282,17 +364,71 @@ const Account = ({status, updater, location}) => {
         {(customerData !== null) 
         ? (
           <div className="py-8">
-            <div className='grid grid-cols-2 grid-rows-3'>
-              <h2 className='text-xl font-bold'>Account Number: {customerData.accNum}</h2>
-              <p className='capitalize col-start-1'>Full Name: {customerData.firstname} {customerData.lastname}</p>
-              <p className='col-start-1 text-gray-500'>Email: {customerData.email}</p>
-              <h2 className='row-start-2 row-end-4 col-start-2 text-2xl font-bold text-right'>Balance: {formatMoney(customerData.balance)}</h2>
+            <p className='capitalize'>Full Name: {customerData.firstname} {customerData.lastname}</p>
+            <p className='text-gray-500'>Email: {customerData.email}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className='grid grid-cols-2 grid-rows-3 p-4 rounded bg-secondary shadow max-w-md'>
+
+                <p className='row-start-1 col-start-1 uppercase'>Balance</p>
+                <h2 className='row-start-2 col-start-1 text-2xl font-bold'>{formatMoney(customerData.balance)}</h2>
+                <p className='row-start-3 col-start-1 text-xl font-bold'>{customerData.accNum}</p>
+                <div className='row-start-3 row-end-4 col-start-2 justify-self-end'><VisaVector width="80" height="40"/></div>
+              </div>
+              <div className='flex gap-4 max-w'>
+                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('deposit')}> 
+                  <h5>Cash In</h5>
+                </div>
+                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('withdrawal')}> 
+                  <h5>Cash Out</h5>
+                </div>
+                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('send')}> 
+                  <h5>Transfer Money</h5>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-4 py-8">
-              <Deposit modalStat={modalStat} customerData={customerData} depositAmount={depositAmount} onChange={(e) => handleOnChange(e, 'deposit')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleDeposit={handleDeposit} error={inputErrs.depositInputErr}/>
-              <Withdraw modalStat={modalStat} customerData={customerData} withdrawAmount={withdrawAmount} onChange={(e) => handleOnChange(e, 'withdraw')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleWithdraw={handleWithdraw} error={inputErrs.withdrawInputErr}/>
-              <Send modalStat={modalStat} customerData={customerData} receivingAccount={receivingAccount} sendAmount={sendAmount} onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
-                onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} handleModalOpen={handleModalOpen} handleModalClose={handleModalClose} handleSend={handleSend} accErr={inputErrs.receiverInputErr} amtErr={inputErrs.sendInputErr}/>
+            <div>
+              <Deposit 
+                className={transactModal.depositModal ? 'show' : 'hide hidden'} 
+                modalStat={modalStat} 
+                customerData={customerData} 
+                depositAmount={depositAmount} 
+                onChange={(e) => handleOnChange(e, 'deposit')} 
+                handleModalOpen={handleModalOpen} 
+                handleNewTransaction={handleNewTransaction} 
+                handleDeposit={handleDeposit}
+                handleCancel={handletransactModalClose}
+                handleTransBack={handleTransBack}
+                modalOverlay={modalOverlay && modalStat.deposit ? 'show' : 'hide hidden'} 
+                error={inputErrs.depositInputErr}/> 
+              <Withdraw 
+                className={transactModal.withdrawalModal ? 'show' : 'hide hidden'} 
+                modalStat={modalStat} 
+                customerData={customerData} 
+                withdrawAmount={withdrawAmount} 
+                onChange={(e) => handleOnChange(e, 'withdraw')} 
+                handleModalOpen={handleModalOpen} 
+                handleNewTransaction={handleNewTransaction} 
+                handleWithdraw={handleWithdraw}
+                handleCancel={handletransactModalClose}
+                handleTransBack={handleTransBack}
+                modalOverlay={modalOverlay && modalStat.withdrawal ? 'show' : 'hide hidden'}  
+                error={inputErrs.withdrawInputErr}/> 
+                <Send 
+                className={transactModal.sendModal ? 'show' : 'hide hidden'}
+                modalStat={modalStat} 
+                customerData={customerData} 
+                receivingAccount={receivingAccount} 
+                sendAmount={sendAmount} 
+                onChangeAmount={(e) => handleOnChange(e, 'send-amount')} 
+                onChangeAccount={(e) => handleOnChange(e, 'receiving-account')} 
+                handleModalOpen={handleModalOpen} 
+                handleNewTransaction={handleNewTransaction} 
+                handleSend={handleSend}
+                handleCancel={handletransactModalClose}
+                handleTransBack={handleTransBack}
+                modalOverlay={modalOverlay && modalStat.send ? 'show' : 'hide hidden'}   
+                accErr={inputErrs.receiverInputErr} 
+                amtErr={inputErrs.sendInputErr}/>
             </div>
             <Transactions customerData={customerData}/>
             {showToastErr === true && <Toast type="error" onClick={closeToast}>{toastErrMsg}</Toast>}

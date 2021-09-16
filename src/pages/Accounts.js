@@ -66,7 +66,7 @@ const Accounts = ({status, updater}) => {
     <div className="flex h-full">
       <Header status={status} updater={updater} />
       <PageContent>
-        <div className="mx-auto px-10 w-7/12 my-8">
+        <div className="mx-auto px-10 w-9/12 my-8">
           <div className="flex align-middle">
           <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
             <SearchIcon className="h-5 w-5inline-block"/>
@@ -87,7 +87,7 @@ const Accounts = ({status, updater}) => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {customerList.map((customer) => (
                     <tr key = {customer.accNum}>
-                      <td className="cstm-td"><p className="cstm-td-text">{customer.accNum}</p></td>
+                      <td className="cstm-td"><p className="cstm-td-text">#{customer.accNum}</p></td>
                       <td className="cstm-td"><p className="cstm-td-text">{`${customer.firstname} ${customer.lastname}`}</p></td>
                       <td className="cstm-td"><p className="cstm-td-text">{formatMoney(customer.balance)}</p></td>
                       <td className="cstm-td text-sm"><Button classnames="text-primary hover:underline cursor-pointer" onclick={() => handleOnClick(customer.accNum)}>View Account</Button></td>

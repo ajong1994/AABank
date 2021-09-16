@@ -27,7 +27,7 @@ const Transactions = ({customerData}) => {
                 <span className="capitalize td-centered-text">{transaction.transaction}</span>
               </td>
               <td className="cstm-td text-gray-400">
-                <p>#{transaction.transactionId}</p>
+                <p>Transaction No.: #{transaction.transactionId}</p>
                 <p>{getLocalDate(transaction.date)}</p>
               </td>
               {(transaction.transaction === 'received') || (transaction.transaction === 'deposit') 
