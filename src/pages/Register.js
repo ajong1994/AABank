@@ -6,6 +6,7 @@ import Header from '../parts/Header'
 import Error from '../components/Error'
 import Textfield from '../components/Textfield'
 import Toast from '../parts/Toast'
+import PageContent from '../parts/PageContent';
 
 
 const Register = ({status, updater}) => {
@@ -251,41 +252,42 @@ function closeToast() {
 }
 
   return (
-  
-      <div className="flex justify-between m-auto h-screen">
+      <div className="flex h-full">
         <Header status={status} updater={updater} />
-        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">     
-          <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
-          
-          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
-          
-            <div className='fullName'>
-            <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>Username</Textfield>
-            {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
-            </div>
+        <PageContent>
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">     
+            <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
+            
+            <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
+            
+              <div className='fullName'>
+              <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>Username</Textfield>
+              {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
+              </div>
 
-            <div className='fullName'>
-            <Textfield id="admin-firstname" type="text"  onChange={(e) => handleChange (e, 'firstName')} value={firstName}>First Name</Textfield>
-            {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
-            </div>
+              <div className='fullName'>
+              <Textfield id="admin-firstname" type="text"  onChange={(e) => handleChange (e, 'firstName')} value={firstName}>First Name</Textfield>
+              {error.firstnameErr !== '' && <Error>{error.firstnameErr}</Error>} 
+              </div>
 
-            <div className='fullName'>
-            <Textfield id="admin-lastname" type="text" value={lastName} onChange={(e) => handleChange (e, 'lastName')}>Last Name</Textfield>
-            {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>}
-            </div>
+              <div className='fullName'>
+              <Textfield id="admin-lastname" type="text" value={lastName} onChange={(e) => handleChange (e, 'lastName')}>Last Name</Textfield>
+              {error.lastnameErr !== '' && <Error>{error.lastnameErr}</Error>}
+              </div>
 
-            <div className='password'>
-            <Textfield id="admin-password" type="password" value={passWord} onChange={(e) => handleChange (e, 'passWord')}>Password</Textfield>
-            {error.passwordErr !== '' && <Error>{error.passwordErr}</Error>}
-            </div>
-  
-            <div className='submit mt-8'>
-              <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
-            </div>
+              <div className='password'>
+              <Textfield id="admin-password" type="password" value={passWord} onChange={(e) => handleChange (e, 'passWord')}>Password</Textfield>
+              {error.passwordErr !== '' && <Error>{error.passwordErr}</Error>}
+              </div>
+    
+              <div className='submit mt-8'>
+                <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
+              </div>
 
-          </div>
-        </form>
-        {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
+            </div>
+          </form>
+          {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
+        </PageContent>
       </div>
   )
 }

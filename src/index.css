@@ -40,11 +40,8 @@
 }
 
 @layer base {
-    html {
+    html, body {
         height: 100%;
-    }
-    body {
-        min-height: 100%
     }
     h5, h4, h3, h2, h1 {
         font-family: 'Lato', 'sans-serif';
@@ -69,6 +66,17 @@
     .transaction-container {
         @apply p-4 bg-white flex-grow shadow;
         max-width: calc((100% - 2rem)/3)
+    }
+    .image-rotated {
+        @apply transform rotate-45;
+        margin: 0 0 3px 3px;
+    }
+    .td-centered-text {
+        line-height: calc(2rem - 2px);
+    }
+    .login-hero {
+        background: url('./components/loginBg2.jpg');
+        background-size: cover;
     }
 }
 
