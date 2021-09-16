@@ -371,7 +371,7 @@ const Account = ({status, updater, location}) => {
 
                 <p className='row-start-1 col-start-1 uppercase'>Balance</p>
                 <h2 className='row-start-2 col-start-1 text-2xl font-bold'>{formatMoney(customerData.balance)}</h2>
-                <p className='row-start-3 col-start-1 text-xl font-bold'>{customerData.accNum}</p>
+                <p className='row-start-3 col-start-1 text-xl font-bold'>{String(customerData.accNum).padStart(16, "*")}</p>
                 <div className='row-start-3 row-end-4 col-start-2 justify-self-end'><VisaVector width="80" height="40"/></div>
               </div>
               <div className='flex gap-4 max-w'>
