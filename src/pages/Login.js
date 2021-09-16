@@ -5,6 +5,7 @@ import Form from '../components/Form'
 import Button from '../components/Button'
 import Error from '../components/Error'
 import logo from '../components/logo.png'
+import loginBg from '../components/loginBg.jpg'
 
 
 
@@ -165,7 +166,8 @@ const Login = ({status, updater}) => {
     return (
         <div className="flex justify-between container pt-20 mx-auto">
             <div className="w-2/5 px-4 py-8 mt-20">
-                <HomeHero/>
+                {/* <HomeHero/> */}
+                <img src={loginBg} className='h-full w-full'/>
             </div>
             <Form classnames="px-8 pt-8 pb-16 bg-white rounded shadow-md mt-8 max-w-md flex-grow" >
                 <img src={logo} className="w-24 pb-8"/>

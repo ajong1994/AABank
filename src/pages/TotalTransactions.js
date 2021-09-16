@@ -9,8 +9,15 @@ import { AlertVector } from "../components/AlertVector";
 
 function TotalTransactions({status, updater}) {
 
-  const [transactionList, setTransactionList] = useState(JSON.parse(localStorage.getItem('transactionList')).reverse() || []);
-    //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+  if (localStorage.getItem('transactionList')!== null) {
+    var parsedList = JSON.parse(localStorage.getItem('transactionList')).reverse() 
+  } else {
+    var parsedList = []
+  }
+
+  const [transactionList, setTransactionList] = useState(parsedList);
+ 
+  //If user not isLoggedIn based on state passed as prop, redirect to accounts component
   if (!status.isLoggedIn) {
     return <Redirect to="/login"/>
   } 
@@ -20,10 +27,11 @@ function TotalTransactions({status, updater}) {
       <div className="flex">
         <Header status={status} updater={updater}/>
         <div className="mx-auto px-10 w-9/12 mt-8">
-          <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
           
           {transactionList.length 
           ? 
+          <>
+          <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">       
             <table className="min-w-full divide-y divide-gray-200" id="all-transactions-table"> 
               <thead className="bg-gray-50">
@@ -46,14 +54,16 @@ function TotalTransactions({status, updater}) {
                 </tr>
               ))}
               </tbody>
-            </table>
+            </table>   
           </div> 
-        :   <div className="flex flex-col items-center">
-              <AlertVector width="40%" height="auto"/>
-              <p className="mx-auto text-center pt-4">No transactions yet.</p>
+          </>
+        :   <div className="mt-14 py-20 rounded-md bg-white">
+              <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center"><AlertVector width="74%" height="auto"/></div>
+              <p className="mx-auto text-center">No transactions yet.</p>
             </div>
           }   
-          
+        {transactionList === null 
+        ?
         <div className="flex justify-center p-3 bg-gray-50">
           <ReactToExcel
             className="bg-transparent hover:text-white font-semibold py-2 px-4 border border-gray-400 rounded-full shadow hover:bg-purple-400 text-gray-800"
@@ -62,8 +72,10 @@ function TotalTransactions({status, updater}) {
             sheet="Sheet"
             buttonText='⭳ Download '
           />
-        </div>    
-      </div>
+        </div>
+        : <></>
+        }   
+      </div> 
     </div> 
     </>
   )
