@@ -6,6 +6,7 @@ import {formatMoney} from '../utils/FormatMoneyUtil'
 import Header from "../parts/Header";
 import { AlertVector } from "../components/AlertVector";
 import PageContent from '../parts/PageContent';
+import TransIcon from "../components/TransIcon";
 
 
 function TotalTransactions({status, updater}) {
@@ -31,26 +32,30 @@ function TotalTransactions({status, updater}) {
             {transactionList.length 
             ? 
             <>
-            <h2 className="text-center font-bold text-2xl text-gray-600 uppercase pt-5 font-Lato">All Transactions</h2>
-            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-8">       
+            <h2 className="text-center font-bold text-2xl text-gray-600 uppercase  font-Lato ">All Transactions</h2>
+            <div className="shadow border-b border-gray-200 sm:rounded-lg mt-8">       
               <table className="min-w-full divide-y divide-gray-200" id="all-transactions-table"> 
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="cstm-th text-center" >Transaction ID</th>
-                    <th className="cstm-th text-center">Transaction Type</th>
-                    <th className= "cstm-th text-center">Amount</th>
-                    <th className="cstm-th text-center">Date</th>
-                    <th className="cstm-th text-center">Account Origin</th>
+                    <th className="cstm-th  text-gray-400" >Transaction ID</th>
+                    <th className="cstm-th  text-gray-400">Transaction Type</th>
+                    <th className= "cstm-th  text-gray-400">Details</th>
+                    <th className="cstm-th  text-gray-400 text-right">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {transactionList.map((transaction) => (
                   <tr key={transaction.transactionId}>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-center">{transaction.transactionId}</p></td>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-center">{transaction.transaction}</p></td>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-center">{formatMoney(transaction.amount)}</p></td>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-center">{getLocalDate(transaction.date)}</p></td>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-center">{transaction.user}</p></td>
+                    <td className="cstm-td"><p className="cstm-td-text">#{transaction.transactionId}</p></td>
+                    <td className="cstm-td">
+                    <TransIcon transaction={transaction.transaction}/>
+                    <span className="capitalize td-centered-text">{transaction.transaction}</span>
+                    </td>
+                    <td className="cstm-td text-gray-300">
+                    <p>#{transaction.user}</p>
+                    <p>{getLocalDate(transaction.date)}</p>
+                  </td>
+                    <td className="cstm-td text-center"><p className="cstm-td-text text-right">{formatMoney(transaction.amount)}</p></td>
                   </tr>
                 ))}
                 </tbody>
@@ -62,7 +67,7 @@ function TotalTransactions({status, updater}) {
                 <p className="mx-auto text-center">No transactions yet.</p>
               </div>
             }   
-            {transactionList === null 
+            {transactionList !== null 
             ? <div className="flex justify-center p-3 bg-gray-50">
             <ReactToExcel
               className="bg-transparent hover:text-white font-semibold py-2 px-4 border border-gray-400 rounded-full shadow hover:bg-purple-400 text-gray-800"

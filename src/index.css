@@ -75,7 +75,8 @@
         line-height: calc(2rem - 2px);
     }
     .login-hero {
-        background: url('./components/loginBg2.jpg');
+        /* background: url('./components/loginBg2.jpg'); */
+        background: url('./components/popartfinal.jpg');
         background-size: cover;
     }
 }

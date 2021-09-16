@@ -1,29 +1,30 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Redirect } from "react-router";
+import { Redirect } from "react-router"
 import { useState, useEffect } from 'react'
 import Header from '../parts/Header'
 import Error from '../components/Error'
 import Textfield from '../components/Textfield'
 import Toast from '../parts/Toast'
-import PageContent from '../parts/PageContent';
+import PageContent from '../parts/PageContent'
+import {AddAccountVector} from '../components/AddAccountVector'
 
 
 const Register = ({status, updater}) => {
 
   const history = useHistory()
-
+  //Initialize state for form input values
+  const [userName, setuserName] = useState('')
+  const [firstName, setfirstName] = useState('')
+  const [lastName, setlastName] = useState('')
+  const [passWord, setpassWord] = useState('')
+  //Initialize state of errors
   const [error, setError] = useState({
     usernameErr   : '',
     firstnameErr  : '',
     lastnameErr   : '',
     passwordErr   : ''
   })
-
-  const [userName, setuserName] = useState('')
-  const [firstName, setfirstName] = useState('')
-  const [lastName, setlastName] = useState('')
-  const [passWord, setpassWord] = useState('')
 
   //Initialize error/success message text
   const [toastMsg, setToastMsg] = useState('');
@@ -63,64 +64,7 @@ let user_exist,
 //Regular expression for pattern matching to check 
 const validNameRegex = RegExp(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
 
-
-
-// validate user input
-const validateUser = (e) => {
-  
-  let username = e.target.value
-  let saved_user = JSON.parse(localStorage.getItem(username))
-  
-  if (saved_user !== null) {
-    form_valid =false
-    user_exist = true
-  } else {  
-    user_exist = false
-  }
- 
-
-return user_exist
-} 
-
-//Save validated account
-const saveAccount = () => {
-
-  if ((userName !== '') && (firstName !== '') && (lastName !== '') && (passWord !== '')) {
-    if (form_valid===true) {
-      adminInfo.firstname = firstName
-      adminInfo.lastname = lastName
-      adminInfo.password = passWord
-      localStorage.setItem(userName, JSON.stringify(adminInfo)); 
-      // history.push('/accounts') 
-      // alert(`User ${userName} succesfully created!`)
-      handleSuccess(`User ${userName} succesfully created!`)
-    } else {   
-      form_valid=false
-      // alert(`Invalid!`)
-      handleError('Invalid!')
-    }     
-  } else {
-      form_valid=false
-      // alert('Please fill required fields!')
-      handleError('Please fill required fields!')
-  }
-} 
-
-//form validator checks/counts errors
-const validateForm = (error) => {
-    let valid=true;
-    Object.values(error).forEach(
-      (val) => val.length > 0 && (valid = false)
-    );
-    if(valid === true){
-      console.log("Registering can be done");
-   }else{
-      console.log("You cannot be registered!!!")
-   }
-    return valid;
-}
-  
-//onChange function
+//handles the changes and errors committed for each user input values
 const handleChange = (e, state) => { 
   e.preventDefault()
     switch (state) {
@@ -212,6 +156,59 @@ const handleChange = (e, state) => {
     }
 }
 
+// loop through the local storage to check if same username exists
+const validateUser = (e) => {
+  
+  let username = e.target.value
+  let saved_user = JSON.parse(localStorage.getItem(username))
+  
+  if (saved_user !== null) {
+    form_valid = false
+    user_exist = true
+  } else {  
+    user_exist = false
+  }
+    return user_exist
+} 
+
+//form validator checks/counts errors
+const validateForm = (error) => {
+  let valid=true;
+  Object.values(error).forEach(
+    (val) => val.length > 0 && (valid = false)
+  );
+  if (valid === true){
+    console.log("Registering can be done");
+  } else{
+    console.log("You cannot be registered!!!")
+  }
+  return valid;
+}
+
+//Save validated account
+const saveAccount = () => {
+
+  if ((userName !== '') && (firstName !== '') && (lastName !== '') && (passWord !== '')) {
+    if (form_valid===true) {
+      adminInfo.firstname = firstName
+      adminInfo.lastname = lastName
+      adminInfo.password = passWord
+      localStorage.setItem(userName, JSON.stringify(adminInfo)); 
+      // history.push('/accounts') 
+      // alert(`User ${userName} succesfully created!`)
+      handleSuccess(`User ${userName} succesfully created!`)
+    } else {   
+      form_valid=false
+      // alert(`Invalid!`)
+      handleError('Invalid!')
+    }     
+  } else {
+      form_valid=false
+      // alert('Please fill required fields!')
+      handleError('Please fill required fields!')
+  }
+} 
+
 //on submit handle validation
 const handleSubmit = (e) => {
   e.preventDefault();
@@ -229,7 +226,6 @@ const handleSubmit = (e) => {
         console.error('Form has errors')
       }
 } 
-
 
 function handleSuccess(success) {
   setShowToastMsg(true)
@@ -255,11 +251,13 @@ function closeToast() {
       <div className="flex h-full">
         <Header status={status} updater={updater} />
         <PageContent>
-          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">     
-            <h2 className="text-2xl text-primary text-shadow font-bold">Register Admin</h2>
+          <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-6 m-auto max-w-md flex-grow">     
+            <div className="flex justify-between">
+              <h2 className="text-2xl text-primary text-shadow font-bold mt-3">Register Admin</h2>
+              <AddAccountVector width="30%" height="auto"/>
+            </div>
             
-            <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
-            
+            <div className="mt-2 grid grid-cols-1 gap-2 m-auto">
               <div className='fullName'>
               <Textfield id="admin-username" type="text" onChange={(e) => handleChange (e, 'userName')} value={userName}>Username</Textfield>
               {error.usernameErr !== '' && <Error>{error.usernameErr}</Error>} 
@@ -283,10 +281,9 @@ function closeToast() {
               <div className='submit mt-8'>
                 <button className="bg-primary w-full py-2 px-1 rounded-md text-white font-Lato">Register</button>
               </div>
-
             </div>
           </form>
-          {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
+              {showToastMsg === true && <Toast type={toastType} onClick={closeToast}>{toastMsg}</Toast>}
         </PageContent>
       </div>
   )

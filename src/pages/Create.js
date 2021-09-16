@@ -8,12 +8,19 @@ import {format_idNumber} from '../utils/UserIdUtil'
 import {getISOdate} from '../utils/ISODateUtil'
 import Toast from '../parts/Toast'
 import PageContent from '../parts/PageContent';
+import {AddUserVector} from '../components/AddUserVector'
 
 
 const Create = ({status, updater}) => {
   
     const history = useHistory()
 
+    //Initialize state for form input values
+    const [firstname, setFirstname] = useState('')
+    const [lastname, setLastname] = useState('')
+    const [email, setEmail] = useState('')
+    const [balance, setBalance] = useState('')
+    //Initialize state of errors
     const [error, setError] = useState({
         firstnameErr  : '',
         lastnameErr   : '',
@@ -21,11 +28,6 @@ const Create = ({status, updater}) => {
         balanceErr    : ''
     })
 
-    const [firstname, setFirstname] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [email, setEmail] = useState('')
-    const [balance, setBalance] = useState('')
-    
   //Initialize error/success message text
   const [toastMsg, setToastMsg] = useState('');
 
@@ -40,32 +42,111 @@ const Create = ({status, updater}) => {
     return () => clearTimeout(timer);
   },[showToastMsg])
 
+    
+  //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+  if (!status.isLoggedIn) {
+    return <Redirect to="/login"/>
+  }       
 
-    let accInfo = {}  
-    let populatedCustomerList = []
-
-    //email cannot be the same
-    //firstname + lastname cannot be the same
     let user_exist = false;
-    let email_exist;
-        
-    //If user not isLoggedIn based on state passed as prop, redirect to accounts component
-    if (!status.isLoggedIn) {
-      return <Redirect to="/login"/>
-    }       
-        
-    //Regular expression for pattern matching to check 
-    const validNameRegex = RegExp(/[~`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
-    const validEmailRegex = RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-    // const validBalanceRegex = RegExp(/(^[0-9]+[-]*[0-9]+$)/);
+    let email_exist = false;
+    let populatedCustomerList = []
+    let accInfo = {}  
+
+
+    //handles the changes and errors committed for each user input values
+    const handleChange = (e, state) => { 
+      e.preventDefault()
+      // validateUser()
+        switch (state) {
+          case 'firstname' :
+            error.firstnameErr = 
+              e.target.value === ''
+              ? setError((prevState) => ({
+                ...prevState,
+                firstnameErr   : 'Firstname must not be empty'}))
+              :
+              validNameRegex.test(e.target.value)
+              ? setError((prevState) => ({
+                ...prevState,
+                firstnameErr   : 'First name must not include numbers and special characters!'}))
+              :
+              e.target.value.length < 2
+              ? setError((prevState) => ({
+                ...prevState,
+                firstnameErr   : 'Firstname must be at least 2 characters long'}))
+              : ''
+              setFirstname(e.target.value)
+            break;
+
+          case 'lastname':     
+            error.lastnameErr =
+            e.target.value === ''
+            ? setError((prevState) => ({
+              ...prevState,
+              lastnameErr   : 'Lastname must not be empty'}))
+            : 
+            (e.target.value.length < 2)
+            ? setError((prevState) => ({
+              ...prevState,
+              lastnameErr   : 'Last name must be at least 2 characters long'}))
+            :
+            (validNameRegex.test(e.target.value))
+            ? setError((prevState) => ({
+              ...prevState,
+              lastnameErr   : 'Must not include numbers and special characters!'}))
+            :''
+            setLastname(e.target.value)
+            break;
+
+          case 'email' :
+            validateEmail(e)
+            error.emailErr = 
+            e.target.value === ''
+            ? setError((prevState) => ({
+              ...prevState,
+              emailErr   : 'Email must not be empty'}))
+            : 
+            email_exist === true
+            ? setError((prevState) => ({
+              ...prevState,
+              emailErr   : 'Email already exist'}))
+            :        
+            validEmailRegex.test(e.target.value)
+            ? ''
+            : setError((prevState) => ({
+              ...prevState,
+              emailErr   : 'Email invalid!'}))
+            
+            setEmail(e.target.value)
+            break;
+
+          case 'balance' :
+            error.balanceErr = 
+            e.target.value < 0
+            ? setError((prevState) => ({
+              ...prevState,
+              balanceErr   : 'Balance must not be a negative number!'}))
+            : 
+            e.target.value.length === ''
+            ? setBalance((prevState) => ({
+              ...prevState,
+              balance  : 0}))
+            : ''
+            setBalance(e.target.value)
+            break;
+          default:
+            break
+        }
+  }
  
+    // Get list of total customers from localStorage and cross-check for same firstname and lastname
     const validateUser = () => {
      
-      // Get list of total customers from localStorage 
       const customerList = JSON.parse(localStorage.getItem('customerList'));
 
       if (customerList !== null) {
-          //loop through each customer accounts and cross-check
+          
           for (let customer of customerList) {
               populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
           }
@@ -81,15 +162,18 @@ const Create = ({status, updater}) => {
       } return user_exist;
     }
 
+    //Regular expression for pattern matching
+    const validNameRegex = RegExp(/[~`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?0-9]+/);
+    const validEmailRegex = RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 
-      const validateEmail = (e) => {
+    // Get list of total customers from localStorage and cross-check fro same email
+    const validateEmail = (e) => {
         
         let email = e.target.value
-        // Get list of total customers from localStorage 
+         
         const customerList = JSON.parse(localStorage.getItem('customerList'));
-  
         if (customerList !== null) {
-            //loop through each customer accounts and cross-check
+            
             for (let customer of customerList) {
                 populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))      
             }
@@ -101,6 +185,20 @@ const Create = ({status, updater}) => {
                     } 
                 }
         } return email_exist;
+    }
+
+    //form validator that checks/counts errors
+    const validateForm = (error) => {
+      let valid=true;
+      Object.values(error).forEach(
+      (val) => val.length > 0 && (valid = false)
+      );
+      if (valid === true){
+      console.log("Registering can be done");
+      }   else{
+      console.log("You cannot be registered!!!")
+      }
+      return valid;
     }
     
     const create_user = () => {
@@ -120,7 +218,6 @@ const Create = ({status, updater}) => {
       
           if ((firstname !== '') && (lastname !== '') && (email !== '')) {  
              
- 
         //Set UID and numbers of totalCustomers
         if (localStorage.getItem('totalCustomers') === null) {
             localStorage.setItem('totalCustomers', 1)    
@@ -134,6 +231,7 @@ const Create = ({status, updater}) => {
         
         
         var totalTransactions;
+
         //Set total transactions of each user
         if (localStorage.getItem('totalTransactions') === null) {
           localStorage.setItem('totalTransactions', 1)    
@@ -195,115 +293,13 @@ const Create = ({status, updater}) => {
                   localStorage.setItem('customerList', JSON.stringify(customerList))
               }
 
-
           } else {   
             // alert ('Please fill required fields!')  
             handleError('Please fill required fields!'); 
           }    
         }
     }            
-  
-    //form validator checks/counts errors
-    const validateForm = (error) => {
-        let valid=true;
-        Object.values(error).forEach(
-        (val) => val.length > 0 && (valid = false)
-        );
-        if (valid === true){
-        console.log("Registering can be done");
-        }   else{
-        console.log("You cannot be registered!!!")
-        }
-        return valid;
-    }
-  
-    const handleChange = (e, state) => { 
-        e.preventDefault()
-        // validateUser()
-          switch (state) {
-            case 'firstname' :
-              error.firstnameErr = 
-                e.target.value === ''
-                ? setError((prevState) => ({
-                  ...prevState,
-                  firstnameErr   : 'Firstname must not be empty'}))
-                :
-                validNameRegex.test(e.target.value)
-                ? setError((prevState) => ({
-                  ...prevState,
-                  firstnameErr   : 'First name must not include numbers and special characters!'}))
-                :
-                e.target.value.length < 2
-                ? setError((prevState) => ({
-                  ...prevState,
-                  firstnameErr   : 'Firstname must be at least 2 characters long'}))
-                : ''
-                setFirstname(e.target.value)
-              break;
-
-            case 'lastname':
-              
-              error.lastnameErr =
-              e.target.value === ''
-              ? setError((prevState) => ({
-                ...prevState,
-                lastnameErr   : 'Lastname must not be empty'}))
-              : 
-              (e.target.value.length < 2)
-              ? setError((prevState) => ({
-                ...prevState,
-                lastnameErr   : 'Last name must be at least 2 characters long'}))
-              :
-              (validNameRegex.test(e.target.value))
-              ? setError((prevState) => ({
-                ...prevState,
-                lastnameErr   : 'Must not include numbers and special characters!'}))
-              :''
-              setLastname(e.target.value)
-              break;
-
-            case 'email' :
-              validateEmail(e)
-              error.emailErr = 
-              e.target.value === ''
-              ? setError((prevState) => ({
-                ...prevState,
-                emailErr   : 'Email must not be empty'}))
-              : 
-              email_exist === true
-              ? setError((prevState) => ({
-                ...prevState,
-                emailErr   : 'Email already exist'}))
-              : 
-              
-              validEmailRegex.test(e.target.value)
-              ? ''
-              : setError((prevState) => ({
-                ...prevState,
-                emailErr   : 'Email invalid!'}))
-              
-              setEmail(e.target.value)
-              break;
-
-            case 'balance' :
-              error.balanceErr = 
-              e.target.value < 0
-              ? setError((prevState) => ({
-                ...prevState,
-                balanceErr   : 'Balance must not be a negative number!'}))
-              : 
-              e.target.value.length === ''
-              ? setBalance((prevState) => ({
-                ...prevState,
-                balance  : 0}))
-              : ''
-              setBalance(e.target.value)
-              break;
-            default:
-              break
-          }
-    }
-    
+   
     let form_valid;
     const handleSubmit = (e) => {
       
@@ -341,14 +337,19 @@ const Create = ({status, updater}) => {
     function closeToast() {
       setShowToastMsg(false)
     }
+    
 
     return (
       <div className="flex h-full">
         <Header status={status} updater={updater} />
         <PageContent>
-        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-8 m-auto max-w-md flex-grow">
-          <h2 className="text-2xl text-primary font-bold">Create User</h2>
-          <div className="mt-5 grid grid-cols-1 gap-4 m-auto">
+        <form onSubmit={handleSubmit} className="bg-white px-4 py-8 rounded-sm shadow-md mt-6 m-auto max-w-md flex-grow">
+        <div className="flex justify-between">
+          <h2 className="text-2xl text-primary font-bold w-40 mt-3">Create User</h2>
+          <AddUserVector width="30%" height="auto" className="absolute flex justify-end top-11 w-1/3"/>
+        </div>
+          
+          <div className="mt-2 grid grid-cols-1 gap-2 m-auto">
   
             <div className='fullName'>
               <Textfield id="user-firstname" type="text" onChange={(e) => handleChange (e, 'firstname')} value={firstname}>First Name</Textfield>
