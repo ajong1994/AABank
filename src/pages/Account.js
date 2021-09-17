@@ -15,6 +15,8 @@ import Header from '../parts/Header'
 import {ArrowRightIcon} from '@heroicons/react/outline'
 import PageContent from '../parts/PageContent'
 import { VisaVector } from '../components/VisaVector'
+import chip from '../components/chip.png'
+import thumbmark from '../components/thumbmark.png'
 
 
 const Account = ({status, updater, location}) => {
@@ -363,17 +365,25 @@ const Account = ({status, updater, location}) => {
         <div className="my-auto px-8 flex-shrink"> 
         {(customerData !== null) 
         ? (
-          <div className="py-8">
-            <p className='capitalize'>Full Name: {customerData.firstname} {customerData.lastname}</p>
-            <p className='text-gray-500'>Email: {customerData.email}</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className='grid grid-cols-2 grid-rows-3 p-4 rounded bg-secondary shadow max-w-md'>
-
-                <p className='row-start-1 col-start-1 uppercase'>Balance</p>
-                <h2 className='row-start-2 col-start-1 text-2xl font-bold'>{formatMoney(customerData.balance)}</h2>
-                <p className='row-start-3 col-start-1 text-xl font-bold'>{String(customerData.accNum).padStart(16, "*")}</p>
-                <div className='row-start-3 row-end-4 col-start-2 justify-self-end'><VisaVector width="80" height="40"/></div>
+          <div className="py-6">
+            <div className="mb-4">
+            <p className='capitalize font-Source Sans Pro text-lg'>Full Name: {customerData.firstname} {customerData.lastname}</p>
+            <p className='text-gray-500 font-Source Sans Pro'>Email: {customerData.email}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">  
+              <div className='grid grid-cols-2 grid-rows-5 items-center p-3 w-96 h-56 relative text-white shadow-l rounded-lg bg-gradient-to-r from-yellow-400 via-orange-500 to-purple-400 transition-transform transform hover:scale-110'>
+                {/* <p className='row-start-1 col-start-1 mt-2 uppercase font-Lato font-medium tracking-widest '>{customerData.firstname} {customerData.lastname}</p> */}
+                <img src={chip} className="row-start-1 col-start-2 w-11 h-8 justify-self-end mr-2" alt="atm chip"/>
+                <p className='row-start-1 col-start-1 capitalize font-medium'>Balance</p>
+                <h2 className='row-start-2 col-start-1 text-4xl font-bold'>{formatMoney(customerData.balance)}</h2>
+                <img src={thumbmark} className=" w-28 row-start-2 col-start-2 ml-14 mt-28 opacity-6" alt="thumbmark"/>
+                <img src={thumbmark} className=" w-30 row-start-2 col-start-2 ml-5 mt-24 opacity-5" alt="thumbmark"/>
+                <p className='row-start-5  row-end-5 col-start-1 mt-3 text-xl text-shadow-md font-medium tracking-more-wider'>{String(customerData.accNum).padStart(16, "*")}</p>  
+                <div className='row-start-5 row-end-5 col-start-2 justify-self-end mr-2'>
+                  <VisaVector width="80" height="40"/>
+                </div>
               </div>
+
               <div className='flex gap-4 max-w'>
                 <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('deposit')}> 
                   <h5>Cash In</h5>
