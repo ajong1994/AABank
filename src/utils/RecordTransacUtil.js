@@ -15,7 +15,7 @@ export function record_transaction(customerData, amount, transac_type, transac_c
             amount: amount,
             transaction: transac_type, //can be deposit, withdrawal, send, receive
             transactionId: transacId,
-            notes: `To: ${user}`
+            notes: `To: #${user}`
         }
     } else if (transac_type === 'received'){
         transaction_details = {
@@ -23,7 +23,7 @@ export function record_transaction(customerData, amount, transac_type, transac_c
             amount: amount,
             transaction: transac_type, //can be deposit, withdrawal, send, receive
             transactionId: transacId,
-            notes: `From: ${user}`
+            notes: `From: #${user}`
         }
     } else {
         transaction_details = {

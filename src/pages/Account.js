@@ -9,14 +9,13 @@ import { withdraw } from '../utils/WithdrawUtil'
 import { send } from '../utils/SendUtil'
 import { record_transaction } from '../utils/RecordTransacUtil'
 import Toast from '../parts/Toast'
-import { formatMoney } from '../utils/FormatMoneyUtil'
 import {AlertVector} from '../components/AlertVector'
 import Header from '../parts/Header'
 import {ArrowRightIcon} from '@heroicons/react/outline'
 import PageContent from '../parts/PageContent'
-import { VisaVector } from '../components/VisaVector'
-import chip from '../components/chip.png'
-import thumbmark from '../components/thumbmark.png'
+import CreditCard from '../parts/CreditCard'
+import TransactionBlock from '../parts/TransactionBlock'
+import AccountGreeting from '../parts/AccountGreeting'
 
 
 const Account = ({status, updater, location}) => {
@@ -172,7 +171,8 @@ const Account = ({status, updater, location}) => {
       setWithdrawAmount('');
       updateTransactions(latest_transaction);  
     } else {
-      handleError("You can't withdraw more than your current balance");
+      handleError("You can't withdraw more than your current balance.");
+      setModalOverlay(false);
       hideModal();
     }
   };
@@ -192,16 +192,17 @@ const Account = ({status, updater, location}) => {
       updateBalance(from_newBalance, new_transactions);
       updateModalToPaid();
       setSendAmount('');
-      updateTransactions(latest_transaction);  
+      updateTransactions(latest_transaction, receivingTransData.latest_transaction);  
       return;
     } else if (receivingAccount !== customerData.accNum && receivingCustomerData === null) {
       handleError("Recipient account number does not exist.")
     } else if (receivingAccount !== customerData.accNum && sendAmount > customerData.balance){
-      handleError("Transfer amount exceeds current balance.")
+      handleError("You can't send more than your current balance.")
     } else {
       handleError("Can't send to own account.");
     };
     hideModal();
+    setModalOverlay(false);
 }
 
   //Auxiliary functions
@@ -286,8 +287,8 @@ const Account = ({status, updater, location}) => {
       handleTransactModalClick(trigger)
   }
 
-  function updateTransactions(latest_transaction) {
-    setTransactionList((prevState) => ([...prevState, latest_transaction]));
+  function updateTransactions(sender_transaction, receiver_transaction) {
+    setTransactionList((prevState) => ([...prevState, sender_transaction, receiver_transaction]));
     setTotalTransactions((prevTotal) => (Number(prevTotal) + 1));
   }
 
@@ -366,34 +367,13 @@ const Account = ({status, updater, location}) => {
         {(customerData !== null) 
         ? (
           <div className="py-6">
-            <div className="mb-4">
-            <p className='capitalize font-Source Sans Pro text-lg'>Full Name: {customerData.firstname} {customerData.lastname}</p>
-            <p className='text-gray-500 font-Source Sans Pro'>Email: {customerData.email}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">  
-              <div className='grid grid-cols-2 grid-rows-5 items-center p-3 w-96 h-56 relative text-white shadow-l rounded-lg bg-gradient-to-r from-yellow-400 via-orange-500 to-purple-400 transition-transform transform hover:scale-110'>
-                {/* <p className='row-start-1 col-start-1 mt-2 uppercase font-Lato font-medium tracking-widest '>{customerData.firstname} {customerData.lastname}</p> */}
-                <img src={chip} className="row-start-1 col-start-2 w-11 h-8 justify-self-end mr-2" alt="atm chip"/>
-                <p className='row-start-1 col-start-1 capitalize font-medium'>Balance</p>
-                <h2 className='row-start-2 col-start-1 text-4xl font-bold'>{formatMoney(customerData.balance)}</h2>
-                <img src={thumbmark} className=" w-28 row-start-2 col-start-2 ml-14 mt-28 opacity-6" alt="thumbmark"/>
-                <img src={thumbmark} className=" w-30 row-start-2 col-start-2 ml-5 mt-24 opacity-5" alt="thumbmark"/>
-                <p className='row-start-5  row-end-5 col-start-1 mt-3 text-xl text-shadow-md font-medium tracking-more-wider'>{String(customerData.accNum).padStart(16, "*")}</p>  
-                <div className='row-start-5 row-end-5 col-start-2 justify-self-end mr-2'>
-                  <VisaVector width="80" height="40"/>
-                </div>
-              </div>
-
-              <div className='flex gap-4 max-w'>
-                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('deposit')}> 
-                  <h5>Cash In</h5>
-                </div>
-                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('withdrawal')}> 
-                  <h5>Cash Out</h5>
-                </div>
-                <div className='rounded bg-white p-4 cursor-pointer flex-grow' onClick={() => handleTransactModalClick('send')}> 
-                  <h5>Transfer Money</h5>
-                </div>
+            <AccountGreeting customerData={customerData}/>
+            <div className="flex gap-8">  
+              <CreditCard customerData={customerData}/>
+              <div className='flex flex-grow gap-4'>
+                <TransactionBlock img_src='piggy' caption="Cash In" onClick={() => handleTransactModalClick('deposit')}/>
+                <TransactionBlock img_src='money out' caption="Cash Out" onClick={() => handleTransactModalClick('withdrawal')}/>
+                <TransactionBlock caption="Send Money" onClick={() => handleTransactModalClick('send')}/>
               </div>
             </div>
             <div>
