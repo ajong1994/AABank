@@ -81,7 +81,7 @@ const Account = ({status, updater, location}) => {
     return () => clearTimeout(timer);
   },[toastErrMsg])
 
-  //Initialize input error states for transaction components
+  //Initialize input error states for transaction block input fields
   const [inputErrs, setInputErrs] = useState({
     depositInputErr: false,
     withdrawInputErr: false,
@@ -90,7 +90,7 @@ const Account = ({status, updater, location}) => {
   });
 
   useEffect(() => {
-    if (depositAmount) {
+    if (depositAmount && depositAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         depositInputErr: false,
@@ -99,7 +99,7 @@ const Account = ({status, updater, location}) => {
   },[depositAmount])
 
   useEffect(() => {
-    if (withdrawAmount) {
+    if (withdrawAmount && withdrawAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         withdrawInputErr: false,
@@ -108,7 +108,7 @@ const Account = ({status, updater, location}) => {
   },[withdrawAmount])
 
   useEffect(() => {
-    if (sendAmount) {
+    if (sendAmount && sendAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         sendInputErr: false,
