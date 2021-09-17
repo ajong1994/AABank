@@ -363,7 +363,7 @@ const Account = ({status, updater, location}) => {
     <div className="flex h-full">
       <Header status={status} updater={updater}/>
       <PageContent>
-        <div className="my-auto px-8 flex-shrink"> 
+        <div className="my-auto px-8"> 
         {(customerData !== null) 
         ? (
           <div className="py-6">
@@ -425,7 +425,7 @@ const Account = ({status, updater, location}) => {
           </div>
           )
         : (
-          <div className="flex flex-col items-center p-8">
+          <div className="flex flex-col justify-center items-center p-8">
             <AlertVector width="40%" height="auto"/>
             <p className="mx-auto text-center pt-4">Customer account number does not exist.</p>
             <Link to="/accounts" className="pt-8 text-primary block hover:underline">Return to accounts<ArrowRightIcon className="w-4 h-4 inline ml-2 -mt-1" /></Link>
