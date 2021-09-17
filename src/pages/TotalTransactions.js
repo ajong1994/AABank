@@ -11,10 +11,11 @@ import TransIcon from "../components/TransIcon";
 
 function TotalTransactions({status, updater}) {
 
+  var parsedList = []
   if (localStorage.getItem('transactionList')!== null) {
-    var parsedList = JSON.parse(localStorage.getItem('transactionList')).reverse() 
+    parsedList = JSON.parse(localStorage.getItem('transactionList')).reverse() 
   } else {
-    var parsedList = []
+    parsedList = []
   }
 
   const [transactionList, setTransactionList] = useState(parsedList);

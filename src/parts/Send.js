@@ -5,7 +5,7 @@ import {get_balance} from '../utils/GetBalanceUtil'
 import {formatMoney} from '../utils/FormatMoneyUtil'
 import Form from '../components/Form'
 import Error from '../components/Error'
-import { format_idNumber } from '../utils/UserIdUtil'
+
 const Send = ({modalStat, customerData, receivingAccount, sendAmount, onChangeAmount, onChangeAccount, handleNewTransaction, handleTransBack, handleModalOpen, handleSend, accErr, amtErr, className, handleCancel, modalOverlay}) => {
 
     const formattedBalance = get_balance(customerData);
