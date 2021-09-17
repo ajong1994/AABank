@@ -81,7 +81,7 @@ const Account = ({status, updater, location}) => {
     return () => clearTimeout(timer);
   },[toastErrMsg])
 
-  //Initialize input error states for transaction components
+  //Initialize input error states for transaction block input fields
   const [inputErrs, setInputErrs] = useState({
     depositInputErr: false,
     withdrawInputErr: false,
@@ -90,7 +90,7 @@ const Account = ({status, updater, location}) => {
   });
 
   useEffect(() => {
-    if (depositAmount) {
+    if (depositAmount && depositAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         depositInputErr: false,
@@ -99,7 +99,7 @@ const Account = ({status, updater, location}) => {
   },[depositAmount])
 
   useEffect(() => {
-    if (withdrawAmount) {
+    if (withdrawAmount && withdrawAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         withdrawInputErr: false,
@@ -108,7 +108,7 @@ const Account = ({status, updater, location}) => {
   },[withdrawAmount])
 
   useEffect(() => {
-    if (sendAmount) {
+    if (sendAmount && sendAmount > 0) {
       setInputErrs((prevState) => ({
         ...prevState,
         sendInputErr: false,
@@ -363,7 +363,7 @@ const Account = ({status, updater, location}) => {
     <div className="flex h-full">
       <Header status={status} updater={updater}/>
       <PageContent>
-        <div className="my-auto px-8 flex-shrink"> 
+        <div className="my-auto px-8"> 
         {(customerData !== null) 
         ? (
           <div className="py-6">
@@ -425,7 +425,7 @@ const Account = ({status, updater, location}) => {
           </div>
           )
         : (
-          <div className="flex flex-col items-center p-8">
+          <div className="flex flex-col justify-center items-center p-8">
             <AlertVector width="40%" height="auto"/>
             <p className="mx-auto text-center pt-4">Customer account number does not exist.</p>
             <Link to="/accounts" className="pt-8 text-primary block hover:underline">Return to accounts<ArrowRightIcon className="w-4 h-4 inline ml-2 -mt-1" /></Link>
