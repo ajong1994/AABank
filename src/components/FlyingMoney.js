@@ -1,0 +1,19 @@
+
+export const FlyingMoney = ({width, height}) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 64 64" aria-labelledby="title"
+        aria-describedby="desc" role="img">
+        <title>Online Payment</title>
+        <desc>A color styled icon from Orion Icon Library.</desc>
+        <path data-name="layer1"
+        d="M58 43a3.9 3.9 0 0 1-4 3H25a3 3 0 0 1-3-3l4-22a3.9 3.9 0 0 1 4-3h29a3 3 0 0 1 3 3z"
+        fill="#f6c44b"></path>
+        <path d="M26 21l-.2 1L50 46h4a4.6 4.6 0 0 0 1.7-.3L28.3 18.3A3.6 3.6 0 0 0 26 21zm32.7 18.1l2.1-11.3L51 18H38l20.7 21.1z"
+        fill="#fff" data-name="opacity" opacity=".25"></path>
+        <path data-name="stroke" d="M58 43a3.9 3.9 0 0 1-4 3H25a3 3 0 0 1-3-3l4-22a3.9 3.9 0 0 1 4-3h29a3 3 0 0 1 3 3zM2 22h16M6 30h10m-6 8h4"
+        fill="none" stroke="#340097" stroke-linecap="butt" stroke-linejoin="round"
+        stroke-width="1"></path>
+        </svg>
+    )
+}
+

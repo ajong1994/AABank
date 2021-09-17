@@ -26,7 +26,7 @@ const Send = ({modalStat, customerData, receivingAccount, sendAmount, onChangeAm
                         <Textfield id="transfer-input" placeholder="Enter transfer amount" type="number" value={sendAmount} onChange={onChangeAmount}>Transfer Amount</Textfield>
                         <Error classnames={amtErr ? 'show' : 'hide'}>{sendAmount < 0 ? 'Amount cannot be negative.' : 'Amount must not be blank.' }</Error>
                         <footer className="modal-footer mt-4 self-end">
-                            <Button classnames='justify-self-end self-end mt-auto text-gray-800 py-1 px-2 rounded mr-2 text-sm' onclick={handleCancel}>Back</Button>
+                            <Button classnames='justify-self-end self-end mt-auto text-gray-800 py-1 px-2 rounded mr-2 text-sm' onclick={handleCancel}>Cancel</Button>
                             <Button classnames='justify-self-end self-end mt-auto bg-primary text-white py-1 px-2 rounded text-sm' type="submit"onclick={() => handleModalOpen({
                                 show: true, 
                                 status: 'confirmation',
@@ -41,7 +41,7 @@ const Send = ({modalStat, customerData, receivingAccount, sendAmount, onChangeAm
             <Modal header="transfer" show={modalStat.show && modalStat.send ? 'show':'hide'} status={modalStat.status} 
                     buttonClick={handleSend} handleNewTransaction={handleNewTransaction} handleTransBack={handleTransBack}> 
                     {modalStat.status === 'confirmation' ? 
-                        (`You are Transferring ${formattedSendAmt} from Account Number: ${customerData.accNum} to Account Number: ${format_idNumber(receivingAccount)}.`) :
+                        (`You are Transferring ${formattedSendAmt} from Account Number: ${customerData.accNum} to Account Number: ${receivingAccount}.`) :
                         (`Transfer successful! Account balance is now ${formattedBalance}.`)
                     }
             </Modal> 

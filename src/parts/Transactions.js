@@ -16,6 +16,7 @@ const Transactions = ({customerData}) => {
             <tr>
               <th className="cstm-th text-gray-300">Transaction Type</th>
               <th className="cstm-th text-gray-300">Details</th>
+              <th className="cstm-th text-gray-300">Notes</th>
               <th className="cstm-th text-gray-300 text-right">Amount</th>
             </tr>
           </thead>
@@ -29,6 +30,9 @@ const Transactions = ({customerData}) => {
               <td className="cstm-td text-gray-400">
                 <p>Transaction No.: #{transaction.transactionId}</p>
                 <p>{getLocalDate(transaction.date)}</p>
+              </td>
+              <td className="cstm-td text-gray-400">
+                <p>{transaction.notes}</p>
               </td>
               {(transaction.transaction === 'received') || (transaction.transaction === 'deposit') 
               ? 

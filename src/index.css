@@ -64,7 +64,7 @@
         font-family: 'Source Sans Pro', 'sans-serif';
     }
     .transaction-container {
-        @apply p-4 bg-white flex-grow shadow;
+        @apply p-4 bg-purple-50 flex-grow shadow rounded cursor-pointer flex flex-col transition-transform transform border-transparent border hover:scale-110 hover:border-primary;
         max-width: calc((100% - 2rem)/3)
     }
     .image-rotated {
@@ -78,6 +78,9 @@
         /* background: url('./components/loginBg2.jpg'); */
         background: url('./components/popartfinal.jpg');
         background-size: cover;
+    }
+    .greeting-custom-width {
+        grid-template-columns: 30px minmax(0, 1fr);
     }
 }
 

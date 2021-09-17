@@ -71,7 +71,7 @@ const Accounts = ({status, updater}) => {
           <span className="mt-1 mb-2 h-10 px-3 rounded-md rounded-r-none bg-gray-100 border-transparent flex items-center">
             <SearchIcon className="h-5 w-5inline-block"/>
           </span>
-          <input type="text" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} value={searchQuery}
+          <input type="number" name = "accounts-search-input" id="accounts-search-input" placeholder="Enter account number" onChange={handleOnChange} value={searchQuery}
           className="mt-1 mb-2 inline-block h-10 rounded-md rounded-l-none bg-gray-100 border-transparent focus:border-transparent focus:bg-white focus:ring-0 text-sm flex-grow"/>
           </div>
           { customerList.length ? (
