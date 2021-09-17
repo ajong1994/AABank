@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/AABank/static/css/main.f4c6556c.chunk.css",
+    "main.js": "/AABank/static/js/main.c180b3d4.chunk.js",
+    "main.js.map": "/AABank/static/js/main.c180b3d4.chunk.js.map",
+    "runtime-main.js": "/AABank/static/js/runtime-main.5096a565.js",
+    "runtime-main.js.map": "/AABank/static/js/runtime-main.5096a565.js.map",
+    "static/js/2.4da9f60a.chunk.js": "/AABank/static/js/2.4da9f60a.chunk.js",
+    "static/js/2.4da9f60a.chunk.js.map": "/AABank/static/js/2.4da9f60a.chunk.js.map",
+    "index.html": "/AABank/index.html",
+    "static/css/main.f4c6556c.chunk.css.map": "/AABank/static/css/main.f4c6556c.chunk.css.map",
+    "static/js/2.4da9f60a.chunk.js.LICENSE.txt": "/AABank/static/js/2.4da9f60a.chunk.js.LICENSE.txt",
+    "static/media/chip.0fbd0bde.png": "/AABank/static/media/chip.0fbd0bde.png",
+    "static/media/logo.c669f8bd.png": "/AABank/static/media/logo.c669f8bd.png",
+    "static/media/index.css": "/AABank/static/media/popartfinal.ebe84903.jpg",
+    "static/media/thumbmark.622eeabf.png": "/AABank/static/media/thumbmark.622eeabf.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5096a565.js",
+    "static/js/2.4da9f60a.chunk.js",
+    "static/css/main.f4c6556c.chunk.css",
+    "static/js/main.c180b3d4.chunk.js"
+  ]
+}
