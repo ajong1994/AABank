@@ -54,8 +54,14 @@ function TotalTransactions({status, updater}) {
                     <td className="cstm-td text-gray-300">
                     <p>#{transaction.user}</p>
                     <p>{getLocalDate(transaction.date)}</p>
-                  </td>
-                    <td className="cstm-td text-center"><p className="cstm-td-text text-right">{formatMoney(transaction.amount)}</p></td>
+                    </td>
+                    {/* <td className="cstm-td text-center"><p className="cstm-td-text text-right">{formatMoney(transaction.amount)}</p></td> */}
+                    {(transaction.transaction === 'received') || (transaction.transaction === 'deposit') 
+                    ? 
+                    <td className="cstm-td text-center"><p className='text-primary text-right'>{formatMoney(transaction.amount)}</p></td>
+                    :
+                    <td className="cstm-td text-right"><p>-{formatMoney(transaction.amount)}</p></td>
+                    }
                   </tr>
                 ))}
                 </tbody>
