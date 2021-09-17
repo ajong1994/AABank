@@ -68,13 +68,24 @@ function TotalTransactions({status, updater}) {
                 </tbody>
               </table>   
             </div> 
+
+            <div className="flex justify-center p-3 bg-gray-50">
+              <ReactToExcel
+                className="bg-transparent hover:text-white font-semibold py-2 px-4 border border-gray-400 rounded-full shadow hover:bg-purple-400 text-gray-800"
+                table="all-transactions-table"
+                filename="Transactions excelFile"
+                sheet="Sheet"
+                buttonText='⭳ Download'
+              />
+            </div>
+
             </>
             : <div className="mt-14 py-20 rounded-md bg-white">
                 <div className="max-w-xs sm:max-w-md mx-auto py-8 flex justify-center"><AlertVector width="74%" height="auto"/></div>
                 <p className="mx-auto text-center">No transactions yet.</p>
               </div>
             }   
-            {transactionList !== null 
+            {/* {transactionList !== null 
             ? <div className="flex justify-center p-3 bg-gray-50">
             <ReactToExcel
               className="bg-transparent hover:text-white font-semibold py-2 px-4 border border-gray-400 rounded-full shadow hover:bg-purple-400 text-gray-800"
@@ -85,7 +96,7 @@ function TotalTransactions({status, updater}) {
             />
           </div>
           : <></>
-          }   
+          }    */}
           </div> 
         </PageContent>
       </div> 
