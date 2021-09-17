@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 // import { Switch, Route } from 'react-router-dom'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 /* Components */
 // import Home from './components/Home'
@@ -36,13 +36,13 @@ const App = () => {
   return (
     <Router>
       <Switch>
-          <Route exact path={process.env.PUBLIC_URL + "/login"} render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
-          <Route exact path={process.env.PUBLIC_URL + "/register"} render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
-          <Route exact path={process.env.PUBLIC_URL + "/accounts"} render={(props) => <Accounts {...props} status={loginStatus} updater={updateStatus} />} />
-          <Route exact path={process.env.PUBLIC_URL + "/account"} render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
-          <Route exact path={process.env.PUBLIC_URL + "/create"} render={(props) => <Create {...props} status={loginStatus}  updater={updateStatus}/>} /> 
-          <Route exact path={process.env.PUBLIC_URL + "/transactions"} render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
-          <Route path={process.env.PUBLIC_URL + "/"} render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
+          <Route exact path="/login" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus}/>} />
+          <Route exact path="/register" render={(props) => <Register {...props} status={loginStatus} updater={updateStatus} />}  /> 
+          <Route exact path="/accounts" render={(props) => <Accounts {...props} status={loginStatus} updater={updateStatus} />} />
+          <Route exact path="/account" render={(props) => <Account {...props} status={loginStatus} updater={updateStatus} />} />
+          <Route exact path="/create" render={(props) => <Create {...props} status={loginStatus}  updater={updateStatus}/>} /> 
+          <Route exact path="/transactions" render={(props) => <TotalTransactions {...props} status={loginStatus} updater={updateStatus}/>} />
+          <Route exact path="/" render={(props) => <Login {...props} status={loginStatus} updater={updateStatus} />} />
           <Route path = "*"><PageNotFound /></Route>
       </Switch>
     </Router>
