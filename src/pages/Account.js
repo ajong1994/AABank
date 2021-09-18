@@ -89,6 +89,7 @@ const Account = ({status, updater, location}) => {
     sendInputErr: false,
   });
 
+  //Validators to hide errors on input change if input is not blank and positive
   useEffect(() => {
     if (depositAmount && depositAmount > 0) {
       setInputErrs((prevState) => ({
@@ -126,30 +127,12 @@ const Account = ({status, updater, location}) => {
   },[receivingAccount])
   
 
-  //If user not isLoggedIn based on state passed as prop, redirect to accounts component
+  //If user not isLoggedIn based on state passed as prop, redirect to accounts component. Authentication condition
   if (!status.isLoggedIn) {
     return <Redirect to="/login"/>
   } 
   
-  function handleOnChange(e, state) {
-    switch (state) {
-      case 'deposit' :
-        setDepositAmount(Number(e.target.value) || '');
-        break;
-      case 'withdraw' :
-        setWithdrawAmount(Number(e.target.value) || '');
-        break;
-      case 'send-amount' :
-        setSendAmount(Number(e.target.value) || '');
-        break;
-      case 'receiving-account' :
-        setReceivingAccount(e.target.value);
-        break;
-      default:
-        break;
-    }
-  }
-  
+  //Main transactional functions
   function handleDeposit() {
     if (depositAmount && depositAmount > 0) {
       const new_balance = deposit(customerData.accNum, depositAmount);
@@ -203,16 +186,9 @@ const Account = ({status, updater, location}) => {
     };
     hideModal();
     setModalOverlay(false);
-}
-
-  //Auxiliary functions
-  function hideModal() {
-    setModalStat((prevState) => ({
-      ...prevState,
-      show: false
-      }))
   }
 
+  //Helper functions for updating customer data
   function updateBalance(new_balance, new_transactions) {
     setCustomerData((prevState) => ({
       ...prevState,
@@ -221,11 +197,102 @@ const Account = ({status, updater, location}) => {
     }));
   }
 
-  function updateModalToPaid() {
+  function updateTransactions(sender_transaction, receiver_transaction) {
+    if (receiver_transaction !== undefined) {
+      setTransactionList((prevState) => ([...prevState, sender_transaction, receiver_transaction]));
+      setTotalTransactions((prevTotal) => (Number(prevTotal) + 1));
+    } else {
+      setTransactionList((prevState) => ([...prevState, sender_transaction]));
+      setTotalTransactions((prevTotal) => (Number(prevTotal) + 1));
+    }
+  }
+
+  //Auxiliary functions
+  function handleOnChange(e, state) {
+    switch (state) {
+      case 'deposit' :
+        //Adding a default state of '' is necessary because without it, the input states will always have a default first digit of 0  due to the Number() casting
+        setDepositAmount(Number(e.target.value) || '');
+        break;
+      case 'withdraw' :
+        setWithdrawAmount(Number(e.target.value) || '');
+        break;
+      case 'send-amount' :
+        setSendAmount(Number(e.target.value) || '');
+        break;
+      case 'receiving-account' :
+        setReceivingAccount(e.target.value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  //onClick handler of transaction blocks (cash in, cash out, send money.
+  //This will open top-level modal and update secondary-level modal state so that it knows what content to render )
+  function handleTransactModalClick(trigger){
+    if (trigger === 'deposit') {
+      setTransactModal({
+        depositModal: true,
+        withdrawalModal: false,
+        sendModal: false
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: true,
+        withdrawal: false,
+        send: false
+    })
+    } else if(trigger === 'withdrawal') {
+      setTransactModal({
+        depositModal: false,
+        withdrawalModal: true,
+        sendModal: false
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: false,
+        withdrawal: true,
+        send: false
+    })
+    } else {
+      setTransactModal({
+        depositModal: false,
+        withdrawalModal: false,
+        sendModal: true
+      })
+      setModalStat({
+        show: false, 
+        status: 'confirmation',
+        deposit: false,
+        withdrawal: false,
+        send: true
+    })
+    }
+    setModalOverlay(true);
+  }
+
+  //Function to handle close action or cancel button click of the top-most level Transaction Modal
+  function handletransactModalClose(){
     setModalStat((prevState) => ({
       ...prevState,
-      status: 'paid'
-    }));
+      show: false
+      }));
+    setTransactModal({
+      depositModal: false,
+      withdrawalModal: false,
+      sendModal: false
+    })
+    setModalOverlay(false);
+  } 
+
+  function hideModal() {
+    setModalStat((prevState) => ({
+      ...prevState,
+      show: false
+      }))
   }
 
   function handleModalOpen(newstate) {
@@ -287,10 +354,14 @@ const Account = ({status, updater, location}) => {
       handleTransactModalClick(trigger)
   }
 
-  function updateTransactions(sender_transaction, receiver_transaction) {
-    setTransactionList((prevState) => ([...prevState, sender_transaction, receiver_transaction]));
-    setTotalTransactions((prevTotal) => (Number(prevTotal) + 1));
+  
+  function updateModalToPaid() {
+    setModalStat((prevState) => ({
+      ...prevState,
+      status: 'paid'
+    }));
   }
+
 
   function handleError(err) {
     setShowToastErr(true)
@@ -301,63 +372,7 @@ const Account = ({status, updater, location}) => {
     setShowToastErr(false)
   }
 
-  function handleTransactModalClick(trigger){
-    if (trigger === 'deposit') {
-      setTransactModal({
-        depositModal: true,
-        withdrawalModal: false,
-        sendModal: false
-      })
-      setModalStat({
-        show: false, 
-        status: 'confirmation',
-        deposit: true,
-        withdrawal: false,
-        send: false
-    })
-    } else if(trigger === 'withdrawal') {
-      setTransactModal({
-        depositModal: false,
-        withdrawalModal: true,
-        sendModal: false
-      })
-      setModalStat({
-        show: false, 
-        status: 'confirmation',
-        deposit: false,
-        withdrawal: true,
-        send: false
-    })
-    } else {
-      setTransactModal({
-        depositModal: false,
-        withdrawalModal: false,
-        sendModal: true
-      })
-      setModalStat({
-        show: false, 
-        status: 'confirmation',
-        deposit: false,
-        withdrawal: false,
-        send: true
-    })
-    }
-    setModalOverlay(true);
-  }
-
-  //Function to handle close action or cancel button click of the top-most level Transaction Modal
-  function handletransactModalClose(){
-    setModalStat((prevState) => ({
-      ...prevState,
-      show: false
-      }));
-    setTransactModal({
-      depositModal: false,
-      withdrawalModal: false,
-      sendModal: false
-    })
-    setModalOverlay(false);
-  }
+  
 
   return (
     <div className="flex h-full">
