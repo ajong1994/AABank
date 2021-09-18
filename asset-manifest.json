@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/AABank/static/css/main.01ed3c75.chunk.css",
-    "main.js": "/AABank/static/js/main.105826df.chunk.js",
-    "main.js.map": "/AABank/static/js/main.105826df.chunk.js.map",
+    "main.js": "/AABank/static/js/main.69eae129.chunk.js",
+    "main.js.map": "/AABank/static/js/main.69eae129.chunk.js.map",
     "runtime-main.js": "/AABank/static/js/runtime-main.5096a565.js",
     "runtime-main.js.map": "/AABank/static/js/runtime-main.5096a565.js.map",
-    "static/js/2.88427d73.chunk.js": "/AABank/static/js/2.88427d73.chunk.js",
-    "static/js/2.88427d73.chunk.js.map": "/AABank/static/js/2.88427d73.chunk.js.map",
+    "static/js/2.69c24e91.chunk.js": "/AABank/static/js/2.69c24e91.chunk.js",
+    "static/js/2.69c24e91.chunk.js.map": "/AABank/static/js/2.69c24e91.chunk.js.map",
     "index.html": "/AABank/index.html",
     "static/css/main.01ed3c75.chunk.css.map": "/AABank/static/css/main.01ed3c75.chunk.css.map",
-    "static/js/2.88427d73.chunk.js.LICENSE.txt": "/AABank/static/js/2.88427d73.chunk.js.LICENSE.txt",
+    "static/js/2.69c24e91.chunk.js.LICENSE.txt": "/AABank/static/js/2.69c24e91.chunk.js.LICENSE.txt",
     "static/media/chip.0fbd0bde.png": "/AABank/static/media/chip.0fbd0bde.png",
     "static/media/logo.c669f8bd.png": "/AABank/static/media/logo.c669f8bd.png",
     "static/media/index.css": "/AABank/static/media/popartfinal.ebe84903.jpg",
@@ -17,8 +17,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.5096a565.js",
-    "static/js/2.88427d73.chunk.js",
+    "static/js/2.69c24e91.chunk.js",
     "static/css/main.01ed3c75.chunk.css",
-    "static/js/main.105826df.chunk.js"
+    "static/js/main.69eae129.chunk.js"
   ]
 }
