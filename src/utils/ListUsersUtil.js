@@ -6,10 +6,11 @@ export function list_users() {
 
     //For every customer, get their data from local storage and add it to array for mapping
     if (customerList !== null) {
-        var populatedCustomerList = []
-        for (let customer of customerList) {
-        populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
-        }
+        // var populatedCustomerList = []
+        // for (let customer of customerList) {
+        // populatedCustomerList.push(JSON.parse(localStorage.getItem(customer)))
+        // }
+        const populatedCustomerList = customerList.map((customer) => JSON.parse(localStorage.getItem(customer)))
         return populatedCustomerList;
     } else {
         return [];
